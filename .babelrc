@@ -1,0 +1,25 @@
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "env":
+  {
+    "development":
+    {
+
+    },
+    "production":
+    {
+
+    },
+    "lib":
+    {
+      "plugins": [
+        ["css-modules-transform",
+        {
+          "generateScopedName": "[name]__[local]"
+        }],
+        "@babel/proposal-class-properties",
+        "@babel/proposal-object-rest-spread"
+      ],
+    },
+  }
+}

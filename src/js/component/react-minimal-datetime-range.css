@@ -1,0 +1,574 @@
+@import 'open-color/open-color.css';
+:root {
+  --item-width-xs: 25px;
+  --item-height-xs: 25px;
+  --body-container-height-xs: 200px;
+}
+
+.picky-date-time {
+  opacity: 0;
+  position: relative;
+  box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.1), 0 0 4px 0 rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  transition: all 0.3s;
+  transform: translateY(-1em) perspective(600px) rotateX(10deg);
+  padding: 20px;
+}
+
+.picky-date-time.visible {
+  opacity: 1;
+  transform: translateY(0) perspective(600px) rotateX(0);
+}
+
+.picky-date-time__calendar,
+.picky-date-time__clock {
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.picky-date-time__calendar:before,
+.picky-date-time__clock:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.picky-date-time__calendar {
+}
+
+.picky-date-time__clock {
+}
+
+.picky-date-time__close {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--oc-gray-5);
+}
+
+.picky-date-time__breaker.l {
+  padding: var(--breaker-padding-l);
+}
+
+.picky-date-time__breaker.m {
+  padding: var(--breaker-padding-m);
+}
+
+.picky-date-time__breaker.s {
+  padding: var(--breaker-padding-s);
+}
+
+.picky-date-time__breaker.xs {
+  padding: var(--breaker-padding-xs);
+}
+
+@media only screen and (max-width: 550px) {
+  .picky-date-time__calendar.xs,
+  .picky-date-time__clock.xs {
+    display: block;
+  }
+
+  .picky-date-time__breaker.xs {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 660px) {
+  .picky-date-time__calendar.s,
+  .picky-date-time__clock.s {
+    display: block;
+  }
+
+  .picky-date-time__breaker.s {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .picky-date-time__calendar.m,
+  .picky-date-time__clock.m {
+    display: block;
+  }
+
+  .picky-date-time__breaker.m {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .picky-date-time__calendar.l,
+  .picky-date-time__clock.l {
+    display: block;
+  }
+
+  .picky-date-time__breaker.l {
+    display: none;
+  }
+}
+
+/* dropdown section */
+
+.picky-date-time-dropdown {
+  position: relative;
+}
+
+.picky-date-time-dropdown.visible .picky-date-time-dropdown-calendar__menu {
+  transform: translate3d(-50%, 0, 0) scale3d(1, 1, 1);
+  transform: translate(-50%, 0) scale(1, 1)\9;
+  opacity: 1;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.picky-date-time-dropdown.visible .picky-date-time-dropdown-calendar__menu-no-effect {
+  display: block;
+}
+
+.picky-date-time-dropdown .picky-date-time-dropdown-calendar__menu {
+  will-change: transform, opacity;
+  transform: translate3d(-50%, 0, 0) scale3d(1, 0, 1);
+  transform: translate(-50%, 0) scale(1, 0)\9;
+  opacity: 0;
+  left: 50%;
+  width: 280px;
+  margin-top: 30px;
+  text-align: center;
+  transform-origin: 0 0;
+  transition: transform 0.4s, opacity 0.2s;
+  position: absolute;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3), 0 0 1px 0 rgba(0, 0, 0, 0.12);
+  /*z-index: -1;*/
+  background: #fff;
+}
+
+.picky-date-time-dropdown .picky-date-time-dropdown-calendar__container {
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.picky-date-time-dropdown .picky-date-time-dropdown-calendar__item {
+  padding: 1px 4px;
+  line-height: 20px;
+  transition: background 0.4s;
+  cursor: pointer;
+  display: block;
+}
+
+.picky-date-time-dropdown-calendar__month {
+  background: #fff;
+  *zoom: 1;
+
+  &:after {
+    content: '\200B';
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
+.picky-date-time-dropdown-calendar__month-item {
+  background: #fff;
+  cursor: pointer;
+  float: left;
+  width: 33.3%;
+}
+
+.picky-date-time-dropdown-calendar__month-item > div {
+  padding: 10px 0;
+  padding: 10px 2px;
+  font-size: 12px;
+  margin: 5px;
+  background: #fff;
+  transition: all 0.3s;
+
+  &:hover {
+    background: var(--oc-blue-3);
+    color: #fff;
+  }
+}
+
+.picky-date-time-dropdown-calendar__month-item.active > div {
+  background: var(--oc-blue-5);
+  color: #fff;
+}
+
+.picky-date-time-calendar__previous,
+.picky-date-time-calendar__next {
+}
+
+.picky-date-time-dropdown .picky-date-time-dropdown-calendar__item:hover {
+  background: #eee;
+}
+
+.picky-date-time-dropdown-calendar__year {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+.picky-date-time-dropdown-calendar__year-item {
+  background: #fff;
+  cursor: pointer;
+  float: left;
+  height: 100%;
+  display: table;
+  width: 20%;
+}
+
+.picky-date-time-dropdown-calendar__year-item > div {
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 12px;
+  margin: 2px;
+  font-size: 14px;
+  background: #fff;
+  transition: all 0.3s;
+
+  &:hover {
+    background: var(--oc-blue-3);
+    color: #fff;
+  }
+}
+
+.picky-date-time-dropdown-calendar__year-item.active > div {
+  background: var(--oc-blue-5);
+  color: #fff;
+}
+
+/* end of dropdown section */
+
+.picky-date-time-calendar__default-day,
+.picky-date-time-calendar__today {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.picky-date-time-calendar__today {
+  left: 0;
+}
+
+.picky-date-time-calendar__default-day {
+  right: 0;
+}
+
+.picky-date-time-calendar__default-day .picky-date-time-calendar__icon,
+.picky-date-time-calendar__today .picky-date-time-calendar__icon {
+  font-size: 15px;
+}
+
+.picky-date-time-calendar__clicker {
+  cursor: pointer;
+}
+
+.picky-date-time__col {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.picky-date-time-calendar__title {
+  cursor: pointer;
+  width: 100%;
+  position: absolute;
+  color: var(--oc-gray-8);
+  &:hover {
+    color: var(--oc-blue-3);
+  }
+}
+
+.picky-date-time-calendar__inline-span span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.picky-date-time-calendar__inline-span:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.picky-date-time-calendar__content {
+}
+
+.picky-date-time-calendar__icon {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.picky-date-time__col-0-5 {
+  width: 5%;
+}
+
+.picky-date-time__col-9 {
+  width: 90%;
+}
+
+.picky-date-time__col-3 {
+  width: 25%;
+}
+
+.picky-date-time__col-6 {
+  width: 50%;
+}
+
+.picky-date-time-calendar__header {
+  text-align: center;
+}
+
+.picky-date-time--inline-block {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.picky-date-time-calendar__table {
+  display: table;
+  border-collapse: collapse;
+  border-collapse: initial !important\9;
+  margin: 0 auto;
+}
+
+@media all and (-ms-high-contrast: none) {
+  .picky-date-time-calendar__table {
+    border-collapse: initial;
+  }
+}
+
+@supports (-ms-ime-align: auto) {
+  .picky-date-time-calendar__table {
+    border-collapse: initial;
+  }
+}
+
+.picky-date-time-calendar__table-row {
+  display: table-row;
+}
+
+.picky-date-time-calendar__table-cel {
+  font-size: 12px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid var(--oc-gray-2);
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  cursor: default;
+  transition: all 0.3s;
+  background: #fff;
+  color: var(--oc-gray-7);
+  padding: 6px;
+  width: var(--item-width-xs);
+  height: var(--item-height-xs);
+
+  &.disabled {
+    color: var(--oc-gray-5);
+  }
+
+  &.today {
+    color: var(--oc-red-5);
+  }
+
+  &.active {
+    &:not(.today) {
+      color: #fff;
+      background: var(--oc-blue-3);
+    }
+  }
+
+  &.no-border {
+    border: 1px solid transparent;
+  }
+
+  &.picky-date-time-calendar__date-item {
+    position: relative;
+
+    &:not(.disabled) {
+      cursor: pointer;
+
+      &:hover {
+        color: #fff;
+        background: var(--oc-blue-3);
+      }
+    }
+  }
+
+  &.picky-date-time-calendar__date-item .picky-date-time-calendar__icon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 12px;
+  }
+}
+
+.picky-date-time-calendar__table-caption {
+  color: var(--oc-gray-7);
+}
+
+.picky-date-time-calendar__mask {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+
+  &.visible {
+    opacity: 1 !important;
+    filter: alpha(opacity=100);
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    z-index: 1 !important;
+  }
+}
+
+.picky-date-time-check {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  font-size: 12px;
+}
+
+.picky-date-time-calendar__button {
+  position: absolute;
+  bottom: -40px;
+  display: inline-block;
+  color: var(--oc-gray-6);
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid var(--oc-gray-4);
+  transition: all 0.3s;
+  background: #fff;
+
+  &:hover {
+    border: 1px solid var(--oc-blue-4);
+    background: var(--oc-blue-4);
+    color: #fff;
+  }
+}
+
+.forwardEnter {
+  will-change: transform;
+  transition: opacity 0.5s ease-in, transform 0.3s;
+  opacity: 1;
+  transform: translate3d(100%, 0, 0);
+  &.forwardEnterActive {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.forwardLeave {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+  &.forwardLeaveActive {
+    opacity: 0;
+  }
+}
+
+.backwardEnter {
+  &.backwardEnterActive {
+  }
+}
+
+.backwardLeave {
+  will-change: transform, opacity;
+  transition: transform 0.3s ease-in;
+  transform: translate3d(100%, 0, 0);
+  &.backwardLeaveActive {
+  }
+}
+
+.picky-date-time-calendar__title-container {
+  position: relative;
+  display: block;
+  height: 18px;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+
+.picky-date-time-calendar__selector-panel-year-set-container {
+  position: relative;
+  display: block;
+  height: 24px;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.picky-date-time-calendar__body-container {
+  position: relative;
+  display: block;
+  transition: height 0.3s;
+  overflow: hidden;
+  text-align: center;
+  height: var(--body-container-height-xs);
+}
+
+.slide {
+  position: absolute;
+}
+
+.slide-enter {
+  transform: translateX(100%);
+  transition: 0.3s transform ease-in-out;
+}
+
+.slide-enter-active {
+  transform: translateX(0);
+}
+
+.slide-leave {
+  transform: translateX(0);
+  transition: 0.3s transform ease-in-out;
+}
+
+.slide-leave-active {
+  transform: translateX(-100%);
+}
+
+.forward-enter {
+  transform: translateX(100%);
+  transition: 0.3s transform ease-in-out;
+}
+
+.forward-enter-active {
+  transform: translateX(0);
+}
+
+.forward-leave {
+  transform: translateX(0);
+  transition: 0.3s transform ease-in-out;
+}
+
+.forward-leave-active {
+  transform: translateX(-100%);
+}
+
+.backward-enter {
+  transform: translateX(-100%);
+  transition: 0.3s transform ease-in-out;
+}
+
+.backward-enter-active {
+  transform: translateX(0);
+}
+
+.backward-leave {
+  transform: translateX(0);
+  transition: 0.3s transform ease-in-out;
+}
+
+.backward-leave-active {
+  transform: translateX(100%);
+}
