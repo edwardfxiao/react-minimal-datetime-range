@@ -1,4 +1,5 @@
 @import 'open-color/open-color.css';
+
 :root {
   --item-width-xs: 25px;
   --item-height-xs: 25px;
@@ -278,6 +279,7 @@
   width: 100%;
   position: absolute;
   color: var(--oc-gray-8);
+
   &:hover {
     color: var(--oc-blue-3);
   }
@@ -438,6 +440,10 @@
   font-size: 12px;
 }
 
+.picky-date-time-check:hover .picky-date-time-check__path {
+  fill: var(--oc-red-5);
+}
+
 .picky-date-time-calendar__button {
   position: absolute;
   bottom: -40px;
@@ -461,6 +467,7 @@
   transition: opacity 0.5s ease-in, transform 0.3s;
   opacity: 1;
   transform: translate3d(100%, 0, 0);
+
   &.forwardEnterActive {
     transform: translate3d(0, 0, 0);
   }
@@ -469,6 +476,7 @@
 .forwardLeave {
   opacity: 1;
   transition: opacity 0.5s ease-in;
+
   &.forwardLeaveActive {
     opacity: 0;
   }
@@ -483,6 +491,7 @@
   will-change: transform, opacity;
   transition: transform 0.3s ease-in;
   transform: translate3d(100%, 0, 0);
+
   &.backwardLeaveActive {
   }
 }
