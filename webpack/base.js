@@ -42,7 +42,7 @@ var config = (module.exports = {
       {
         test: /\.jsx?$/,
         include: [PATH.ROOT_PATH],
-        exclude: [PATH.NODE_MODULES_PATH],
+        exclude: [PATH.NODE_MODULES_PATH, path.join(__dirname, '../', './example')],
         enforce: 'pre',
         enforce: 'post',
         loader: 'eslint-loader',
