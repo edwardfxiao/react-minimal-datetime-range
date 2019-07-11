@@ -74,6 +74,8 @@ export const RangePicker = memo(
     onResetDefaultDate = () => {},
   }) => {
     const [selected, setSelected] = useState(false);
+    const [start, setStart] = useState('');
+    const [end, setEnd] = useState('');
     const [internalShow, setInternalShow] = useState(show);
     const [startDatePickedArray, setStartDatePickedArray] = useState([]);
     const [endDatePickedArray, setEndDatePickedArray] = useState([]);
@@ -108,12 +110,19 @@ export const RangePicker = memo(
       },
       [dates],
     );
+    const handleOnConfirm = useCallback(
+      () => {
+        setStart(startDatePickedArray.join('-'));
+        setEnd(endDatePickedArray.join('-'));
+      },
+      [startDatePickedArray, endDatePickedArray],
+    );
     return (
       <div className="react-minimal-datetime-range__range">
         <span className="react-minimal-datetime-range__range-input-wrapper" onClick={() => setInternalShow(!internalShow)}>
-          <input readOnly={true} placeholder={placeholder[0]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value="" />
+          <input readOnly={true} placeholder={placeholder[0]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={start} />
           <span className="react-minimal-datetime-range__range-input-separator"> ~ </span>
-          <input readOnly={true} placeholder={placeholder[1]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value="" />
+          <input readOnly={true} placeholder={placeholder[1]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={end} />
         </span>
         <div className={`${componentClass}`}>
           <Range
@@ -121,7 +130,6 @@ export const RangePicker = memo(
             setSelected={setSelected}
             handleChooseStartDate={handleChooseStartDate}
             handleChooseEndDate={handleChooseEndDate}
-            isRangePicker={true}
             rangeDirection="start"
             defaultDateStart={dates[0]}
             defaultDateEnd={dates[1]}
@@ -134,7 +142,6 @@ export const RangePicker = memo(
             setSelected={setSelected}
             handleChooseStartDate={handleChooseStartDate}
             handleChooseEndDate={handleChooseEndDate}
-            isRangePicker={true}
             rangeDirection="end"
             defaultDateStart={dates[0]}
             defaultDateEnd={dates[1]}
@@ -142,6 +149,9 @@ export const RangePicker = memo(
             startDatePickedArray={startDatePickedArray}
             endDatePickedArray={endDatePickedArray}
           />
+          <div>
+            <div onClick={handleOnConfirm}>confirm</div>
+          </div>
         </div>
       </div>
     );

@@ -486,19 +486,19 @@ const CalendarBody = memo(
                 }
               }
             }
-
             if (ends.length) {
               isPickedEnd = ends[0] === item.year && ends[1] === item.month && ends[2] === item.name;
             }
           }
-
           const datePickerItemClass = cx(
             'react-minimal-datetime-range-calendar__table-cel',
             'react-minimal-datetime-range-calendar__date-item',
+            'range',
             isDisabled && 'disabled',
             isPickedStart && 'active',
             isPickedEnd && 'active',
             isHighlight && 'highlight',
+            DATE == item.name && MONTH == item.month && YEAR == item.year && 'today',
           );
           return (
             <CalendarItem
@@ -527,7 +527,7 @@ const CalendarBody = memo(
 );
 
 const CalendarItem = memo(
-  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {},  datePickerItemClass = '', onClick = () => {} }) => {
+  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, datePickerItemClass = '', onClick = () => {} }) => {
     const handleOnClick = useCallback(
       () => {
         if (startDatePickedArray.length) {
