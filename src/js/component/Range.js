@@ -12,8 +12,6 @@ const DATE = TODAY.getDate();
 
 const ITEM_HEIGHT = 40;
 
-let isStart = true;
-
 const Index = memo(
   ({
     selected,
@@ -22,8 +20,8 @@ const Index = memo(
     defaultDateStart = '',
     defaultDateEnd = '',
     rangeDirection = 'start',
-    startDatePickedArray = [], // [YY, MM. DD]
-    endDatePickedArray = [], // [YY, MM. DD]
+    startDatePickedArray = [], // [YY, MM, DD]
+    endDatePickedArray = [], // [YY, MM, DD]
     handleChooseStartDate = () => {},
     handleChooseEndDate = () => {},
   }) => {
