@@ -1,5 +1,3 @@
-const DEFAULT_LACALE = 'en-us';
-
 let locale = {
   'en-us': {
     today: 'Today',
@@ -9,6 +7,9 @@ let locale = {
     now: 'Now',
     weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    date: 'Select date',
+    time: 'Select time',
+    confirm: 'Confirm',
   },
   'zh-cn': {
     today: '今天',
@@ -18,12 +19,15 @@ let locale = {
     now: '现在',
     weeks: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
     months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    date: '选择日期',
+    time: '选择时间',
+    confirm: '确定',
   },
 };
 
 const getCustomLocale = (o, m) => {
   if (!o || typeof o !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
-    console.error(REACT_PICKY_DATE_TIME_CUSTOM_LOCALE_EXAMPLE);
+    console.error('wrong structure');
     return false;
   }
   Object.keys(o).map(i => {

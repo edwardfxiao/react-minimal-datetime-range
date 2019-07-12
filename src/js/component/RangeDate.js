@@ -211,7 +211,6 @@ const Index = memo(
       [pickedYearMonth],
     );
     const changeSelectorPanelYearSet = useCallback((yearSelectorPanel, direction) => {
-      console.log(direction);
       setDirection(direction);
       setYearSelectorPanel(yearSelectorPanel);
       setYearSelectorPanelList(getYearSet(yearSelectorPanel));
@@ -550,8 +549,18 @@ const CalendarItem = memo(
       },
       [item, selected],
     );
+    const handleOnMouseOut = useCallback(
+      () => {
+        if (!selected) {
+          if (!startDatePickedArray.length) {
+            handleChooseEndDate({ year: '', month: '', name: '', value: '' });
+          }
+        }
+      },
+      [selected, startDatePickedArray],
+    );
     return (
-      <div className={`${datePickerItemClass}`} onMouseOver={handleOnMouseOver} onClick={handleOnClick}>
+      <div className={`${datePickerItemClass}`} onMouseOver={handleOnMouseOver} onClick={handleOnClick} onMouseOut={handleOnMouseOut}>
         {item.name}
       </div>
     );

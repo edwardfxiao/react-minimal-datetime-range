@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
-import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
 import { cx, isValidDate } from './utils.js';
+import LOCALE from './locale.js';
 import Calendar from './Calendar.js';
-import Range from './Range.js';
+import RangeDate from './RangeDate.js';
+import RangeTime from './RangeTime.js';
+const DEFAULT_LACALE = 'en-us';
 export const CalendarPicker = memo(
   ({
     locale = DEFAULT_LACALE,
@@ -55,135 +57,214 @@ export const CalendarPicker = memo(
   },
 );
 
-const TODAY = new Date();
-const YEAR = TODAY.getFullYear();
-const MONTH = TODAY.getMonth() + 1;
-const DATE = TODAY.getDate();
+const TYPES = ['date', 'time'];
 
-export const RangePicker = memo(
+export const RangePicker = memo(({ locale = DEFAULT_LACALE, placeholder = ['', ''], defaultDates = ['', ''], defaultTimes = ['', ''], show = false, onConfirm = () => {} }) => { // ['MM/DD/YYYY', 'MM/DD/YYYY'] // ['hh:mm:ss', 'hh:mm:ss']
+  const [selected, setSelected] = useState(false);
+  const [start, setStart] = useState('');
+  const [type, setType] = useState(TYPES[0]);
+  const [end, setEnd] = useState('');
+  const [internalShow, setInternalShow] = useState(show);
+  const [startDatePickedArray, setStartDatePickedArray] = useState([]);
+  const [endDatePickedArray, setEndDatePickedArray] = useState([]);
+  const [startTimePickedArray, setStartTimePickedArray] = useState([]);
+  const [endTimePickedArray, setEndTimePickedArray] = useState([]);
+  const [dates, setDates] = useState(defaultDates);
+  const [times, setTimes] = useState(defaultTimes);
+  const handleOnYearPicked = useCallback(yearObj => {
+    onYearPicked && onYearPicked(yearObj);
+  }, []);
+  const handleOnMonthPicked = useCallback(monthObj => {
+    onMonthPicked && onMonthPicked(monthObj);
+  }, []);
+  const handleOnDatePicked = useCallback(dateObj => {
+    onDatePicked && onDatePicked(dateObj);
+  }, []);
+  const handleChooseStartDate = useCallback(
+    ({ name, month, year, value }) => {
+      setDates([value.replace(/-/g, '/'), dates[1]]);
+      setStartDatePickedArray([year, month, name]);
+    },
+    [dates],
+  );
+  const handleChooseEndDate = useCallback(
+    ({ name, month, year, value }) => {
+      setDates([dates[0], value.replace(/-/g, '/')]);
+      setEndDatePickedArray([year, month, name]);
+    },
+    [dates],
+  );
+  const handleChooseStartTimeHour = useCallback(
+    res => {
+      setStartTimePickedArray([res, startTimePickedArray[1]]);
+    },
+    [startTimePickedArray],
+  );
+  const handleChooseStartTimeMinute = useCallback(
+    res => {
+      setStartTimePickedArray([startTimePickedArray[0], res]);
+    },
+    [startTimePickedArray],
+  );
+  const handleChooseEndTimeHour = useCallback(
+    res => {
+      setEndTimePickedArray([res, endTimePickedArray[1]]);
+    },
+    [endTimePickedArray],
+  );
+  const handleChooseEndTimeMinute = useCallback(
+    res => {
+      setEndTimePickedArray([endTimePickedArray[0], res]);
+    },
+    [endTimePickedArray],
+  );
+  const handleOnChangeType = useCallback(
+    () => {
+      if (type === TYPES[0]) {
+        setType(TYPES[1]);
+      } else {
+        setType(TYPES[0]);
+      }
+    },
+    [type],
+  );
+  const handleOnConfirm = useCallback(
+    () => {
+      setStart(`${startDatePickedArray.join('-')} ${startTimePickedArray.join(':')}`);
+      setEnd(`${endDatePickedArray.join('-')} ${endTimePickedArray.join(':')}`);
+      setInternalShow(false);
+      onConfirm && onConfirm();
+    },
+    [startDatePickedArray, endDatePickedArray, startTimePickedArray, endTimePickedArray],
+  );
+  useEffect(
+    () => {
+      setType(TYPES[0]);
+    },
+    [internalShow],
+  );
+  return (
+    <div className="react-minimal-datetime-range__range">
+      <span className="react-minimal-datetime-range__range-input-wrapper" onClick={() => setInternalShow(!internalShow)}>
+        <input readOnly={true} placeholder={placeholder[0]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={start} />
+        <span className="react-minimal-datetime-range__range-input-separator"> ~ </span>
+        <input readOnly={true} placeholder={placeholder[1]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={end} />
+      </span>
+      {internalShow && (
+        <RangeWrapper
+          show={internalShow}
+          selected={selected}
+          setSelected={setSelected}
+          handleChooseStartDate={handleChooseStartDate}
+          handleChooseEndDate={handleChooseEndDate}
+          dates={dates}
+          times={times}
+          locale={locale}
+          startDatePickedArray={startDatePickedArray}
+          endDatePickedArray={endDatePickedArray}
+          type={type}
+          handleOnChangeType={handleOnChangeType}
+          handleOnConfirm={handleOnConfirm}
+          startTimePickedArray={startTimePickedArray}
+          endTimePickedArray={endTimePickedArray}
+          handleChooseStartTimeHour={handleChooseStartTimeHour}
+          handleChooseStartTimeMinute={handleChooseStartTimeMinute}
+          handleChooseEndTimeHour={handleChooseEndTimeHour}
+          handleChooseEndTimeMinute={handleChooseEndTimeMinute}
+        />
+      )}
+    </div>
+  );
+});
+
+const RangeWrapper = memo(
   ({
-    locale = DEFAULT_LACALE,
-    placeholder = ['', ''],
-    defaultDates = ['', ''],
-    show = false,
-    onClose = () => {},
-    onYearPicked = () => {},
-    onMonthPicked = () => {},
-    onDatePicked = () => {},
-    onResetDate = () => {},
-    onResetDefaultDate = () => {},
+    show,
+    selected,
+    setSelected,
+    handleChooseStartDate,
+    handleChooseEndDate,
+    dates,
+    times,
+    locale,
+    startDatePickedArray,
+    endDatePickedArray,
+    type,
+    handleOnChangeType,
+    handleOnConfirm,
+    handleChooseStartTimeHour,
+    handleChooseStartTimeMinute,
+    handleChooseEndTimeHour,
+    handleChooseEndTimeMinute,
+    startTimePickedArray,
+    endTimePickedArray,
   }) => {
-    const [selected, setSelected] = useState(false);
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
-    const [internalShow, setInternalShow] = useState(show);
-    const [startDatePickedArray, setStartDatePickedArray] = useState([]);
-    const [endDatePickedArray, setEndDatePickedArray] = useState([]);
-    const [dates, setDates] = useState(defaultDates);
-    const handleOnClose = useCallback(() => {
-      onClose && onClose();
-    }, []);
-    const handleOnYearPicked = useCallback(yearObj => {
-      onYearPicked && onYearPicked(yearObj);
-    }, []);
-    const handleOnMonthPicked = useCallback(monthObj => {
-      onMonthPicked && onMonthPicked(monthObj);
-    }, []);
-    const handleOnDatePicked = useCallback(dateObj => {
-      onDatePicked && onDatePicked(dateObj);
-    }, []);
-    const handleIsStartClicked = useCallback(bool => {
-      setIsStartClicked(bool);
-    }, []);
-    const handleChooseStartDate = useCallback(
-      ({ name, month, year, value }) => {
-        setDates([value.replace(/-/g, '/'), dates[1]]);
-        setStartDatePickedArray([year, month, name]);
-      },
-      [dates],
-    );
-    const handleChooseEndDate = useCallback(
-      ({ name, month, year, value }) => {
-        setDates([dates[0], value.replace(/-/g, '/')]);
-        setEndDatePickedArray([year, month, name]);
-      },
-      [dates],
-    );
-    const handleOnConfirm = useCallback(
+    const [internalShow, setInternalShow] = useState(false);
+    useEffect(
       () => {
-        setStart(startDatePickedArray.join('-'));
-        setEnd(endDatePickedArray.join('-'));
+        if (show) {
+          setTimeout(() => {
+            setInternalShow(true);
+          }, 0);
+        }
       },
-      [startDatePickedArray, endDatePickedArray],
+      [show],
     );
+    const componentClass = useMemo(() => cx('react-minimal-datetime-range', internalShow && 'visible'), [internalShow]);
     return (
-      <div className="react-minimal-datetime-range__range">
-        <span className="react-minimal-datetime-range__range-input-wrapper" onClick={() => setInternalShow(!internalShow)}>
-          <input readOnly={true} placeholder={placeholder[0]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={start} />
-          <span className="react-minimal-datetime-range__range-input-separator"> ~ </span>
-          <input readOnly={true} placeholder={placeholder[1]} className="react-minimal-datetime-range__range-input" tabIndex="-1" value={end} />
-        </span>
-        {internalShow && (
-          <RangeWrapper
-            show={internalShow}
+      <div className={componentClass}>
+        <div className="react-minimal-datetime-date-piker">
+          <RangeDate
             selected={selected}
             setSelected={setSelected}
             handleChooseStartDate={handleChooseStartDate}
             handleChooseEndDate={handleChooseEndDate}
-            dates={dates}
+            rangeDirection="start"
+            defaultDateStart={dates[0]}
+            defaultDateEnd={dates[1]}
             locale={locale}
             startDatePickedArray={startDatePickedArray}
             endDatePickedArray={endDatePickedArray}
-            handleOnConfirm={handleOnConfirm}
           />
-        )}
+          <RangeDate
+            selected={selected}
+            setSelected={setSelected}
+            handleChooseStartDate={handleChooseStartDate}
+            handleChooseEndDate={handleChooseEndDate}
+            rangeDirection="end"
+            defaultDateStart={dates[0]}
+            defaultDateEnd={dates[1]}
+            locale={locale}
+            startDatePickedArray={startDatePickedArray}
+            endDatePickedArray={endDatePickedArray}
+          />
+          {type === TYPES[1] && (
+            <div className="react-minimal-datetime-range__time-piker">
+              <RangeTime
+                defaultTimeStart={times[0]}
+                defaultTimeEnd={times[1]}
+                startDatePickedArray={startDatePickedArray}
+                endDatePickedArray={endDatePickedArray}
+                handleChooseStartTimeHour={handleChooseStartTimeHour}
+                handleChooseStartTimeMinute={handleChooseStartTimeMinute}
+                handleChooseEndTimeHour={handleChooseEndTimeHour}
+                handleChooseEndTimeMinute={handleChooseEndTimeMinute}
+                startTimePickedArray={startTimePickedArray}
+                endTimePickedArray={endTimePickedArray}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="react-minimal-datetime-range__button-wrapper">
+          <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--type', !selected && 'disabled')} onClick={selected ? handleOnChangeType : () => {}}>
+            {type === TYPES[0] ? LOCALE[locale][TYPES[1]] : LOCALE[locale][TYPES[0]]}
+          </div>
+          <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--confirm', !selected && 'disabled')} onClick={selected ? handleOnConfirm : () => {}}>
+            {LOCALE[locale]['confirm']}
+          </div>
+        </div>
       </div>
     );
   },
 );
-
-const RangeWrapper = memo(({ show, selected, setSelected, handleChooseStartDate, handleChooseEndDate, dates, locale, startDatePickedArray, endDatePickedArray, handleOnConfirm }) => {
-  const [internalShow, setInternalShow] = useState(false);
-  useEffect(
-    () => {
-      if (show) {
-        setTimeout(() => {
-          setInternalShow(true);
-        }, 0);
-      }
-    },
-    [show],
-  );
-  const componentClass = useMemo(() => cx('react-minimal-datetime-range', internalShow && 'visible'), [internalShow]);
-  return (
-    <div className={componentClass}>
-      <Range
-        selected={selected}
-        setSelected={setSelected}
-        handleChooseStartDate={handleChooseStartDate}
-        handleChooseEndDate={handleChooseEndDate}
-        rangeDirection="start"
-        defaultDateStart={dates[0]}
-        defaultDateEnd={dates[1]}
-        locale={locale}
-        startDatePickedArray={startDatePickedArray}
-        endDatePickedArray={endDatePickedArray}
-      />
-      <Range
-        selected={selected}
-        setSelected={setSelected}
-        handleChooseStartDate={handleChooseStartDate}
-        handleChooseEndDate={handleChooseEndDate}
-        rangeDirection="end"
-        defaultDateStart={dates[0]}
-        defaultDateEnd={dates[1]}
-        locale={locale}
-        startDatePickedArray={startDatePickedArray}
-        endDatePickedArray={endDatePickedArray}
-      />
-      <div>
-        <div onClick={handleOnConfirm}>confirm</div>
-      </div>
-    </div>
-  );
-});
