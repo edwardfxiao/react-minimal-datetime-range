@@ -22,33 +22,14 @@ export const cx = (...params) => {
   return classes.join(' ');
 };
 
-export const isValidDate = function(value, userFormat) {
-  userFormat = userFormat || 'mm/dd/yyyy';
-  const delimiter = /[^mdy]/.exec(userFormat)[0];
-  const theFormat = userFormat.split(delimiter);
-  const theDate = value.split(delimiter);
-  function isDate(date, format) {
-    let m,
-      d,
-      y,
-      i = 0,
-      len = format.length,
-      f;
-    for (i; i < len; i++) {
-      f = format[i];
-      if (/m/.test(f)) m = date[i];
-      if (/d/.test(f)) d = date[i];
-      if (/y/.test(f)) y = date[i];
+export const isValidDate = str => {
+  try {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      return true;
     }
-    return (
-      m > 0 &&
-      m < 13 &&
-      y &&
-      y.length === 4 &&
-      d > 0 &&
-      // Is it a valid day of the month?
-      d <= new Date(y, m, 0).getDate()
-    );
+    return false;
+  } catch (e) {
+    return false;
   }
-  return isDate(theDate, theFormat);
 };

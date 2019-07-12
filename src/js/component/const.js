@@ -12,16 +12,16 @@ export const getDaysArray = (year, month) => {
   let nextMonth;
   let prevYear;
   let nextYear;
-  if (month == 12) {
+  if (month === 12) {
     prevMonth = 11;
     nextMonth = 1;
-    prevYear = year - 1;
+    prevYear = year;
     nextYear = year + 1;
-  } else if (month == 1) {
+  } else if (month === 1) {
     prevMonth = 12;
     nextMonth = 2;
     prevYear = year - 1;
-    nextYear = year + 1;
+    nextYear = year;
   } else {
     prevMonth = month - 1;
     nextMonth = month + 1;
@@ -153,4 +153,46 @@ export const KEY_CODE = {
   '55': '7',
   '56': '8',
   '57': '9',
+};
+// Number(currentDateObjStart.year) === Number(currentDateObjEnd.year) && Number(currentDateObjStart.month) + 1 === Number(currentDateObjEnd.month))
+// Number(currentDateObjEnd.year) === Number(currentDateObjStart.year) && Number(currentDateObjEnd.month) - 1 === Number(currentDateObjStart.month))
+export const isWith1Month = (year1, year2, month1, month2, type) => {
+  year1 = Number(year1);
+  month1 = Number(month1);
+  year2 = Number(year2);
+  month2 = Number(month2);
+  if (type === 'add') {
+    if (month1 === 12) {
+      if (year1 + 1 === year2 && month2 === 1) {
+        return true;
+      }
+    } else {
+      if (year1 === year2 && month1 + 1 === month2) {
+        return true;
+      }
+    }
+  } else {
+    if (month1 === 1) {
+      if (year1 - 1 === year2 && month2 === 12) {
+        return true;
+      }
+    } else {
+      if (year1 === year2 && month1 - 1 === month2) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+  // if (type === 'minus') {
+  //   if (month === 1) {
+  //     res['year'] = year - 1;
+  //     res['month'] = 12;
+  //   }
+  // } else {
+  //   if (month === 12) {
+  //     res['year'] = year + 1;
+  //     res['month'] = 1;
+  //   }
+  // }
 };

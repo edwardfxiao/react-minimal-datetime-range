@@ -9,75 +9,14 @@ import Markdown from 'react-markdown';
 import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
-import CSS from '../src/css/example.css';
-import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
-
-const markdownTextboxEmptyExample = `
-\`\`\`javascript
-import ReactMinimalDatetimeRange from 'react-minimal-datetime-range';
-import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-
-...
-const [password, setPassword] = useState('');
-const [isSubmitting, setIsSubmitting] = useState(false);
-const $wrapperRef = useRef(null);
-const submit = useCallback(
-  () => {
-    if (password.length === 6) {
-      alert('success');
-    }
-  },
-  [password],
-);
-return
-  (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        submit();
-      }}
-      style={{ maxWidth: '300px', margin: '0 auto' }}
-    >
-
-      <ReactMinimalDatetimeRange
-        wrapperRef={$wrapperRef}
-        id="password"
-        codeLength={6}
-        type="number"
-        hide={true}
-        value={password}
-        onChange={res => {
-          setPassword(res);
-        }}
-      />
-
-      <input
-        type="submit"
-        className="submit-btn"
-        onClick={() => {
-          let isComplete = true;
-          for (let index = 0; index < 6; index += 1) {
-            if (typeof password[index] === 'undefined') {
-              $wrapperRef.current.children[index].click();
-              isComplete = false;
-              break;
-            }
-          }
-          if (!isComplete) {
-            return;
-          }
-          submit();
-        }}
-      />
-    </form>
-  );
-\`\`\`
-`;
-
+import '../src/css/example.css';
+// import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
+import { CalendarPicker, RangePicker } from '../lib/components/index.js';
+// import '../src/js/component/react-minimal-datetime-range.css';
+import '../lib/react-minimal-datetime-range.min.css';
 const CodeBlock = ({ literal, language }) => {
   var html = Prism.highlight(literal, Prism.languages[language]);
   var cls = 'language-' + language;
-
   return (
     <pre className={cls}>
       <code dangerouslySetInnerHTML={{ __html: html }} className={cls} />
@@ -94,85 +33,102 @@ const Component = () => {
   const $passwordWrapperRef = useRef(null);
   const $pinWrapperRef = useRef(null);
   const $activationWrapperRef = useRef(null);
-  const [showPickyDateTime, setShowPickyDateTime] = useState(true);
+  const [showCalendarPicker, setShowCalendarPicker] = useState(true);
   const [hour, setHour] = useState('03');
   const [minute, setMinute] = useState('10');
-  const [second, setSecond] = useState('10');
-  const [meridiem, setMeridiem] = useState('PM');
   const [month, setMonth] = useState('01');
   const [date, setDate] = useState('30');
   const [year, setYear] = useState('2000');
-  const onYearPicked = useCallback(() => {}, []);
-  const onMonthPicked = useCallback(() => {}, []);
-  const onDatePicked = useCallback(() => {}, []);
-  const onResetDate = useCallback(() => {}, []);
-  const onResetDefaultDate = useCallback(() => {}, []);
-  const onSecondChange = useCallback(() => {}, []);
-  const onMinuteChange = useCallback(() => {}, []);
-  const onHourChange = useCallback(() => {}, []);
-  const onMeridiemChange = useCallback(() => {}, []);
-  const onResetTime = useCallback(() => {}, []);
-  const onResetDefaultTime = useCallback(() => {}, []);
-  const onClearTime = useCallback(() => {}, []);
   return (
-    <div className={CSS['wrapper']}>
-      <div className={CSS['nav']}>
-        <div>
-          <h2>
-            <a href="#passwordSection">Example of password (type="alpha")</a>
-          </h2>
-        </div>
+    <div className={'wrapper'}>
+      <div>
+        <h3>CalendarPicker</h3>
       </div>
-      <div id="passwordSection" className={CSS['example-section']}>
-        <div style={prefixAll({ flex: '0 0 50%' })}>
-{/*          <div>
+      <div className={'example-section'}>
+        <div style={prefixAll({ flex: '0 0 60%' })}>
+          <div style={{ marginBottom: '10px' }}>
+            <div
+              onClick={() => {
+                setShowCalendarPicker(!showCalendarPicker);
+              }}
+              style={{ textAlign: 'center', cursor: 'pointer' }}
+            >
+              {!showCalendarPicker ? <span>Show CalendarPicker</span> : <span>Close CalendarPicker</span>}
+            </div>
             <CalendarPicker
               locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
-              show={true} //default is false
-              onClose={() => setShowPickyDateTime(false)}
-              defaultTime={`${hour}:${minute}:${second} ${meridiem}`} // OPTIONAL. format: "HH:MM:SS AM"
-              defaultDate={`${month}/${date}/${year}`} // OPTIONAL. format: "MM/DD/YYYY"
-              onYearPicked={res => onYearPicked(res)}
-              onMonthPicked={res => onMonthPicked(res)}
-              onDatePicked={res => onDatePicked(res)}
-              onResetDate={res => onResetDate(res)}
-              onResetDefaultDate={res => onResetDefaultDate(res)}
-              onSecondChange={res => onSecondChange(res)}
-              onMinuteChange={res => onMinuteChange(res)}
-              onHourChange={res => onHourChange(res)}
-              onMeridiemChange={res => onMeridiemChange(res)}
-              onResetTime={res => onResetTime(res)}
-              onResetDefaultTime={res => onResetDefaultTime(res)}
-              onClearTime={res => onClearTime(res)}
+              show={showCalendarPicker} //default is false
+              onClose={() => setShowCalendarPicker(false)}
+              defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "MM/DD/YYYY"
+              onYearPicked={res => console.log(res)}
+              onMonthPicked={res => console.log(res)}
+              onDatePicked={res => console.log(res)}
+              onResetDate={res => console.log(res)}
+              onResetDefaultDate={res => console.log(res)}
+              style={{ width: '300px', margin: '10px auto 0' }}
             />
-          </div>/*/}
-          <div>
-            <div style={{ maxWidth: '300px', margin: '10px auto' }}>
-              <h2>password (type="alpha")</h2>
-            </div>
-            <div>
-              <RangePicker
-                locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
-                show={false} //default is false
-                placeholder={['Start Time', 'End Time']}
-                onClose={() => setShowPickyDateTime(false)}
-                defaultTime={`${hour}:${minute}:${second} ${meridiem}`} // OPTIONAL. format: "HH:MM:SS AM"
-                defaultDate={`${month}/${date}/${year}`} // OPTIONAL. format: "MM/DD/YYYY"
-                onYearPicked={res => onYearPicked(res)}
-                onMonthPicked={res => onMonthPicked(res)}
-                onDatePicked={res => onDatePicked(res)}
-                onResetDate={res => onResetDate(res)}
-                onResetDefaultDate={res => onResetDefaultDate(res)}
-                onSecondChange={res => onSecondChange(res)}
-                onMinuteChange={res => onMinuteChange(res)}
-                onHourChange={res => onHourChange(res)}
-                onMeridiemChange={res => onMeridiemChange(res)}
-                onResetTime={res => onResetTime(res)}
-                onResetDefaultTime={res => onResetDefaultTime(res)}
-                onClearTime={res => onClearTime(res)}
-              />
-            </div>
           </div>
+        </div>
+        <div style={prefixAll({ flex: '0 0 40%' })}>
+          <Markdown
+            source={`\`\`\`javascript
+import ReactMinimalDatetimeRange from 'react-minimal-datetime-range';
+import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
+  <CalendarPicker
+    locale="en-us" // default is en-us
+    show={showCalendarPicker} //default is false
+    onClose={() => setShowCalendarPicker(false)}
+    defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "YYYY-MM-DD"
+    onYearPicked={res => console.log(res)}
+    onMonthPicked={res => console.log(res)}
+    onDatePicked={res => console.log(res)}
+    onResetDate={res => console.log(res)}
+    onResetDefaultDate={res => console.log(res)}
+    style={{ width: '300px', margin: '10px auto 0' }}
+  />
+ \`\`\``}
+            renderers={{ CodeBlock }}
+          />
+        </div>
+      </div>
+      <div>
+        <h3>RangePicker</h3>
+      </div>
+      <div className={'example-section'}>
+        <div style={prefixAll({ flex: '0 0 60%' })}>
+          <div style={{ marginBottom: '10px' }}>
+            <RangePicker
+              locale={`en-us`} // default is en-us
+              show={false} // default is false
+              placeholder={['Start Time', 'End Time']}
+              defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+              defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+              onConfirm={res => console.log(res)}
+              onClose={() => console.log('closed')}
+              style={{ width: '300px', margin: '0 auto' }}
+            />
+          </div>
+        </div>
+        <div style={prefixAll({ flex: '0 0 40%' })}>
+          <Markdown
+            source={`\`\`\`javascript
+import ReactMinimalDatetimeRange from 'react-minimal-datetime-range';
+import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
+  <RangePicker
+    locale="en-us" // default is en-us
+    show={false} // default is false
+    placeholder={['Start Time', 'End Time']}
+    defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]}
+    // ['YYYY-MM-DD', 'YYYY-MM-DD']
+    defaultTimes={[hour + ':' + minute, hour + ':' + minute]}
+    // ['hh:mm', 'hh:mm']
+    onConfirm={res => console.log(res)}
+    onClose={() => console.log('closed')}
+    style={{ width: '300px', margin: '0 auto' }}
+  />
+ \`\`\``}
+            renderers={{ CodeBlock }}
+          />
         </div>
       </div>
     </div>

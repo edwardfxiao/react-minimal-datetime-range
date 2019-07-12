@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import LOCALE from './locale.js';
-import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
+import React, { memo } from 'react';
+import { formatDateString } from './const';
 import { cx, isValidDate } from './utils.js';
-import CSS from './react-minimal-datetime-range.css';
 
 const HOURS = [...Array(24).keys()];
 const MINUTES = [...Array(60).keys()];
 
 const Index = memo(
   ({
-    defaultTimeStart,
-    defaultTimeEnd,
     startDatePickedArray,
     endDatePickedArray,
     handleChooseStartTimeHour,

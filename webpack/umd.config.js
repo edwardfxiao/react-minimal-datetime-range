@@ -20,7 +20,7 @@ if (env === 'build') {
 var config = (module.exports = {
   mode: 'production',
   context: PATH.ROOT_PATH,
-  entry: PATH.ROOT_PATH + 'src/js/Input/index.umd.js',
+  entry: PATH.ROOT_PATH + 'src/js/component/index.umd.js',
   module: {
     rules: [
       {
@@ -123,6 +123,7 @@ var config = (module.exports = {
                 require('postcss-import')({
                   root: loader.resourcePath,
                 }),
+                require('postcss-cssnext')(),
                 require('autoprefixer')(),
                 require('cssnano')({ safe: true }),
               ],

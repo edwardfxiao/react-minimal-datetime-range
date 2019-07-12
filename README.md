@@ -9,7 +9,7 @@ React verify or password code entering component. Online demo examples.
 <a href="https://github.com/edwardfhsiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
 
 # Codesandbox Examples
-* <a href="https://codesandbox.io/s/index-6hnbf">Examples</a>
+* <a href="https://codesandbox.io/s/index-z90y9">Examples</a>
 
 ### Version of ```16.8.6``` or higher of react and react-dom is required.
 ```js
@@ -31,61 +31,32 @@ Tested on IE9+ and Chrome and Safari(10.0.3)
 
 # Docs
 
-|Props                        |       |Type         |Description                                    |Default          |
-|---                          |---    |---          |---                                            |  ---            |
-|initialFocus                 |  Opt  |  Bool       |Options are ['false', 'true']                  |  false          |
-|wrapperRef                   |  Req  |  React Ref  |                                               |  none           |
-|codeLength                   |  Req  |  Number     |                                               |  6              |
-|id                           |  Req  |  Str        |                                               |  random ID      |
-|onChange                     |  Req  |  Func       |                                               |  none           |
-|type                         |  Opt  |  Default    |Options are ['alphanumeric', 'alpha', 'number']|  "alphanumeric" |
-|letterCase                   |  Opt  |  Str        |Options are ['upper', 'lower']                 |  "upper"        |
-|value                        |  Req  |  Str        |                                               |  ""             |
-|hide                         |  Opt  |  Bool       |Options are ['false', 'true']                  |  false          |
-|focusColor                   |  Opt  |  Str        |                                               |  "007bff"       |
-|classNameComponent           |  Opt  |  Str        |                                               |  ""             |
-|classNameWrapper             |  Opt  |  Str        |                                               |  ""             |
-|classNameCodeWrapper         |  Opt  |  Str        |                                               |  ""             |
-|classNameEnteredValue        |  Opt  |  Str        |                                               |  ""             |
-|classNameCode                |  Opt  |  Str        |                                               |  ""             |
-|classNameCodeWrapperFocus    |  Opt  |  Str        |                                               |  {}             |
-|customStyleComponent         |  Opt  |  Obj        |                                               |  {}             |
-|customStyleWrapper           |  Opt  |  Obj        |                                               |  {}             |
-|customStyleCodeWrapper       |  Opt  |  Obj        |                                               |  {}             |
-|customStyleEnteredValue      |  Opt  |  Obj        |                                               |  {}             |
-|customStyleCode              |  Opt  |  Obj        |                                               |  {}             |
-|customStyleCodeWrapperFocus  |  Opt  |  Obj        |                                               |  {}             |
-
-
-
 ```js
-import ReactCodesInput from 'react-minimal-datetime-range';
+import { CalendarPicker, RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 
+<CalendarPicker
+  locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
+  show={showCalendarPicker} //default is false
+  onClose={() => setShowCalendarPicker(false)}
+  defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "MM/DD/YYYY"
+  onYearPicked={res => console.log(res)}
+  onMonthPicked={res => console.log(res)}
+  onDatePicked={res => console.log(res)}
+  onResetDate={res => console.log(res)}
+  onResetDefaultDate={res => console.log(res)}
+  style={{ width: '300px', margin: '10px auto 0' }}
+/>
 
-<ReactCodesInput
-  initialFocus="" // Opt. Bool. Default false. Options are ['false', 'true'].
-  wrapperRef="" // Req. React Ref. Default none.
-  codeLength="" // Req. Number. Default 6.
-  id="" // Req. Str. Default random ID.
-  onChange="" // Req. Func. Default none.
-  type="" // Opt. Str. Default "alphanumeric". Options are ['alphanumeric', 'alpha', 'number'].
-  letterCase="upper" // Opt. Str. Default "upper". Options are ['upper', 'lower'].
-  value="" // Req. Str. Default "".
-  hide={false} // Opt. Bool. Default false. Options are ['false', 'true'].
-  focusColor="" // Opt. Str. Default "007bff".
-  classNameComponent="" // Opt. Str. Default "".
-  classNameWrapper="" // Opt. Str. Default "".
-  classNameCodeWrapper="" // Opt. Str. Default "".
-  classNameEnteredValue="" // Opt. Str. Default "".
-  classNameCode="" // Opt. Str. Default "".
-  classNameCodeWrapperFocus="" // Opt. Str. Default {}.
-  customStyleComponent={} // Opt. Obj. Default {}.
-  customStyleWrapper={} // Opt. Obj. Default {}.
-  customStyleCodeWrapper={} // Opt. Obj. Default {}.
-  customStyleEnteredValue={} // Opt. Obj. Default {}.
-  customStyleCode={} // Opt. Obj. Default {}.
-  customStyleCodeWrapperFocus={} // Opt. Obj. Default {}.
+<RangePicker
+  locale={`en-us`} // default is en-us
+  show={false} // default is false
+  placeholder={['Start Time', 'End Time']}
+  defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+  onConfirm={res => console.log(res)}
+  onClose={() => console.log('closed')}
+  style={{ width: '300px', margin: '0 auto' }}
 />
 ```
 

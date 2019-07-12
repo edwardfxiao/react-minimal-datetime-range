@@ -1,2 +1,3 @@
-var ReactCodesInput = require('./lib/components/index.js');
-module.exports = ReactCodesInput;
+var ReactMinimalRange = require('./lib/components/index.js');
+exports.CalendarPicker = ReactMinimalRange.CalendarPicker;
+exports.RangePicker = ReactMinimalRange.RangePicker;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import LOCALE from './locale.js';
-import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
+import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString, isWith1Month } from './const';
 import { cx, isValidDate } from './utils.js';
-import CSS from './react-minimal-datetime-range.css';
 
 const TODAY = new Date();
 const YEAR = TODAY.getFullYear();
@@ -24,11 +23,14 @@ const Index = memo(
     endDatePickedArray = [], // [YY, MM, DD]
     handleChooseStartDate = () => {},
     handleChooseEndDate = () => {},
+    currentDateObjStart = () => {},
+    currentDateObjEnd = () => {},
+    setCurrentDateObjStart = () => {},
+    setCurrentDateObjEnd = () => {},
   }) => {
     let defaultDateDateStart = DATE;
     let defaultDateMonthStart = MONTH;
     let defaultDateYearStart = YEAR;
-    let defaultDatesStart = getDaysArray(defaultDateYearStart, defaultDateMonthStart);
 
     let defaultDateDateEnd = defaultDateDateStart;
     let defaultDateMonthEnd;
@@ -40,24 +42,50 @@ const Index = memo(
     } else {
       defaultDateMonthEnd = defaultDateMonthStart + 1;
     }
-    let defaultDatesEnd = getDaysArray(defaultDateYearEnd, defaultDateMonthEnd);
 
     const isDefaultDateValidStart = useMemo(() => isValidDate(defaultDateStart), [defaultDateStart]);
     if (isDefaultDateValidStart) {
-      const dateStr = defaultDateStart.split('/');
-      defaultDateMonthStart = Number(dateStr[0]);
-      defaultDateDateStart = Number(dateStr[1]);
-      defaultDateYearStart = Number(dateStr[2]);
-      defaultDatesStart = getDaysArray(defaultDateYearStart, defaultDateMonthStart);
+      const dateStr = defaultDateStart.split('-');
+      defaultDateYearStart = Number(dateStr[0]);
+      defaultDateMonthStart = Number(dateStr[1]);
+      defaultDateDateStart = Number(dateStr[2]);
     }
     const isDefaultDateValidEnd = useMemo(() => isValidDate(defaultDateEnd), [defaultDateEnd]);
     if (isDefaultDateValidEnd) {
-      const dateStr = defaultDateEnd.split('/');
-      defaultDateMonthEnd = Number(dateStr[0]);
-      defaultDateDateEnd = Number(dateStr[1]);
-      defaultDateYearEnd = Number(dateStr[2]);
-      defaultDatesEnd = getDaysArray(defaultDateYearEnd, defaultDateMonthEnd);
+      const dateStr = defaultDateEnd.split('-');
+      defaultDateYearEnd = Number(dateStr[0]);
+      defaultDateMonthEnd = Number(dateStr[1]);
+      defaultDateDateEnd = Number(dateStr[2]);
+      // special handle
+      if (defaultDateMonthStart === 12) {
+        defaultDateMonthEnd = 1;
+        defaultDateYearEnd = defaultDateYearStart + 1;
+      } else {
+        defaultDateMonthEnd = defaultDateMonthStart + 1;
+      }
     }
+
+    let showPrevYearArrow = true;
+    let showPrevMonthArrow = true;
+    let showNextYearArrow = true;
+    let showNextMonthArrow = true;
+
+    if (currentDateObjStart.string && currentDateObjEnd.string) {
+      if (rangeDirection === 'start') {
+        if (isWith1Month(currentDateObjStart.year, currentDateObjEnd.year, currentDateObjStart.month, currentDateObjEnd.month, 'add')) {
+          showNextYearArrow = false;
+          showNextMonthArrow = false;
+        }
+      } else {
+        if (isWith1Month(currentDateObjEnd.year, currentDateObjStart.year, currentDateObjEnd.month, currentDateObjStart.month, 'minus')) {
+          showPrevYearArrow = false;
+          showPrevMonthArrow = false;
+        }
+      }
+    }
+
+    const defaultDatesStart = getDaysArray(defaultDateYearStart, defaultDateMonthStart);
+    const defaultDatesEnd = getDaysArray(defaultDateYearEnd, defaultDateMonthEnd);
 
     let defaultDateMonth;
     let defaultDateDate;
@@ -85,8 +113,18 @@ const Index = memo(
       defaultDateStr = formatDateString(defaultDateDateEnd);
     }
 
-    const [dates, setDates] = useState(defaultDates);
+    useEffect(
+      () => {
+        if (rangeDirection === 'start') {
+          setCurrentDateObjStart({ year: defaultDateYear, month: defaultDateMonth, string: `${defaultDateYear}-${defaultDateMonth}` });
+        } else {
+          setCurrentDateObjEnd({ year: defaultDateYear, month: defaultDateMonth, string: `${defaultDateYear}-${defaultDateMonth}` });
+        }
+      },
+      [rangeDirection, defaultDateYear, defaultDateMonth],
+    );
 
+    const [dates, setDates] = useState(defaultDates);
     const [pickedYearMonth, setPickedYearMonth] = useState({
       year: defaultYearStr,
       month: defaultMonthStr,
@@ -116,7 +154,6 @@ const Index = memo(
       },
       [pickedYearMonth],
     );
-
     const pickYear = useCallback(
       (year, direction) => {
         year = Number(year);
@@ -125,7 +162,13 @@ const Index = memo(
         } else {
           year = year + 1;
         }
-        setPickedYearMonth({ ...pickedYearMonth, year, string: `${year}-${pickedYearMonth.month}` });
+        const newData = { ...pickedYearMonth, year, string: `${year}-${pickedYearMonth.month}` };
+        setPickedYearMonth(newData);
+        if (rangeDirection === 'start') {
+          setCurrentDateObjStart(newData);
+        } else {
+          setCurrentDateObjEnd(newData);
+        }
         setDirection(direction);
       },
       [pickedYearMonth],
@@ -151,65 +194,18 @@ const Index = memo(
         }
         const yearStr = String(year);
         const monthStr = formatDateString(month);
-        setPickedYearMonth({ ...pickedYearMonth, year: yearStr, month: monthStr, string: `${yearStr}-${monthStr}` });
+        const newData = { ...pickedYearMonth, year: yearStr, month: monthStr, string: `${yearStr}-${monthStr}` };
+        setPickedYearMonth(newData);
+        if (rangeDirection === 'start') {
+          setCurrentDateObjStart(newData);
+        } else {
+          setCurrentDateObjEnd(newData);
+        }
         setDirection(direction);
       },
       [pickedYearMonth],
     );
-    const pickDate = useCallback(
-      pickedDate => {
-        setPickedDateInfo({
-          ...pickedDateInfo,
-          year: pickedYearMonth.year,
-          month: pickedYearMonth.month,
-          date: formatDateString(pickedDate),
-        });
-      },
-      [pickedYearMonth, pickedDateInfo],
-    );
-    const reset = useCallback(
-      (today = false) => {
-        let year = YEAR;
-        let month = MONTH;
-        let date = DATE;
-        if (!today) {
-          const dateStr = defaultDate.split('/');
-          month = Number(dateStr[0]);
-          date = Number(dateStr[1]);
-          year = Number(dateStr[2]);
-        }
-        let direction = NEXT_TRANSITION;
-        if (year < Number(pickedYearMonth.year)) {
-          direction = PREV_TRANSITION;
-        } else if (year === Number(pickedYearMonth.year)) {
-          if (month < Number(pickedYearMonth.month)) {
-            direction = PREV_TRANSITION;
-          }
-        }
-        const yearStr = formatDateString(year);
-        const monthStr = formatDateString(month);
-        const dateStr = formatDateString(date);
-        setPickedDateInfo({
-          ...pickedDateInfo,
-          year: yearStr,
-          month: monthStr,
-          date: dateStr,
-        });
-        setPickedYearMonth({
-          ...pickedYearMonth,
-          year: yearStr,
-          month: monthStr,
-          string: `${yearStr}-${monthStr}`,
-        });
-        changeSelectorPanelYearSet(year, direction);
-        if (!today) {
-          onResetDefaultDate(pickedDateInfo);
-        } else {
-          onResetDate(pickedDateInfo);
-        }
-      },
-      [pickedYearMonth],
-    );
+    const pickDate = useCallback(pickedDate => {}, []);
     const changeSelectorPanelYearSet = useCallback((yearSelectorPanel, direction) => {
       setDirection(direction);
       setYearSelectorPanel(yearSelectorPanel);
@@ -369,18 +365,22 @@ const Index = memo(
             </div>
           </div>
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__previous`} onClick={() => pickYear(pickedYearMonth.year, PREV_TRANSITION)}>
-              <svg width="15" height="15" viewBox="0 0 24 24">
-                <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z" />
-                <path fill="none" d="M24 24H0V0h24v24z" />
-              </svg>
-            </div>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-previous`} onClick={() => pickMonth(pickedYearMonth.month, PREV_TRANSITION)}>
-              <svg width="15" height="15" viewBox="0 0 24 24">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                <path d="M0 0h24v24H0z" fill="none" />
-              </svg>
-            </div>
+            {showPrevYearArrow && (
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__previous`} onClick={() => pickYear(pickedYearMonth.year, PREV_TRANSITION)}>
+                <svg width="15" height="15" viewBox="0 0 24 24">
+                  <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z" />
+                  <path fill="none" d="M24 24H0V0h24v24z" />
+                </svg>
+              </div>
+            )}
+            {showPrevMonthArrow && (
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-previous`} onClick={() => pickMonth(pickedYearMonth.month, PREV_TRANSITION)}>
+                <svg width="15" height="15" viewBox="0 0 24 24">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+              </div>
+            )}
           </div>
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-6`}>
             <ReactCSSTransitionGroup
@@ -404,18 +404,22 @@ const Index = memo(
             </ReactCSSTransitionGroup>
           </div>
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__next`} onClick={() => pickMonth(pickedYearMonth.month, NEXT_TRANSITION)}>
-              <svg width="15" height="15" viewBox="0 0 24 24">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                <path d="M0 0h24v24H0z" fill="none" />
-              </svg>
-            </div>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-next`} onClick={() => pickYear(pickedYearMonth.year, NEXT_TRANSITION)}>
-              <svg width="15" height="15" viewBox="0 0 24 24">
-                <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z" />
-                <path fill="none" d="M0 0h24v24H0V0z" />
-              </svg>
-            </div>
+            {showNextMonthArrow && (
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__next`} onClick={() => pickMonth(pickedYearMonth.month, NEXT_TRANSITION)}>
+                <svg width="15" height="15" viewBox="0 0 24 24">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+              </div>
+            )}
+            {showNextYearArrow && (
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-next`} onClick={() => pickYear(pickedYearMonth.year, NEXT_TRANSITION)}>
+                <svg width="15" height="15" viewBox="0 0 24 24">
+                  <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z" />
+                  <path fill="none" d="M0 0h24v24H0V0z" />
+                </svg>
+              </div>
+            )}
           </div>
         </div>
         <div className={`react-minimal-datetime-range-calendar__content`}>
@@ -456,7 +460,7 @@ const CalendarBody = memo(
       let colHtml;
       if (data[key].length) {
         colHtml = data[key].map((item, key) => {
-          const itemDate = new Date(`${item.year}/${item.month}/${item.name}`);
+          const itemDate = new Date(`${item.year}-${item.month}-${item.name}`);
           let isDisabled = pickedYearMonth.month !== item.month;
           let isPickedStart = false;
           let isPickedEnd = false;
@@ -465,20 +469,20 @@ const CalendarBody = memo(
             let starts = startDatePickedArray;
             let ends = endDatePickedArray;
             if (startDatePickedArray.length && endDatePickedArray.length) {
-              const a = new Date(startDatePickedArray.join('/'));
-              const b = new Date(endDatePickedArray.join('/'));
+              const a = new Date(startDatePickedArray.join('-'));
+              const b = new Date(endDatePickedArray.join('-'));
               starts = a < b ? startDatePickedArray : endDatePickedArray;
               ends = a > b ? startDatePickedArray : endDatePickedArray;
             }
             if (starts.length) {
               isPickedStart = starts[0] === item.year && starts[1] === item.month && starts[2] === item.name;
-              const targetDate = new Date(starts.join('/'));
+              const targetDate = new Date(starts.join('-'));
               if (!ends.length) {
                 if (itemDate > targetDate) {
                   isHighlight = true;
                 }
               } else {
-                if (itemDate > targetDate && itemDate < new Date(ends.join('/'))) {
+                if (itemDate > targetDate && itemDate < new Date(ends.join('-'))) {
                   isHighlight = true;
                 }
               }
@@ -539,28 +543,20 @@ const CalendarItem = memo(
           setSelected(false);
         }
       },
-      [item, selected, startDatePickedArray],
+      [item, selected, startDatePickedArray, endDatePickedArray],
     );
     const handleOnMouseOver = useCallback(
       () => {
         if (!selected) {
-          handleChooseEndDate(item);
-        }
-      },
-      [item, selected],
-    );
-    const handleOnMouseOut = useCallback(
-      () => {
-        if (!selected) {
-          if (!startDatePickedArray.length) {
-            handleChooseEndDate({ year: '', month: '', name: '', value: '' });
+          if (startDatePickedArray.length) {
+            handleChooseEndDate(item);
           }
         }
       },
-      [selected, startDatePickedArray],
+      [item, selected, startDatePickedArray, endDatePickedArray],
     );
     return (
-      <div className={`${datePickerItemClass}`} onMouseOver={handleOnMouseOver} onClick={handleOnClick} onMouseOut={handleOnMouseOut}>
+      <div className={`${datePickerItemClass}`} onMouseOver={handleOnMouseOver} onClick={handleOnClick}>
         {item.name}
       </div>
     );

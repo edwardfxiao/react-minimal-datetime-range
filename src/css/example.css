@@ -2,6 +2,10 @@ body {
   margin: 0;
 }
 
+.wrapper {
+  padding: 20px;
+}
+
 .nav {
   padding: 20px;
   background-color: #ececec;
@@ -62,7 +66,7 @@ body {
 }
 
 @media only screen and (max-width: 1000px) {
-    .example-section {
-      display: block;
-    }
+  .example-section {
+    display: block;
   }
+}

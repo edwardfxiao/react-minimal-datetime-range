@@ -3,7 +3,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import LOCALE from './locale.js';
 import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
 import { cx, isValidDate } from './utils.js';
-import CSS from './react-minimal-datetime-range.css';
 
 const TODAY = new Date();
 const YEAR = TODAY.getFullYear();
@@ -19,10 +18,10 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
   let defaultDates = getDaysArray(YEAR, MONTH);
   const isDefaultDateValid = useMemo(() => isValidDate(defaultDate), [defaultDate]);
   if (isDefaultDateValid) {
-    const dateStr = defaultDate.split('/');
-    defaultDateMonth = Number(dateStr[0]);
-    defaultDateDate = Number(dateStr[1]);
-    defaultDateYear = Number(dateStr[2]);
+    const dateStr = defaultDate.split('-');
+    defaultDateYear = Number(dateStr[0]);
+    defaultDateMonth = Number(dateStr[1]);
+    defaultDateDate = Number(dateStr[2]);
     defaultDates = getDaysArray(defaultDateYear, defaultDateMonth);
   }
   const defaultYearStr = String(defaultDateYear);
@@ -58,12 +57,6 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
     },
     [pickedYearMonth],
   );
-  // useEffect(
-  //   () => {
-  //     console.log(pickedDateInfo);
-  //   },
-  //   [pickedDateInfo],
-  // );
   const pickYear = useCallback(
     (year, direction) => {
       year = Number(year);
@@ -123,10 +116,10 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
       let month = MONTH;
       let date = DATE;
       if (!today) {
-        const dateStr = defaultDate.split('/');
-        month = Number(dateStr[0]);
-        date = Number(dateStr[1]);
-        year = Number(dateStr[2]);
+        const dateStr = defaultDate.split('-');
+        year = Number(dateStr[0]);
+        month = Number(dateStr[1]);
+        date = Number(dateStr[2]);
       }
       let direction = NEXT_TRANSITION;
       if (year < Number(pickedYearMonth.year)) {
@@ -161,7 +154,6 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
     [pickedYearMonth],
   );
   const changeSelectorPanelYearSet = useCallback((yearSelectorPanel, direction) => {
-    console.log(direction);
     setDirection(direction);
     setYearSelectorPanel(yearSelectorPanel);
     setYearSelectorPanelList(getYearSet(yearSelectorPanel));
