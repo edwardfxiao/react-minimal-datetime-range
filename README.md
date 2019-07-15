@@ -57,8 +57,8 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   locale={`en-us`} // default is en-us
   show={false} // default is false
   placeholder={['Start Time', 'End Time']}
-  defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
-  defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+  defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  defaultTimes={[`${hourS}:${minuteS}`, `${hourE}:${minuteE}`]} // ['hh:mm', 'hh:mm']
   onConfirm={res => console.log(res)}
   onClose={() => console.log('closed')}
   style={{ width: '300px', margin: '0 auto' }}
