@@ -5,7 +5,7 @@ React verify or password code entering component. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
 
 # Online Demo
-<a href="https://edwardfhsiao.github.io/react-minimal-datetime-range/">Online demo example</a>
+<a href="https://edwardfhsiao.github.io/react-minimal-datetime-range/">Online demo example (Make sure window width is greater than 900 for better experience)</a>
 
 <a href="https://github.com/edwardfhsiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
 
