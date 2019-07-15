@@ -79,11 +79,6 @@ By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can 
             customLocale: {
                 "my-own-locale": {...},//structure must follow below
                 'es': {
-                    today: 'Hoy',
-                    reset: 'Reiniciar',
-                    'reset-date': 'Reiniciar Fecha',
-                    clear: 'Borrar',
-                    now: 'Ahora',
                     weeks: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
                     months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     date: 'Select date',
