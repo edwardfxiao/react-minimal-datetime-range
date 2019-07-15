@@ -47,8 +47,8 @@ const getCustomLocale = (o, m) => {
 const handleCustomLocale = (locale, w) => {
   let res;
   if (typeof w !== 'undefined') {
-    if (w.REACT_PICKY_DATE_TIME && w.REACT_PICKY_DATE_TIME['customLocale']) {
-      res = getCustomLocale(w.REACT_PICKY_DATE_TIME['customLocale'], locale);
+    if (w.REACT_MINIMAL_DATETIME_RANGE && w.REACT_MINIMAL_DATETIME_RANGE['customLocale']) {
+      res = getCustomLocale(w.REACT_MINIMAL_DATETIME_RANGE['customLocale'], locale);
     }
   }
   if (typeof res === 'undefined' || res === false) {
@@ -58,7 +58,7 @@ const handleCustomLocale = (locale, w) => {
 };
 
 if (typeof window !== 'undefined') {
-  window.REACT_PICKY_DATE_TIME = window.REACT_PICKY_DATE_TIME || {};
+  window.REACT_MINIMAL_DATETIME_RANGE = window.REACT_MINIMAL_DATETIME_RANGE || {};
   locale = handleCustomLocale(locale, window);
 }
 
