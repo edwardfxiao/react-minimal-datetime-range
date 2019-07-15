@@ -3,6 +3,7 @@
 
 React verify or password code entering component. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
+
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-minimal-datetime-range/">Online demo example</a>
 
@@ -10,6 +11,10 @@ React verify or password code entering component. Online demo examples.
 
 # Codesandbox Examples
 * <a href="https://codesandbox.io/s/index-z90y9">Examples</a>
+* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Custom locales</a>(when providing)
+
+# Docs Link
+[Custom Locale Guid(can be multiple locales)](#custom-locale)
 
 ### Version of ```16.8.6``` or higher of react and react-dom is required.
 ```js
@@ -60,3 +65,32 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 />
 ```
 
+
+### <a name="custom-locale"></a>Custom Locale (can be multiple locales)
+By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can overwrite the current locale if you like or add a new locale.
+
+**IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_MINIMAL_DATETIME_RANGE BEFORE YOUR JS SCRIPT**
+
+<a href="https://codesandbox.io/s/custom-locale-ylvtr">codesandbox example</a>(located in index.html)
+
+```html
+        <script type="text/javascript">
+        window.REACT_MINIMAL_DATETIME_RANGE = {
+            customLocale: {
+                "my-own-locale": {...},//structure must follow below
+                'es': {
+                    today: 'Hoy',
+                    reset: 'Reiniciar',
+                    'reset-date': 'Reiniciar Fecha',
+                    clear: 'Borrar',
+                    now: 'Ahora',
+                    weeks: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    date: 'Select date',
+                    time: 'Select time',
+                    confirm: 'Confirm',
+                }
+            }
+        }
+        </script>
+```
