@@ -58,7 +58,7 @@
   color: #adb5bd;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 650px) {
   .react-minimal-datetime-range-calendar--range {
     display: block;
   }

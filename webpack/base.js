@@ -87,7 +87,7 @@ var config = (module.exports = {
       },
       {
         test: /\.css$/,
-        include: [PATH.SOURCE_PATH],
+        include: [PATH.SOURCE_PATH, path.join(__dirname, '../', './lib')],
         exclude: [PATH.NODE_MODULES_PATH],
         enforce: 'pre',
         enforce: 'post',

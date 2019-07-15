@@ -1,6 +1,6 @@
 {
   "name": "react-minimal-datetime-range",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React ",
   "main": "index.js",
   "repository": {
@@ -39,7 +39,8 @@
   },
   "peerDependencies": {
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-addons-css-transition-group": "^15.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
