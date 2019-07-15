@@ -11,7 +11,7 @@ React verify or password code entering component. Online demo examples.
 
 # Codesandbox Examples
 * <a href="https://codesandbox.io/s/index-z90y9">Live playground</a>
-* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Example of custom locales</a>(when providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```)
+* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Example of custom locales</a> (when providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```)
 
 # Docs Link
 [Custom Locale Guid(can be multiple locales)](#custom-locale)
