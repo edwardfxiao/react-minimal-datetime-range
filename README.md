@@ -10,8 +10,8 @@ React verify or password code entering component. Online demo examples.
 <a href="https://github.com/edwardfhsiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
 
 # Codesandbox Examples
-* <a href="https://codesandbox.io/s/index-z90y9">Examples</a>
-* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Custom locales</a>(when providing)
+* <a href="https://codesandbox.io/s/index-z90y9">Live playground</a> (Make sure window width is greater than 900 for better experience)
+* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Example of custom locales</a> (when providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```)
 
 # Docs Link
 [Custom Locale Guid(can be multiple locales)](#custom-locale)
@@ -57,10 +57,11 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   locale={`en-us`} // default is en-us
   show={false} // default is false
   placeholder={['Start Time', 'End Time']}
-  defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
-  defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+  defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  defaultTimes={[`${hourS}:${minuteS}`, `${hourE}:${minuteE}`]} // ['hh:mm', 'hh:mm']
   onConfirm={res => console.log(res)}
-  onClose={() => console.log('closed')}
+  onClose={() => console.log('onClose')}
+  onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
 />
 ```
@@ -79,11 +80,6 @@ By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can 
             customLocale: {
                 "my-own-locale": {...},//structure must follow below
                 'es': {
-                    today: 'Hoy',
-                    reset: 'Reiniciar',
-                    'reset-date': 'Reiniciar Fecha',
-                    clear: 'Borrar',
-                    now: 'Ahora',
                     weeks: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
                     months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     date: 'Select date',
