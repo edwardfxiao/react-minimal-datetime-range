@@ -327,7 +327,7 @@
   }
 
   &.today {
-    color: var(--oc-red-5);
+    color: #fc7474;
   }
 
   &.active {
@@ -409,7 +409,7 @@
 }
 
 .today.active .react-minimal-datetime-range-check__path {
-  fill: var(--oc-red-5);
+  fill: #fc7474;
 }
 
 .active .react-minimal-datetime-range-check__path,
