@@ -100,13 +100,14 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
   );
   const pickDate = useCallback(
     pickedDate => {
-      setPickedDateInfo({
+      const newPickedDateInfo = {
         ...pickedDateInfo,
         year: pickedYearMonth.year,
         month: pickedYearMonth.month,
         date: formatDateString(pickedDate),
-      });
-      onDatePicked(pickedDateInfo);
+      };
+      setPickedDateInfo(newPickedDateInfo);
+      onDatePicked(newPickedDateInfo);
     },
     [pickedYearMonth, pickedDateInfo],
   );

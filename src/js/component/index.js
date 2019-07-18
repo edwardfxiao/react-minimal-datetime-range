@@ -231,6 +231,13 @@ export const RangePicker = memo(
       },
       [internalShow],
     );
+    useEffect(
+      () => {
+        setStart(defaultDates[0] ? `${defaultDates[0]} ${defaultTimes[0] ? defaultTimes[0] : ''}` : '');
+        setEnd(defaultDates[1] ? `${defaultDates[1]} ${defaultTimes[1] ? defaultTimes[1] : ''}` : '');
+      },
+      [defaultDates],
+    );
     return (
       <div className="react-minimal-datetime-range__range" style={style}>
         <span className="react-minimal-datetime-range__range-input-wrapper" onClick={() => setInternalShow(!internalShow)}>

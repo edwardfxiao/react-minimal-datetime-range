@@ -3,13 +3,18 @@
 
 React verify or password code entering component. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
+
 # Online Demo
 <a href="https://edwardfhsiao.github.io/react-minimal-datetime-range/">Online demo example</a>
 
 <a href="https://github.com/edwardfhsiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
 
 # Codesandbox Examples
-* <a href="https://codesandbox.io/s/index-z90y9">Examples</a>
+* <a href="https://codesandbox.io/s/index-z90y9">Live playground</a> (Make sure window width is greater than 900 for better experience)
+* <a href="https://codesandbox.io/s/custom-locale-ylvtr">Example of custom locales</a> (when providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```)
+
+# Docs Link
+[Custom Locale Guid(can be multiple locales)](#custom-locale)
 
 ### Version of ```16.8.6``` or higher of react and react-dom is required.
 ```js
@@ -52,11 +57,36 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   locale={`en-us`} // default is en-us
   show={false} // default is false
   placeholder={['Start Time', 'End Time']}
-  defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
-  defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+  defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  defaultTimes={[`${hourS}:${minuteS}`, `${hourE}:${minuteE}`]} // ['hh:mm', 'hh:mm']
   onConfirm={res => console.log(res)}
-  onClose={() => console.log('closed')}
+  onClose={() => console.log('onClose')}
+  onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
 />
 ```
 
+
+### <a name="custom-locale"></a>Custom Locale (can be multiple locales)
+By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can overwrite the current locale if you like or add a new locale.
+
+**IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_MINIMAL_DATETIME_RANGE BEFORE YOUR JS SCRIPT**
+
+<a href="https://codesandbox.io/s/custom-locale-ylvtr">codesandbox example</a>(located in index.html)
+
+```html
+        <script type="text/javascript">
+        window.REACT_MINIMAL_DATETIME_RANGE = {
+            customLocale: {
+                "my-own-locale": {...},//structure must follow below
+                'es': {
+                    weeks: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    date: 'Select date',
+                    time: 'Select time',
+                    confirm: 'Confirm',
+                }
+            }
+        }
+        </script>
+```

@@ -20,6 +20,7 @@
 }
 
 .react-minimal-datetime-range.visible {
+  z-index: 1;
   opacity: 1;
   transform: translateY(0) perspective(600px) rotateX(0);
 }
@@ -391,7 +392,7 @@
   &.visible {
     opacity: 1 !important;
     filter: alpha(opacity=100);
-    background-color-color: rgba(0, 0, 0, 0.3) !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
     z-index: 1 !important;
   }
 }
@@ -560,7 +561,7 @@
   display: inline-block;
   padding: 4px 0;
   color: rgba(0, 0, 0, 0.65);
-  background-color-color: #fff;
+  background-color: #fff;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   transition: all 0.3s;
@@ -571,7 +572,7 @@
   width: 44%;
   height: 95%;
   text-align: center;
-  background-color-color: transparent;
+  background-color: transparent;
   outline: 0;
 }
 
