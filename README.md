@@ -70,8 +70,6 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 ### <a name="custom-locale"></a>Custom Locale (can be multiple locales)
 By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can overwrite the current locale if you like or add a new locale.
 
-**IMPORTANT NOTE: YOU WILL NEED TO PLACE window.REACT_MINIMAL_DATETIME_RANGE BEFORE YOUR JS SCRIPT**
-
 <a href="https://codesandbox.io/s/custom-locale-ylvtr">codesandbox example</a>(located in index.html)
 
 ```html
