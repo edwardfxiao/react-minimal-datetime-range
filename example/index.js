@@ -72,7 +72,7 @@ const Component = () => {
         <div style={prefixAll({ flex: '0 0 40%' })}>
           <Markdown
             source={`\`\`\`javascript
-import ReactMinimalDatetimeRange from 'react-minimal-datetime-range';
+import { CalendarPicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <CalendarPicker
     locale="en-us" // default is en-us
@@ -112,7 +112,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
         <div style={prefixAll({ flex: '0 0 40%' })}>
           <Markdown
             source={`\`\`\`javascript
-import ReactMinimalDatetimeRange from 'react-minimal-datetime-range';
+import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <RangePicker
     locale="en-us" // default is en-us
