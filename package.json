@@ -1,7 +1,7 @@
 {
   "name": "react-minimal-datetime-range",
-  "version": "0.0.7",
-  "description": "React ",
+  "version": "1.0.1",
+  "description": "A react date time range picker component",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -10,10 +10,16 @@
   "keywords": [
     "react",
     "minimal",
+    "range",
+    "picky",
     "date",
     "time",
-    "range",
-    "picker"
+    "picker",
+    "datepicker",
+    "date-picker",
+    "timepicker",
+    "time-picker",
+    "calendar"
   ],
   "author": "Edward Xiao",
   "license": "MIT",
@@ -82,6 +88,7 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.8.6",
     "react-markdown": "^4.0.9",
+    "rimraf": "^3.0.2",
     "uglifyjs-webpack-plugin": "^2.1.3",
     "url-loader": "^2.0.0",
     "webpack": "^4.19.1",
