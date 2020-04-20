@@ -3,7 +3,7 @@ const path = require('path');
 const PATH = require('./build_path');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var config = (module.exports = {
+module.exports = {
   context: PATH.ROOT_PATH,
   entry: {
     index: PATH.ROOT_PATH + 'example/index.js',
@@ -44,7 +44,6 @@ var config = (module.exports = {
         include: [PATH.ROOT_PATH],
         exclude: [PATH.NODE_MODULES_PATH, path.join(__dirname, '../', './example')],
         enforce: 'pre',
-        enforce: 'post',
         loader: 'eslint-loader',
         options: {
           emitWarning: true,
@@ -54,14 +53,12 @@ var config = (module.exports = {
         test: /\.jsx?$/,
         include: [PATH.ROOT_PATH],
         exclude: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
         enforce: 'post',
         loader: 'babel-loader',
       },
       {
         test: /\.css$/,
         include: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
         enforce: 'post',
         use: [
           MiniCssExtractPlugin.loader,
@@ -89,7 +86,6 @@ var config = (module.exports = {
         test: /\.css$/,
         include: [PATH.SOURCE_PATH, path.join(__dirname, '../', './lib')],
         exclude: [PATH.NODE_MODULES_PATH],
-        enforce: 'pre',
         enforce: 'post',
         use: [
           MiniCssExtractPlugin.loader,
@@ -146,4 +142,4 @@ var config = (module.exports = {
       fileName: 'manifest-rev.json',
     }),
   ],
-});
+};
