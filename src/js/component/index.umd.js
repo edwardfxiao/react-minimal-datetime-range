@@ -1,8 +1,7 @@
-import { CalendarPicker, RangePicker } from './index.js';
+import * as Index from './index.js';
 
 if (typeof window !== 'undefined') {
-  window.CalendarPicker = CalendarPicker;
-  window.RangePicker = RangePicker;
+	window.ReactMinimalDateTimeRange = Index;
 }
 
-export { CalendarPicker, RangePicker };
+export default Index;

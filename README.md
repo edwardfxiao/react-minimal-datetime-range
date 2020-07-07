@@ -1,7 +1,7 @@
 # react-minimal-datetime-range
 [![npm version](https://badge.fury.io/js/react-minimal-datetime-range.svg)](https://badge.fury.io/js/react-minimal-datetime-range) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-minimal-datetime-range.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
-React verify or password code entering component. Online demo examples.
+A react component for date time range picker. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
 
 # Online Demo
@@ -43,6 +43,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 <CalendarPicker
   locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
   show={showCalendarPicker} //default is false
+  allowPageClickToClose={true} // default is true
   onClose={() => setShowCalendarPicker(false)}
   defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "MM/DD/YYYY"
   onYearPicked={res => console.log(res)}
@@ -54,15 +55,34 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 />
 
 <RangePicker
-  locale={`en-us`} // default is en-us
+  locale="en-us" // default is en-us
   show={false} // default is false
-  placeholder={['Start Time', 'End Time']}
-  defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
-  defaultTimes={[`${hourS}:${minuteS}`, `${hourE}:${minuteE}`]} // ['hh:mm', 'hh:mm']
+  disabled={false} // default is false
+  allowPageClickToClose={true} // default is true
   onConfirm={res => console.log(res)}
   onClose={() => console.log('onClose')}
   onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
+  placeholder={['Start Time', 'End Time']}
+  ////////////////////
+  // IMPORTANT DESC //
+  ////////////////////
+  defaultDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the value you choosed every time.
+  defaultTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the value you choosed every time.
+  initialDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the initial dates.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
+  initialTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the initial times.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
 />
 ```
 
