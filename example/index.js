@@ -10,10 +10,10 @@ import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import '../src/css/example.css';
-import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
-// import { CalendarPicker, RangePicker } from '../lib/components/index.js';
-import '../src/js/component/react-minimal-datetime-range.css';
-// import '../lib/react-minimal-datetime-range.min.css';
+// import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
+import { CalendarPicker, RangePicker } from '../lib/components/index.js';
+// import '../src/js/component/react-minimal-datetime-range.css';
+import '../lib/react-minimal-datetime-range.min.css';
 const CodeBlock = ({ literal, language }) => {
   var html = Prism.highlight(literal, Prism.languages[language]);
   var cls = 'language-' + language;
