@@ -57,6 +57,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 <RangePicker
   locale={`en-us`} // default is en-us
   show={false} // default is false
+  disabled={false} // default is false
   allowPageClickToClose={true} // default is true
   placeholder={['Start Time', 'End Time']}
   defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
