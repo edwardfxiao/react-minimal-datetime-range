@@ -141,6 +141,7 @@ export const RangePicker = memo(
     style = {},
   }) => {
     // ['YYYY-MM-DD', 'YYYY-MM-DD'] // ['hh:mm', 'hh:mm']
+    console.log(initialDates);
     const isDefaultDatesValid = isValidDates(defaultDates);
     const isInitialDatesValid = isValidDates(initialDates);
     const [selected, setSelected] = useState(isDefaultDatesValid ? true : false);
@@ -290,7 +291,7 @@ export const RangePicker = memo(
       },
       [allowPageClickToClose],
     );
-    const isInitial = useMemo(() => start === `${initialDates[0]} ${initialTimes[0]}` && end === `${initialDates[1]} ${initialTimes[1]}`, [start, end]);
+    const isInitial = useMemo(() => start === `${initialDates[0]} ${initialTimes[0]}` && end === `${initialDates[1]} ${initialTimes[1]}`, [initialDates, initialTimes, start, end]);
     const isEmpty = useMemo(() => !start && !end, [start, end]);
     return (
       <div className="react-minimal-datetime-range__range" style={style}>
