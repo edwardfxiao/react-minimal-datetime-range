@@ -61,7 +61,7 @@ const Component = () => {
         <h3>CalendarPicker</h3>
       </div>
       <div className={'example-section'}>
-        <div style={prefixAll({ flex: '0 0 60%' })}>
+        <div style={prefixAll({ flex: '0 0 50%' })}>
           <div style={{ marginBottom: '10px' }}>
             <div
               onClick={() => {
@@ -86,25 +86,25 @@ const Component = () => {
             />
           </div>
         </div>
-        <div style={prefixAll({ flex: '0 0 40%' })}>
+        <div style={prefixAll({ flex: '0 0 50%' })}>
           <div style={{ maxWidth: '800px' }}>
             <Markdown
               source={`\`\`\`javascript
 import { CalendarPicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-  <CalendarPicker
-    locale="en-us" // default is en-us
-    show={showCalendarPicker} //default is false
-    allowPageClickToClose={true} // default is true
-    onClose={() => setShowCalendarPicker(false)}
-    defaultDate={year+'-'+month+'-'+date} // OPTIONAL. format: "YYYY-MM-DD"
-    onYearPicked={res => console.log(res)}
-    onMonthPicked={res => console.log(res)}
-    onDatePicked={res => console.log(res)}
-    onResetDate={res => console.log(res)}
-    onResetDefaultDate={res => console.log(res)}
-    style={{ width: '300px', margin: '10px auto 0' }}
-  />
+<CalendarPicker
+  locale="en-us" // default is en-us
+  show={showCalendarPicker} //default is false
+  allowPageClickToClose={true} // default is true
+  onClose={() => setShowCalendarPicker(false)}
+  defaultDate={year+'-'+month+'-'+date} // OPTIONAL. format: "YYYY-MM-DD"
+  onYearPicked={res => console.log(res)}
+  onMonthPicked={res => console.log(res)}
+  onDatePicked={res => console.log(res)}
+  onResetDate={res => console.log(res)}
+  onResetDefaultDate={res => console.log(res)}
+  style={{ width: '300px', margin: '10px auto 0' }}
+/>
  \`\`\``}
               renderers={{ CodeBlock }}
             />
@@ -115,7 +115,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
         <h3>RangePicker</h3>
       </div>
       <div className={'example-section'}>
-        <div style={prefixAll({ flex: '0 0 60%' })}>
+        <div style={prefixAll({ flex: '0 0 50%' })}>
           <div style={{ marginBottom: '10px' }}>
             <RangePicker
               locale={`en-us`} // default is en-us
@@ -133,40 +133,42 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
             />
           </div>
         </div>
-        <div style={prefixAll({ flex: '0 0 40%' })}>
+        <div style={prefixAll({ flex: '0 0 50%' })}>
           <div style={{ maxWidth: '800px' }}>
             <Markdown
               source={`\`\`\`javascript
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-  <RangePicker
-    locale="en-us" // default is en-us
-    show={false} // default is false
-    allowPageClickToClose={true} // default is true
-    onConfirm={res => console.log(res)}
-    onClose={() => console.log('closed')}
-    style={{ width: '300px', margin: '0 auto' }}
-    placeholder={['Start Time', 'End Time']}
-    ////////////////////
-    // IMPORTANT DESC //
-    ////////////////////
-    defaultDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
-    // ['YYYY-MM-DD', 'YYYY-MM-DD']
-    // This is the value you choosed every time.
-    defaultTimes={[hour+':'+minute,hour+':'+minute]}
-    // ['hh:mm', 'hh:mm']
-    // This is the value you choosed every time.
-    initialDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
-    // ['YYYY-MM-DD', 'YYYY-MM-DD']
-    // This is the initial dates.
-    // If provied, input will be reset to this value when the clear icon hits,
-    // otherwise input will be display placeholder
-    initialTimes={[hour+':'+minute,hour+':'+minute]}
-    // ['hh:mm', 'hh:mm']
-    // This is the initial times.
-    // If provied, input will be reset to this value when the clear icon hits,
-    // otherwise input will be display placeholder
-  />
+<RangePicker
+  locale="en-us" // default is en-us
+  show={false} // default is false
+  disabled={false} // default is false
+  allowPageClickToClose={true} // default is true
+  onConfirm={res => console.log(res)}
+  onClose={() => console.log('onClose')}
+  onClear={() => console.log('onClear')}
+  style={{ width: '300px', margin: '0 auto' }}
+  placeholder={['Start Time', 'End Time']}
+  ////////////////////
+  // IMPORTANT DESC //
+  ////////////////////
+  defaultDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the value you choosed every time.
+  defaultTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the value you choosed every time.
+  initialDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the initial dates.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
+  initialTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the initial times.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
+/>
  \`\`\``}
               renderers={{ CodeBlock }}
             />
