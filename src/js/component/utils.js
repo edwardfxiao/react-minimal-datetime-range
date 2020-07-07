@@ -21,7 +21,6 @@ export const cx = (...params) => {
   }
   return classes.join(' ');
 };
-
 export const isValidDate = str => {
   try {
     const d = new Date(str);
@@ -32,4 +31,16 @@ export const isValidDate = str => {
   } catch (e) {
     return false;
   }
+};
+export const isValidDates = arr => {
+  let isValid = false;
+  if (arr.length === 2) {
+    isValid = true;
+    arr.forEach(v => {
+      if (!isValidDate(v)) {
+        isValid = false;
+      }
+    });
+  }
+  return isValid;
 };

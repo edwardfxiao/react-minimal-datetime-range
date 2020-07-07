@@ -55,17 +55,34 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 />
 
 <RangePicker
-  locale={`en-us`} // default is en-us
+  locale="en-us" // default is en-us
   show={false} // default is false
   disabled={false} // default is false
   allowPageClickToClose={true} // default is true
-  placeholder={['Start Time', 'End Time']}
-  defaultDates={[`${yearS}-${monthS}-${dateS}`, `${yearE}-${monthE}-${dateE}`]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
-  defaultTimes={[`${hourS}:${minuteS}`, `${hourE}:${minuteE}`]} // ['hh:mm', 'hh:mm']
   onConfirm={res => console.log(res)}
   onClose={() => console.log('onClose')}
   onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
+  placeholder={['Start Time', 'End Time']}
+  ////////////////////
+  // IMPORTANT DESC //
+  ////////////////////
+  defaultDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the value you choosed every time.
+  defaultTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the value you choosed every time.
+  initialDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+  // ['YYYY-MM-DD', 'YYYY-MM-DD']
+  // This is the initial dates.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
+  initialTimes={[hour+':'+minute,hour+':'+minute]}
+  // ['hh:mm', 'hh:mm']
+  // This is the initial times.
+  // If provied, input will be reset to this value when the clear icon hits,
+  // otherwise input will be display placeholder
 />
 ```
 

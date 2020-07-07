@@ -10,8 +10,8 @@ import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import '../src/css/example.css';
-// import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
-import { CalendarPicker, RangePicker } from '../lib/components/index.js';
+import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
+// import { CalendarPicker, RangePicker } from '../lib/components/index.js';
 import '../src/js/component/react-minimal-datetime-range.css';
 // import '../lib/react-minimal-datetime-range.min.css';
 const CodeBlock = ({ literal, language }) => {
@@ -29,16 +29,32 @@ CodeBlock.propTypes = {
   language: PropTypes.string,
 };
 
+const now = new Date();
+if (!String.prototype.padStart) {
+  String.prototype.padStart = function padStart(targetLength, padString) {
+    targetLength = targetLength >> 0; //truncate if number, or convert non-number to 0;
+    padString = String(typeof padString !== 'undefined' ? padString : ' ');
+    if (this.length >= targetLength) {
+      return String(this);
+    } else {
+      targetLength = targetLength - this.length;
+      if (targetLength > padString.length) {
+        padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+      }
+      return padString.slice(0, targetLength) + String(this);
+    }
+  };
+}
 const Component = () => {
   const $passwordWrapperRef = useRef(null);
   const $pinWrapperRef = useRef(null);
   const $activationWrapperRef = useRef(null);
   const [showCalendarPicker, setShowCalendarPicker] = useState(true);
-  const [hour, setHour] = useState('03');
-  const [minute, setMinute] = useState('10');
-  const [month, setMonth] = useState('01');
-  const [date, setDate] = useState('30');
-  const [year, setYear] = useState('2000');
+  const [hour, setHour] = useState('01');
+  const [minute, setMinute] = useState('01');
+  const [month, setMonth] = useState(String(now.getMonth() + 1).padStart(2, '0'));
+  const [date, setDate] = useState(String(now.getDate()).padStart(2, '0'));
+  const [year, setYear] = useState(String(now.getFullYear()));
   return (
     <div className={'wrapper'}>
       <div>
@@ -71,8 +87,9 @@ const Component = () => {
           </div>
         </div>
         <div style={prefixAll({ flex: '0 0 40%' })}>
-          <Markdown
-            source={`\`\`\`javascript
+          <div style={{ maxWidth: '800px' }}>
+            <Markdown
+              source={`\`\`\`javascript
 import { CalendarPicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <CalendarPicker
@@ -80,7 +97,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
     show={showCalendarPicker} //default is false
     allowPageClickToClose={true} // default is true
     onClose={() => setShowCalendarPicker(false)}
-    defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "YYYY-MM-DD"
+    defaultDate={year+'-'+month+'-'+date} // OPTIONAL. format: "YYYY-MM-DD"
     onYearPicked={res => console.log(res)}
     onMonthPicked={res => console.log(res)}
     onDatePicked={res => console.log(res)}
@@ -89,8 +106,9 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
     style={{ width: '300px', margin: '10px auto 0' }}
   />
  \`\`\``}
-            renderers={{ CodeBlock }}
-          />
+              renderers={{ CodeBlock }}
+            />
+          </div>
         </div>
       </div>
       <div>
@@ -107,6 +125,8 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
               placeholder={['Start Time', 'End Time']}
               defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
               defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
+              initialDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
+              initialTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
               onConfirm={res => console.log(res)}
               onClose={() => console.log('closed')}
               style={{ width: '300px', margin: '0 auto' }}
@@ -114,26 +134,43 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
           </div>
         </div>
         <div style={prefixAll({ flex: '0 0 40%' })}>
-          <Markdown
-            source={`\`\`\`javascript
+          <div style={{ maxWidth: '800px' }}>
+            <Markdown
+              source={`\`\`\`javascript
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <RangePicker
     locale="en-us" // default is en-us
     show={false} // default is false
     allowPageClickToClose={true} // default is true
-    placeholder={['Start Time', 'End Time']}
-    defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]}
-    // ['YYYY-MM-DD', 'YYYY-MM-DD']
-    defaultTimes={[hour + ':' + minute, hour + ':' + minute]}
-    // ['hh:mm', 'hh:mm']
     onConfirm={res => console.log(res)}
     onClose={() => console.log('closed')}
     style={{ width: '300px', margin: '0 auto' }}
+    placeholder={['Start Time', 'End Time']}
+    ////////////////////
+    // IMPORTANT DESC //
+    ////////////////////
+    defaultDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+    // ['YYYY-MM-DD', 'YYYY-MM-DD']
+    // This is the value you choosed every time.
+    defaultTimes={[hour+':'+minute,hour+':'+minute]}
+    // ['hh:mm', 'hh:mm']
+    // This is the value you choosed every time.
+    initialDates={[year+'-'+month+'-'+date,year+'-'+month+'-'+date]}
+    // ['YYYY-MM-DD', 'YYYY-MM-DD']
+    // This is the initial dates.
+    // If provied, input will be reset to this value when the clear icon hits,
+    // otherwise input will be display placeholder
+    initialTimes={[hour+':'+minute,hour+':'+minute]}
+    // ['hh:mm', 'hh:mm']
+    // This is the initial times.
+    // If provied, input will be reset to this value when the clear icon hits,
+    // otherwise input will be display placeholder
   />
  \`\`\``}
-            renderers={{ CodeBlock }}
-          />
+              renderers={{ CodeBlock }}
+            />
+          </div>
         </div>
       </div>
     </div>
