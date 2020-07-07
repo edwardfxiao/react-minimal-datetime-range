@@ -63,8 +63,11 @@
   color: #adb5bd;
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 900px) {
   .react-minimal-datetime-range-calendar--range {
+    display: block;
+  }
+  .react-minimal-datetime-date-piker__divider {
     display: block;
   }
 }
@@ -641,6 +644,11 @@
 
 .react-minimal-datetime-date-piker {
   position: relative;
+}
+
+.react-minimal-datetime-date-piker__divider {
+  display: inline-block;
+  width: 20px;
 }
 
 .react-minimal-datetime-range__time-piker {

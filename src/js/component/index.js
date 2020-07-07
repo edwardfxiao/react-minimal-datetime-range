@@ -10,8 +10,9 @@ try {
 } catch (ex) {}
 export const CalendarPicker = memo(
   ({
-    locale = DEFAULT_LACALE,
     show = false,
+    locale = DEFAULT_LACALE,
+    allowPageClickToClose = true,
     onClose = () => {},
     defaultDate = '',
     onYearPicked = () => {},
@@ -44,8 +45,31 @@ export const CalendarPicker = memo(
     useEffect(() => {
       setInternalShow(show);
     }, [show]);
+    const $elWrapper = useRef(null);
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('mousedown', pageClick);
+        window.addEventListener('touchstart', pageClick);
+        return () => {
+          window.removeEventListener('mousedown', pageClick);
+          window.removeEventListener('touchstart', pageClick);
+        };
+      }
+    }, []);
+    const pageClick = useCallback(
+      e => {
+        if (!allowPageClickToClose) {
+          return;
+        }
+        if ($elWrapper.current.contains(e.target)) {
+          return;
+        }
+        handleOnClose();
+      },
+      [allowPageClickToClose],
+    );
     return (
-      <div style={style}>
+      <div style={style} ref={$elWrapper}>
         {internalShow && (
           <CalendarPickerComponent
             show={internalShow}
@@ -102,12 +126,13 @@ const TYPES = ['date', 'time'];
 
 export const RangePicker = memo(
   ({
+    show = false,
     disabled = false,
+    allowPageClickToClose = true,
     locale = DEFAULT_LACALE,
     placeholder = ['', ''],
     defaultDates = ['', ''],
     defaultTimes = ['', ''],
-    show = false,
     onConfirm = () => {},
     onClear = () => {},
     onClose = () => {},
@@ -231,13 +256,38 @@ export const RangePicker = memo(
       setStart(defaultDates[0] ? `${defaultDates[0]} ${defaultTimes[0] ? defaultTimes[0] : ''}` : '');
       setEnd(defaultDates[1] ? `${defaultDates[1]} ${defaultTimes[1] ? defaultTimes[1] : ''}` : '');
     }, [defaultDates]);
+    const $elWrapper = useRef(null);
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('mousedown', pageClick);
+        window.addEventListener('touchstart', pageClick);
+        return () => {
+          window.removeEventListener('mousedown', pageClick);
+          window.removeEventListener('touchstart', pageClick);
+        };
+      }
+    }, []);
+    const pageClick = useCallback(
+      e => {
+        if (!allowPageClickToClose) {
+          return;
+        }
+        if ($elWrapper.current.contains(e.target)) {
+          return;
+        }
+        setInternalShow(false);
+      },
+      [allowPageClickToClose],
+    );
+    const isDefault = useMemo(() => start === `${defaultDates[0]} ${defaultTimes[0]}` && end === `${defaultDates[1]} ${defaultTimes[1]}`, [start, end]);
+    const isEmpty = useMemo(() => !start && !end, [start, end]);
     return (
       <div className="react-minimal-datetime-range__range" style={style}>
         <span className={`react-minimal-datetime-range__range-input-wrapper ${disabled && 'disabled'}`} onClick={() => !disabled && setInternalShow(!internalShow)}>
           <input readOnly={true} placeholder={placeholder[0]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={start} />
           <span className="react-minimal-datetime-range__range-input-separator"> ~ </span>
           <input readOnly={true} placeholder={placeholder[1]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={end} />
-          {start ? (
+          {!isDefault && !isEmpty ? (
             <svg className={`react-minimal-datetime-range__clear ${disabled && 'disabled'}`} width="15" height="15" viewBox="0 0 24 24" onClick={handleOnClear}>
               <path
                 className="react-minimal-datetime-range__icon-fill"
@@ -255,33 +305,35 @@ export const RangePicker = memo(
             </svg>
           )}
         </span>
-        {internalShow && (
-          <RangePickerComponent
-            show={internalShow}
-            selected={selected}
-            setSelected={setSelected}
-            handleChooseStartDate={handleChooseStartDate}
-            handleChooseEndDate={handleChooseEndDate}
-            dates={dates}
-            times={times}
-            locale={locale}
-            startDatePickedArray={startDatePickedArray}
-            endDatePickedArray={endDatePickedArray}
-            type={type}
-            handleOnChangeType={handleOnChangeType}
-            handleOnConfirm={handleOnConfirm}
-            startTimePickedArray={startTimePickedArray}
-            endTimePickedArray={endTimePickedArray}
-            handleChooseStartTimeHour={handleChooseStartTimeHour}
-            handleChooseStartTimeMinute={handleChooseStartTimeMinute}
-            handleChooseEndTimeHour={handleChooseEndTimeHour}
-            handleChooseEndTimeMinute={handleChooseEndTimeMinute}
-            currentDateObjStart={currentDateObjStart}
-            setCurrentDateObjStart={setCurrentDateObjStart}
-            currentDateObjEnd={currentDateObjEnd}
-            setCurrentDateObjEnd={setCurrentDateObjEnd}
-          />
-        )}
+        <div ref={$elWrapper}>
+          {internalShow && (
+            <RangePickerComponent
+              show={internalShow}
+              selected={selected}
+              setSelected={setSelected}
+              handleChooseStartDate={handleChooseStartDate}
+              handleChooseEndDate={handleChooseEndDate}
+              dates={dates}
+              times={times}
+              locale={locale}
+              startDatePickedArray={startDatePickedArray}
+              endDatePickedArray={endDatePickedArray}
+              type={type}
+              handleOnChangeType={handleOnChangeType}
+              handleOnConfirm={handleOnConfirm}
+              startTimePickedArray={startTimePickedArray}
+              endTimePickedArray={endTimePickedArray}
+              handleChooseStartTimeHour={handleChooseStartTimeHour}
+              handleChooseStartTimeMinute={handleChooseStartTimeMinute}
+              handleChooseEndTimeHour={handleChooseEndTimeHour}
+              handleChooseEndTimeMinute={handleChooseEndTimeMinute}
+              currentDateObjStart={currentDateObjStart}
+              setCurrentDateObjStart={setCurrentDateObjStart}
+              currentDateObjEnd={currentDateObjEnd}
+              setCurrentDateObjEnd={setCurrentDateObjEnd}
+            />
+          )}
+        </div>
       </div>
     );
   },
@@ -342,6 +394,7 @@ const RangePickerComponent = memo(
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
           />
+          <div className="react-minimal-datetime-date-piker__divider" />
           <RangeDate
             selected={selected}
             setSelected={setSelected}

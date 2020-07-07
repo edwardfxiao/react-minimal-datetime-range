@@ -59,6 +59,7 @@ const Component = () => {
               locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
               show={showCalendarPicker} //default is false
               onClose={() => setShowCalendarPicker(false)}
+              allowPageClickToClose={true} // default is true
               defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "MM/DD/YYYY"
               onYearPicked={res => console.log(res)}
               onMonthPicked={res => console.log(res)}
@@ -77,6 +78,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <CalendarPicker
     locale="en-us" // default is en-us
     show={showCalendarPicker} //default is false
+    allowPageClickToClose={true} // default is true
     onClose={() => setShowCalendarPicker(false)}
     defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "YYYY-MM-DD"
     onYearPicked={res => console.log(res)}
@@ -101,6 +103,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
               locale={`en-us`} // default is en-us
               show={false} // default is false
               disabled={false} // default is false
+              allowPageClickToClose={true} // default is true
               placeholder={['Start Time', 'End Time']}
               defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
               defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
@@ -118,6 +121,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   <RangePicker
     locale="en-us" // default is en-us
     show={false} // default is false
+    allowPageClickToClose={true} // default is true
     placeholder={['Start Time', 'End Time']}
     defaultDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]}
     // ['YYYY-MM-DD', 'YYYY-MM-DD']
