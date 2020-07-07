@@ -141,7 +141,6 @@ export const RangePicker = memo(
     style = {},
   }) => {
     // ['YYYY-MM-DD', 'YYYY-MM-DD'] // ['hh:mm', 'hh:mm']
-    console.log(initialDates);
     const isDefaultDatesValid = isValidDates(defaultDates);
     const isInitialDatesValid = isValidDates(initialDates);
     const [selected, setSelected] = useState(isDefaultDatesValid ? true : false);
