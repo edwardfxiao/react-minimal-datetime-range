@@ -388,6 +388,7 @@ const RangePickerComponent = memo(
       }
     }, [show]);
     const componentClass = useMemo(() => cx('react-minimal-datetime-range', internalShow && 'visible'), [internalShow]);
+    const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
     return (
       <div className={componentClass}>
         <div className="react-minimal-datetime-date-piker">
@@ -443,10 +444,10 @@ const RangePickerComponent = memo(
         </div>
         <div className="react-minimal-datetime-range__button-wrapper">
           <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--type', !selected && 'disabled')} onClick={selected ? handleOnChangeType : () => {}}>
-            {type === TYPES[0] ? LOCALE[locale][TYPES[1]] : LOCALE[locale][TYPES[0]]}
+            {type === TYPES[0] ? LOCALE_DATA[TYPES[1]] : LOCALE_DATA[TYPES[0]]}
           </div>
           <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--confirm', !selected && 'disabled')} onClick={selected ? handleOnConfirm : () => {}}>
-            {LOCALE[locale]['confirm']}
+            {LOCALE_DATA['confirm']}
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ const DATE = TODAY.getDate();
 const ITEM_HEIGHT = 40;
 
 const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {} }) => {
+  const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
   let defaultDateDate = DATE;
   let defaultDateMonth = MONTH;
   let defaultDateYear = YEAR;
@@ -51,12 +52,9 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
   const $monthSelectorPanel = useRef(null);
   const onMouseDown = useCallback(() => {}, []);
   const onMouseUp = useCallback(() => {}, []);
-  useEffect(
-    () => {
-      setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
-    },
-    [pickedYearMonth],
-  );
+  useEffect(() => {
+    setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
+  }, [pickedYearMonth]);
   const pickYear = useCallback(
     (year, direction) => {
       year = Number(year);
@@ -159,13 +157,10 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
     setYearSelectorPanel(yearSelectorPanel);
     setYearSelectorPanelList(getYearSet(yearSelectorPanel));
   }, []);
-  const handleShowSelectorPanel = useCallback(
-    () => {
-      setShowSelectorPanel(!showSelectorPanel);
-      setShowMask(!showMask);
-    },
-    [showSelectorPanel, showMask],
-  );
+  const handleShowSelectorPanel = useCallback(() => {
+    setShowSelectorPanel(!showSelectorPanel);
+    setShowMask(!showMask);
+  }, [showSelectorPanel, showMask]);
   let transitionContainerStyle;
   let content;
   if (dates.length) {
@@ -191,7 +186,7 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
       height: `${row * ITEM_HEIGHT}px`,
     };
   }
-  const captionHtml = LOCALE[locale].weeks.map((item, key) => {
+  const captionHtml = LOCALE_DATA.weeks.map((item, key) => {
     return (
       <div className={`react-minimal-datetime-range-calendar__table-caption react-minimal-datetime-range-calendar__table-cel no-border`} key={key}>
         {item}
@@ -199,7 +194,7 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
     );
   });
   let selectorPanelClass = cx('react-minimal-datetime-range-dropdown', 'react-minimal-datetime-range-calendar__selector-panel', showSelectorPanel && 'visible');
-  let selectorPanelMonthHtml = LOCALE[locale].months.map((item, key) => {
+  let selectorPanelMonthHtml = LOCALE_DATA.months.map((item, key) => {
     let itemMonth = key + 1;
     let monthItemClass = cx('react-minimal-datetime-range-dropdown-calendar__month-item', itemMonth == pickedYearMonth.month && 'active');
     let month = itemMonth - 1;
@@ -322,7 +317,7 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
             <div className={`react-minimal-datetime-range-calendar__title`} key={pickedYearMonth.string}>
               <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
                 <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                  <span>{`${LOCALE[locale].months[pickedYearMonth.month - 1]}`}</span>
+                  <span>{`${LOCALE_DATA.months[pickedYearMonth.month - 1]}`}</span>
                 </span>
                 <span>&nbsp;</span>
                 <span className={`react-minimal-datetime-range-calendar__clicker`}>
@@ -363,12 +358,12 @@ const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {
         </ReactCSSTransitionGroup>
       </div>
       <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__today`} onClick={() => reset(true)}>
-        <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE[locale]['today']}</span>
+        <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['today']}</span>
         <span className={`react-minimal-datetime-range-calendar__inline-span react-minimal-datetime-range-calendar__icon react-minimal-datetime-range-refresh`} />
       </div>
       {isDefaultDateValid ? (
         <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__default-day`} onClick={() => reset(false)}>
-          <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE[locale]['reset-date']}</span>
+          <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['reset-date']}</span>
           <span className={`react-minimal-datetime-range-calendar__inline-span react-minimal-datetime-range-calendar__icon react-minimal-datetime-range-refresh`} />
         </div>
       ) : (
@@ -405,12 +400,9 @@ const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {
 });
 
 const CalendarItem = memo(({ item = {}, isPicked = false, isDisabled = false, datePickerItemClass = '', onClick = () => {} }) => {
-  const handleOnClick = useCallback(
-    () => {
-      onClick(item.name);
-    },
-    [item.name],
-  );
+  const handleOnClick = useCallback(() => {
+    onClick(item.name);
+  }, [item.name]);
   return (
     <div
       className={`${datePickerItemClass}`}
