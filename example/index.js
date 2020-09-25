@@ -130,6 +130,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
               onConfirm={res => console.log(res)}
               onClose={() => console.log('closed')}
               style={{ width: '300px', margin: '0 auto' }}
+              // showOnlyTime={true} // default is false
             />
           </div>
         </div>
@@ -144,6 +145,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   show={false} // default is false
   disabled={false} // default is false
   allowPageClickToClose={true} // default is true
+  showOnlyTime={false} // default is false, only select time
   onConfirm={res => console.log(res)}
   onClose={() => console.log('onClose')}
   onClear={() => console.log('onClear')}

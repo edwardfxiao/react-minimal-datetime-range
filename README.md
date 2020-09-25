@@ -64,6 +64,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
   placeholder={['Start Time', 'End Time']}
+  showOnlyTime={false} // default is false, only select time
   ////////////////////
   // IMPORTANT DESC //
   ////////////////////
@@ -103,6 +104,8 @@ By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can 
                     date: 'Select date',
                     time: 'Select time',
                     confirm: 'Confirm',
+                    start: 'Start',
+                    end: 'End',
                 }
             }
         }

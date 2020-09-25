@@ -139,6 +139,7 @@ export const RangePicker = memo(
     onClear = () => {},
     onClose = () => {},
     style = {},
+    showOnlyTime = false,
   }) => {
     // ['YYYY-MM-DD', 'YYYY-MM-DD'] // ['hh:mm', 'hh:mm']
     const isDefaultDatesValid = isValidDates(defaultDates);
@@ -294,12 +295,14 @@ export const RangePicker = memo(
     );
     const isInitial = useMemo(() => start === `${initialDates[0]} ${initialTimes[0]}` && end === `${initialDates[1]} ${initialTimes[1]}`, [initialDates, initialTimes, start, end]);
     const isEmpty = useMemo(() => !start && !end, [start, end]);
+    const valueStart = useMemo(() => (showOnlyTime ? start.split(' ')[1] : start), [showOnlyTime, start]);
+    const valueEnd = useMemo(() => (showOnlyTime ? end.split(' ')[1] : end), [showOnlyTime, end]);
     return (
       <div className="react-minimal-datetime-range__range" style={style}>
         <span className={`react-minimal-datetime-range__range-input-wrapper ${disabled && 'disabled'}`} onClick={() => !disabled && setInternalShow(!internalShow)}>
-          <input readOnly={true} placeholder={placeholder[0]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={start} />
+          <input readOnly={true} placeholder={placeholder[0]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={valueStart} />
           <span className="react-minimal-datetime-range__range-input-separator"> ~ </span>
-          <input readOnly={true} placeholder={placeholder[1]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={end} />
+          <input readOnly={true} placeholder={placeholder[1]} className={`react-minimal-datetime-range__range-input ${disabled && 'disabled'}`} value={valueEnd} />
           {!isInitial && !isEmpty ? (
             <svg className={`react-minimal-datetime-range__clear ${disabled && 'disabled'}`} width="15" height="15" viewBox="0 0 24 24" onClick={handleOnClear}>
               <path
@@ -344,6 +347,7 @@ export const RangePicker = memo(
               setCurrentDateObjStart={setCurrentDateObjStart}
               currentDateObjEnd={currentDateObjEnd}
               setCurrentDateObjEnd={setCurrentDateObjEnd}
+              showOnlyTime={showOnlyTime}
             />
           )}
         </div>
@@ -378,6 +382,7 @@ const RangePickerComponent = memo(
     setCurrentDateObjStart,
     currentDateObjEnd,
     setCurrentDateObjEnd,
+    showOnlyTime,
   }) => {
     const [internalShow, setInternalShow] = useState(false);
     useEffect(() => {
@@ -425,7 +430,7 @@ const RangePickerComponent = memo(
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
           />
-          {type === TYPES[1] && (
+          {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">
               <RangeTime
                 defaultTimeStart={times[0]}
@@ -438,14 +443,18 @@ const RangePickerComponent = memo(
                 handleChooseEndTimeMinute={handleChooseEndTimeMinute}
                 startTimePickedArray={startTimePickedArray}
                 endTimePickedArray={endTimePickedArray}
+                showOnlyTime={showOnlyTime}
+                LOCALE_DATA={LOCALE_DATA}
               />
             </div>
           )}
         </div>
         <div className="react-minimal-datetime-range__button-wrapper">
-          <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--type', !selected && 'disabled')} onClick={selected ? handleOnChangeType : () => {}}>
-            {type === TYPES[0] ? LOCALE_DATA[TYPES[1]] : LOCALE_DATA[TYPES[0]]}
-          </div>
+          {!showOnlyTime && (
+            <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--type', !selected && 'disabled')} onClick={selected ? handleOnChangeType : () => {}}>
+              {type === TYPES[0] ? LOCALE_DATA[TYPES[1]] : LOCALE_DATA[TYPES[0]]}
+            </div>
+          )}
           <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--confirm', !selected && 'disabled')} onClick={selected ? handleOnConfirm : () => {}}>
             {LOCALE_DATA['confirm']}
           </div>
