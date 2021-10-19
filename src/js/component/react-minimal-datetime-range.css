@@ -678,6 +678,14 @@
   width: 25%;
 }
 
+.react-minimal-datetime-range__time-select-wrapper--single {
+  text-align: center;
+}
+
+.react-minimal-datetime-range__time-select-wrapper--single .react-minimal-datetime-range__time-select-options-wrapper {
+  width: 50%;
+}
+
 .react-minimal-datetime-range__time-select-option {
   padding: 2 5px;
   cursor: pointer;

@@ -17,7 +17,37 @@ const Index = memo(
     endTimePickedArray,
     showOnlyTime,
     LOCALE_DATA,
+    singleMode = false,
   }) => {
+    if (singleMode) {
+      return (
+        <div className="react-minimal-datetime-range__time-select-wrapper react-minimal-datetime-range__time-select-wrapper--single">
+          <div>
+            <div className="react-minimal-datetime-range__date">{startDatePickedArray.join('-')}</div>
+          </div>
+          <div className="react-minimal-datetime-range__time-select-options-wrapper">
+            {HOURS.map(i => {
+              const item = formatDateString(i);
+              return (
+                <div key={i} className={cx('react-minimal-datetime-range__time-select-option', item === startTimePickedArray[0] && 'active')} onClick={() => handleChooseStartTimeHour(item)}>
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+          <div className="react-minimal-datetime-range__time-select-options-wrapper">
+            {MINUTES.map(i => {
+              const item = formatDateString(i);
+              return (
+                <div key={i} className={cx('react-minimal-datetime-range__time-select-option', item === startTimePickedArray[1] && 'active')} onClick={() => handleChooseStartTimeMinute(item)}>
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="react-minimal-datetime-range__time-select-wrapper">
         <div>

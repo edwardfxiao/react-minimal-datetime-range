@@ -83,6 +83,10 @@ const Component = () => {
               onResetDate={res => console.log(res)}
               onResetDefaultDate={res => console.log(res)}
               style={{ width: '300px', margin: '10px auto 0' }}
+              defaultTimes={['10:12']}
+              enableTimeSelection={true}
+              handleChooseHourPick={res => console.log(res)}
+              handleChooseMinutePick={res => console.log(res)}
             />
           </div>
         </div>
@@ -127,7 +131,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
               defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
               initialDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
               initialTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
-              onConfirm={res => console.log(res)}
+              onConfirm={res => console.log(res, 1)}
               onClose={() => console.log('closed')}
               style={{ width: '300px', margin: '0 auto' }}
               // showOnlyTime={true} // default is false
