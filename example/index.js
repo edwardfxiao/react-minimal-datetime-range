@@ -10,10 +10,10 @@ import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import '../src/css/example.css';
-// import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
-import { CalendarPicker, RangePicker } from '../lib/components/index.js';
-// import '../src/js/component/react-minimal-datetime-range.css';
-import '../lib/react-minimal-datetime-range.min.css';
+import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
+// import { CalendarPicker, RangePicker } from '../lib/components/index.js';
+import '../src/js/component/react-minimal-datetime-range.css';
+// import '../lib/react-minimal-datetime-range.min.css';
 const CodeBlock = ({ literal, language }) => {
   var html = Prism.highlight(literal, Prism.languages[language]);
   var cls = 'language-' + language;
@@ -30,6 +30,9 @@ CodeBlock.propTypes = {
 };
 
 const now = new Date();
+const todayY = now.getFullYear();
+const todayM = now.getMonth() + 1;
+const todayD = now.getDate();
 if (!String.prototype.padStart) {
   String.prototype.padStart = function padStart(targetLength, padString) {
     targetLength = targetLength >> 0; //truncate if number, or convert non-number to 0;
@@ -83,6 +86,11 @@ const Component = () => {
               onResetDate={res => console.log(res)}
               onResetDefaultDate={res => console.log(res)}
               style={{ width: '300px', margin: '10px auto 0' }}
+              markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`, `${todayY}-${todayM}-${todayD + 1}`]} // OPTIONAL. ['YYYY-MM-DD']
+              // defaultTimes={['10:12']} // OPTIONAL
+              // enableTimeSelection={true} // OPTIONAL
+              // handleChooseHourPick={res => console.log(res)} // OPTIONAL
+              // handleChooseMinutePick={res => console.log(res)} // OPTIONAL
             />
           </div>
         </div>
@@ -104,6 +112,11 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   onResetDate={res => console.log(res)}
   onResetDefaultDate={res => console.log(res)}
   style={{ width: '300px', margin: '10px auto 0' }}
+  markedDates={["".concat(todayY, "-").concat(todayM, "-").concat(todayD - 1), "".concat(todayY, "-").concat(todayM, "-").concat(todayD), "".concat(todayY, "-").concat(todayM, "-").concat(todayD + 1)]} // OPTIONAL. ['YYYY-MM-DD']
+  // defaultTimes={['10:12']} // OPTIONAL
+  // enableTimeSelection={true} // OPTIONAL
+  // handleChooseHourPick={res => console.log(res)} // OPTIONAL
+  // handleChooseMinutePick={res => console.log(res)} // OPTIONAL
 />
  \`\`\``}
               renderers={{ CodeBlock }}
@@ -127,9 +140,11 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
               defaultTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
               initialDates={[year + '-' + month + '-' + date, year + '-' + month + '-' + date]} // ['YYYY-MM-DD', 'YYYY-MM-DD']
               initialTimes={[hour + ':' + minute, hour + ':' + minute]} // ['hh:mm', 'hh:mm']
-              onConfirm={res => console.log(res)}
+              onConfirm={res => console.log(res, 1)}
               onClose={() => console.log('closed')}
               style={{ width: '300px', margin: '0 auto' }}
+              markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`, `${todayY}-${todayM}-${todayD + 1}`]} // OPTIONAL. ['YYYY-MM-DD']
+              // showOnlyTime={true} // default is false
             />
           </div>
         </div>
@@ -144,11 +159,13 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   show={false} // default is false
   disabled={false} // default is false
   allowPageClickToClose={true} // default is true
+  showOnlyTime={false} // default is false, only select time
   onConfirm={res => console.log(res)}
   onClose={() => console.log('onClose')}
   onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
   placeholder={['Start Time', 'End Time']}
+  markedDates={["".concat(todayY, "-").concat(todayM, "-").concat(todayD - 1), "".concat(todayY, "-").concat(todayM, "-").concat(todayD), "".concat(todayY, "-").concat(todayM, "-").concat(todayD + 1)]} // OPTIONAL. ['YYYY-MM-DD']
   ////////////////////
   // IMPORTANT DESC //
   ////////////////////

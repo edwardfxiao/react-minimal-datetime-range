@@ -336,7 +336,20 @@
   &.today {
     color: #fc7474;
   }
-
+  &.marked {
+    position: relative;
+    &:after {
+      position: absolute;
+      content: '';
+      width: 5px;
+      height: 5px;
+      background-color: #ced4da;
+      border-radius: 50%;
+      left: 50%;
+      bottom: 3px;
+      transform: translateX(-50%);
+    }
+  }
   &.active {
     &:not(.today) {
       color: #fff;
@@ -676,6 +689,14 @@
   height: 85%;
   display: inline-block;
   width: 25%;
+}
+
+.react-minimal-datetime-range__time-select-wrapper--single {
+  text-align: center;
+}
+
+.react-minimal-datetime-range__time-select-wrapper--single .react-minimal-datetime-range__time-select-options-wrapper {
+  width: 50%;
 }
 
 .react-minimal-datetime-range__time-select-option {

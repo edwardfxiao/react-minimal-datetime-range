@@ -10,6 +10,8 @@ let locale = {
     date: 'Select date',
     time: 'Select time',
     confirm: 'Confirm',
+    start: 'Start',
+    end: 'End',
   },
   'zh-cn': {
     today: '今天',
@@ -22,6 +24,8 @@ let locale = {
     date: '选择日期',
     time: '选择时间',
     confirm: '确定',
+    start: '开始',
+    end: '结束',
   },
 };
 
