@@ -27,7 +27,26 @@ const Index = memo(
     currentDateObjEnd = () => {},
     setCurrentDateObjStart = () => {},
     setCurrentDateObjEnd = () => {},
+    markedDates = [],
   }) => {
+    const markedDatesHash = useMemo(() => {
+      const res = {};
+      if (markedDates && markedDates.length) {
+        let isValid = true;
+        for (let i = 0; i < markedDates.length; i += 1) {
+          if (!isValidDate(markedDates[i])) {
+            isValid = false;
+            break;
+          }
+        }
+        if (isValid) {
+          markedDates.forEach(d => {
+            res[d] = true;
+          });
+        }
+      }
+      return res;
+    }, [markedDates]);
     const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
     let defaultDateDateStart = DATE;
     let defaultDateMonthStart = MONTH;
@@ -244,6 +263,7 @@ const Index = memo(
           pickedDateInfo={pickedDateInfo}
           onClick={pickDate}
           key={pickedYearMonth.string}
+          markedDatesHash={markedDatesHash}
         />
       );
       transitionContainerStyle = {
@@ -447,6 +467,7 @@ const CalendarBody = memo(
     pickedDateInfo = {},
     pickedYearMonth = {},
     onClick = () => {},
+    markedDatesHash = {},
   }) => {
     const content = Object.keys(data).map(key => {
       let colHtml;
@@ -492,6 +513,7 @@ const CalendarBody = memo(
             isPickedEnd && 'active',
             isHighlight && 'highlight',
             DATE == item.name && MONTH == item.month && YEAR == item.year && 'today',
+            markedDatesHash[`${item.year}-${item.month}-${item.name}`] && 'marked',
           );
           return (
             <CalendarItem

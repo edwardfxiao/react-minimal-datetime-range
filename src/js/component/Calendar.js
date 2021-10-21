@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from '
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import LOCALE from './locale.js';
 import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
-import { cx, isValidDate } from './utils.js';
+import { cx, isValidDate, isValidDates } from './utils.js';
 
 const TODAY = new Date();
 const YEAR = TODAY.getFullYear();
@@ -11,369 +11,389 @@ const DATE = TODAY.getDate();
 
 const ITEM_HEIGHT = 40;
 
-const Index = memo(({ locale = 'en-us', defaultDate = '', onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {} }) => {
-  const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
-  let defaultDateDate = DATE;
-  let defaultDateMonth = MONTH;
-  let defaultDateYear = YEAR;
-  let defaultDates = getDaysArray(YEAR, MONTH);
-  const isDefaultDateValid = useMemo(() => isValidDate(defaultDate), [defaultDate]);
-  if (isDefaultDateValid) {
-    const dateStr = defaultDate.split('-');
-    defaultDateYear = Number(dateStr[0]);
-    defaultDateMonth = Number(dateStr[1]);
-    defaultDateDate = Number(dateStr[2]);
-    defaultDates = getDaysArray(defaultDateYear, defaultDateMonth);
-  }
-  const defaultYearStr = String(defaultDateYear);
-  const defaultMonthStr = formatDateString(defaultDateMonth);
-  const defaultDateStr = formatDateString(defaultDateDate);
-  const [dates, setDates] = useState(defaultDates);
-  const [pickedYearMonth, setPickedYearMonth] = useState({
-    year: defaultYearStr,
-    month: defaultMonthStr,
-    string: `${defaultYearStr}-${defaultMonthStr}`,
-  });
-  const [defaultDateObj, setDefaultDateObj] = useState({
-    year: defaultYearStr,
-    month: defaultMonthStr,
-    date: defaultDateStr,
-  });
-  const [pickedDateInfo, setPickedDateInfo] = useState({
-    year: defaultYearStr,
-    month: defaultMonthStr,
-    date: defaultDateStr,
-  });
-  const [direction, setDirection] = useState(NEXT_TRANSITION);
-  const [yearSelectorPanelList, setYearSelectorPanelList] = useState(getYearSet(defaultDateYear));
-  const [yearSelectorPanel, setYearSelectorPanel] = useState(defaultDateYear);
-  const [showMask, setShowMask] = useState(false);
-  const [showSelectorPanel, setShowSelectorPanel] = useState(false);
-  const $monthSelectorPanel = useRef(null);
-  const onMouseDown = useCallback(() => {}, []);
-  const onMouseUp = useCallback(() => {}, []);
-  useEffect(() => {
-    setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
-  }, [pickedYearMonth]);
-  const pickYear = useCallback(
-    (year, direction) => {
-      year = Number(year);
-      if (direction === PREV_TRANSITION) {
-        year = year - 1;
-      } else {
-        year = year + 1;
+const Index = memo(
+  ({ locale = 'en-us', defaultDate = '', onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {}, markedDates = {} }) => {
+    const markedDatesHash = useMemo(() => {
+      const res = {};
+      if (markedDates && markedDates.length) {
+        let isValid = true;
+        for (let i = 0; i < markedDates.length; i += 1) {
+          if (!isValidDate(markedDates[i])) {
+            isValid = false;
+            break;
+          }
+        }
+        if (isValid) {
+          markedDates.forEach(d => {
+            res[d] = true;
+          });
+        }
       }
-      setPickedYearMonth({ ...pickedYearMonth, year, string: `${year}-${pickedYearMonth.month}` });
-      setDirection(direction);
-      onYearPicked({ year });
-    },
-    [pickedYearMonth],
-  );
-  const pickMonth = useCallback(
-    (month, direction) => {
-      month = Number(month);
-      let year = Number(pickedYearMonth.year);
-      if (direction === PREV_TRANSITION) {
-        if (month === 1) {
-          month = 12;
+      return res;
+    }, [markedDates]);
+    const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
+    let defaultDateDate = DATE;
+    let defaultDateMonth = MONTH;
+    let defaultDateYear = YEAR;
+    let defaultDates = getDaysArray(YEAR, MONTH);
+    const isDefaultDateValid = useMemo(() => isValidDate(defaultDate), [defaultDate]);
+    if (isDefaultDateValid) {
+      const dateStr = defaultDate.split('-');
+      defaultDateYear = Number(dateStr[0]);
+      defaultDateMonth = Number(dateStr[1]);
+      defaultDateDate = Number(dateStr[2]);
+      defaultDates = getDaysArray(defaultDateYear, defaultDateMonth);
+    }
+    const defaultYearStr = String(defaultDateYear);
+    const defaultMonthStr = formatDateString(defaultDateMonth);
+    const defaultDateStr = formatDateString(defaultDateDate);
+    const [dates, setDates] = useState(defaultDates);
+    const [pickedYearMonth, setPickedYearMonth] = useState({
+      year: defaultYearStr,
+      month: defaultMonthStr,
+      string: `${defaultYearStr}-${defaultMonthStr}`,
+    });
+    const [defaultDateObj, setDefaultDateObj] = useState({
+      year: defaultYearStr,
+      month: defaultMonthStr,
+      date: defaultDateStr,
+    });
+    const [pickedDateInfo, setPickedDateInfo] = useState({
+      year: defaultYearStr,
+      month: defaultMonthStr,
+      date: defaultDateStr,
+    });
+    const [direction, setDirection] = useState(NEXT_TRANSITION);
+    const [yearSelectorPanelList, setYearSelectorPanelList] = useState(getYearSet(defaultDateYear));
+    const [yearSelectorPanel, setYearSelectorPanel] = useState(defaultDateYear);
+    const [showMask, setShowMask] = useState(false);
+    const [showSelectorPanel, setShowSelectorPanel] = useState(false);
+    const $monthSelectorPanel = useRef(null);
+    const onMouseDown = useCallback(() => {}, []);
+    const onMouseUp = useCallback(() => {}, []);
+    useEffect(() => {
+      setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
+    }, [pickedYearMonth]);
+    const pickYear = useCallback(
+      (year, direction) => {
+        year = Number(year);
+        if (direction === PREV_TRANSITION) {
           year = year - 1;
         } else {
-          month = month - 1;
-        }
-      } else {
-        if (month === 12) {
-          month = 1;
           year = year + 1;
+        }
+        setPickedYearMonth({ ...pickedYearMonth, year, string: `${year}-${pickedYearMonth.month}` });
+        setDirection(direction);
+        onYearPicked({ year });
+      },
+      [pickedYearMonth],
+    );
+    const pickMonth = useCallback(
+      (month, direction) => {
+        month = Number(month);
+        let year = Number(pickedYearMonth.year);
+        if (direction === PREV_TRANSITION) {
+          if (month === 1) {
+            month = 12;
+            year = year - 1;
+          } else {
+            month = month - 1;
+          }
         } else {
-          month = month + 1;
+          if (month === 12) {
+            month = 1;
+            year = year + 1;
+          } else {
+            month = month + 1;
+          }
         }
-      }
-      const yearStr = String(year);
-      const monthStr = formatDateString(month);
-      setPickedYearMonth({ ...pickedYearMonth, year: yearStr, month: monthStr, string: `${yearStr}-${monthStr}` });
-      setDirection(direction);
-      onMonthPicked({ year: yearStr, month: monthStr });
-    },
-    [pickedYearMonth],
-  );
-  const pickDate = useCallback(
-    pickedDate => {
-      const newPickedDateInfo = {
-        ...pickedDateInfo,
-        year: pickedYearMonth.year,
-        month: pickedYearMonth.month,
-        date: formatDateString(pickedDate),
-      };
-      setPickedDateInfo(newPickedDateInfo);
-      onDatePicked(newPickedDateInfo);
-    },
-    [pickedYearMonth, pickedDateInfo],
-  );
-  const reset = useCallback(
-    (today = false) => {
-      let year = YEAR;
-      let month = MONTH;
-      let date = DATE;
-      if (!today) {
-        const dateStr = defaultDate.split('-');
-        year = Number(dateStr[0]);
-        month = Number(dateStr[1]);
-        date = Number(dateStr[2]);
-      }
-      let direction = NEXT_TRANSITION;
-      if (year < Number(pickedYearMonth.year)) {
-        direction = PREV_TRANSITION;
-      } else if (year === Number(pickedYearMonth.year)) {
-        if (month < Number(pickedYearMonth.month)) {
+        const yearStr = String(year);
+        const monthStr = formatDateString(month);
+        setPickedYearMonth({ ...pickedYearMonth, year: yearStr, month: monthStr, string: `${yearStr}-${monthStr}` });
+        setDirection(direction);
+        onMonthPicked({ year: yearStr, month: monthStr });
+      },
+      [pickedYearMonth],
+    );
+    const pickDate = useCallback(
+      pickedDate => {
+        const newPickedDateInfo = {
+          ...pickedDateInfo,
+          year: pickedYearMonth.year,
+          month: pickedYearMonth.month,
+          date: formatDateString(pickedDate),
+        };
+        setPickedDateInfo(newPickedDateInfo);
+        onDatePicked(newPickedDateInfo);
+      },
+      [pickedYearMonth, pickedDateInfo],
+    );
+    const reset = useCallback(
+      (today = false) => {
+        let year = YEAR;
+        let month = MONTH;
+        let date = DATE;
+        if (!today) {
+          const dateStr = defaultDate.split('-');
+          year = Number(dateStr[0]);
+          month = Number(dateStr[1]);
+          date = Number(dateStr[2]);
+        }
+        let direction = NEXT_TRANSITION;
+        if (year < Number(pickedYearMonth.year)) {
           direction = PREV_TRANSITION;
+        } else if (year === Number(pickedYearMonth.year)) {
+          if (month < Number(pickedYearMonth.month)) {
+            direction = PREV_TRANSITION;
+          }
         }
-      }
-      const yearStr = formatDateString(year);
-      const monthStr = formatDateString(month);
-      const dateStr = formatDateString(date);
-      setPickedDateInfo({
-        ...pickedDateInfo,
-        year: yearStr,
-        month: monthStr,
-        date: dateStr,
-      });
-      setPickedYearMonth({
-        ...pickedYearMonth,
-        year: yearStr,
-        month: monthStr,
-        string: `${yearStr}-${monthStr}`,
-      });
-      changeSelectorPanelYearSet(year, direction);
-      if (!today) {
-        onResetDefaultDate(pickedDateInfo);
-      } else {
-        onResetDate(pickedDateInfo);
-      }
-    },
-    [pickedYearMonth],
-  );
-  const changeSelectorPanelYearSet = useCallback((yearSelectorPanel, direction) => {
-    setDirection(direction);
-    setYearSelectorPanel(yearSelectorPanel);
-    setYearSelectorPanelList(getYearSet(yearSelectorPanel));
-  }, []);
-  const handleShowSelectorPanel = useCallback(() => {
-    setShowSelectorPanel(!showSelectorPanel);
-    setShowMask(!showMask);
-  }, [showSelectorPanel, showMask]);
-  let transitionContainerStyle;
-  let content;
-  if (dates.length) {
-    let row = dates.length / WEEK_NUMBER;
-    let rowIndex = 1;
-    let rowObj = {};
-    dates.map((item, key) => {
-      if (key < rowIndex * WEEK_NUMBER) {
-        if (!rowObj[rowIndex]) {
-          rowObj[rowIndex] = [];
+        const yearStr = formatDateString(year);
+        const monthStr = formatDateString(month);
+        const dateStr = formatDateString(date);
+        setPickedDateInfo({
+          ...pickedDateInfo,
+          year: yearStr,
+          month: monthStr,
+          date: dateStr,
+        });
+        setPickedYearMonth({
+          ...pickedYearMonth,
+          year: yearStr,
+          month: monthStr,
+          string: `${yearStr}-${monthStr}`,
+        });
+        changeSelectorPanelYearSet(year, direction);
+        if (!today) {
+          onResetDefaultDate(pickedDateInfo);
+        } else {
+          onResetDate(pickedDateInfo);
         }
-        rowObj[rowIndex].push(item);
-      } else {
-        rowIndex = rowIndex + 1;
-        if (!rowObj[rowIndex]) {
-          rowObj[rowIndex] = [];
-        }
-        rowObj[rowIndex].push(item);
-      }
-    });
-    content = <CalendarBody data={rowObj} pickedYearMonth={pickedYearMonth} pickedDateInfo={pickedDateInfo} onClick={pickDate} key={pickedYearMonth.string} />;
-    transitionContainerStyle = {
-      height: `${row * ITEM_HEIGHT}px`,
-    };
-  }
-  const captionHtml = LOCALE_DATA.weeks.map((item, key) => {
-    return (
-      <div className={`react-minimal-datetime-range-calendar__table-caption react-minimal-datetime-range-calendar__table-cel no-border`} key={key}>
-        {item}
-      </div>
+      },
+      [pickedYearMonth],
     );
-  });
-  let selectorPanelClass = cx('react-minimal-datetime-range-dropdown', 'react-minimal-datetime-range-calendar__selector-panel', showSelectorPanel && 'visible');
-  let selectorPanelMonthHtml = LOCALE_DATA.months.map((item, key) => {
-    let itemMonth = key + 1;
-    let monthItemClass = cx('react-minimal-datetime-range-dropdown-calendar__month-item', itemMonth == pickedYearMonth.month && 'active');
-    let month = itemMonth - 1;
-    let direction = NEXT_TRANSITION;
-    if (itemMonth < pickedYearMonth.month) {
-      direction = PREV_TRANSITION;
-      month = itemMonth + 1;
+    const changeSelectorPanelYearSet = useCallback((yearSelectorPanel, direction) => {
+      setDirection(direction);
+      setYearSelectorPanel(yearSelectorPanel);
+      setYearSelectorPanelList(getYearSet(yearSelectorPanel));
+    }, []);
+    const handleShowSelectorPanel = useCallback(() => {
+      setShowSelectorPanel(!showSelectorPanel);
+      setShowMask(!showMask);
+    }, [showSelectorPanel, showMask]);
+    let transitionContainerStyle;
+    let content;
+    if (dates.length) {
+      let row = dates.length / WEEK_NUMBER;
+      let rowIndex = 1;
+      let rowObj = {};
+      dates.map((item, key) => {
+        if (key < rowIndex * WEEK_NUMBER) {
+          if (!rowObj[rowIndex]) {
+            rowObj[rowIndex] = [];
+          }
+          rowObj[rowIndex].push(item);
+        } else {
+          rowIndex = rowIndex + 1;
+          if (!rowObj[rowIndex]) {
+            rowObj[rowIndex] = [];
+          }
+          rowObj[rowIndex].push(item);
+        }
+      });
+      content = <CalendarBody data={rowObj} pickedYearMonth={pickedYearMonth} pickedDateInfo={pickedDateInfo} onClick={pickDate} key={pickedYearMonth.string} markedDatesHash={markedDatesHash} />;
+      transitionContainerStyle = {
+        height: `${row * ITEM_HEIGHT}px`,
+      };
     }
-    return (
-      <div
-        className={monthItemClass}
-        onClick={
-          itemMonth !== pickedYearMonth.month
-            ? () => pickMonth(month, direction)
-            : () => {
-                return;
-              }
-        }
-        key={key}
-      >
-        <div>{item}</div>
-      </div>
-    );
-  });
-  let selectorPanelYearHtml;
-  if (yearSelectorPanelList.length) {
-    selectorPanelYearHtml = yearSelectorPanelList.map((item, key) => {
-      let yearItemClass = cx('react-minimal-datetime-range-dropdown-calendar__year-item', item == pickedYearMonth.year && 'active');
-      let year = item - 1;
+    const captionHtml = LOCALE_DATA.weeks.map((item, key) => {
+      return (
+        <div className={`react-minimal-datetime-range-calendar__table-caption react-minimal-datetime-range-calendar__table-cel no-border`} key={key}>
+          {item}
+        </div>
+      );
+    });
+    let selectorPanelClass = cx('react-minimal-datetime-range-dropdown', 'react-minimal-datetime-range-calendar__selector-panel', showSelectorPanel && 'visible');
+    let selectorPanelMonthHtml = LOCALE_DATA.months.map((item, key) => {
+      let itemMonth = key + 1;
+      let monthItemClass = cx('react-minimal-datetime-range-dropdown-calendar__month-item', itemMonth == pickedYearMonth.month && 'active');
+      let month = itemMonth - 1;
       let direction = NEXT_TRANSITION;
-      if (item < pickedYearMonth.year) {
+      if (itemMonth < pickedYearMonth.month) {
         direction = PREV_TRANSITION;
-        year = item + 1;
+        month = itemMonth + 1;
       }
       return (
         <div
-          className={yearItemClass}
+          className={monthItemClass}
           onClick={
-            item !== pickedYearMonth.year
-              ? () => pickYear(year, direction)
+            itemMonth !== pickedYearMonth.month
+              ? () => pickMonth(month, direction)
               : () => {
                   return;
                 }
           }
           key={key}
         >
-          <span style={{ verticalAlign: 'middle' }}>{item}</span>
+          <div>{item}</div>
         </div>
       );
     });
-  }
-  return (
-    <div className={`react-minimal-datetime-range-calendar`}>
-      <div className={`react-minimal-datetime-range-calendar__header`}>
-        <div className={selectorPanelClass} ref={$monthSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onTouchEnd={onMouseDown} onTouchCancel={onMouseUp}>
-          <div className={`react-minimal-datetime-range-dropdown-calendar__menu`}>
-            <div className={`react-minimal-datetime-range-dropdown-calendar__month`}>{selectorPanelMonthHtml}</div>
-            <div style={{ height: '10px' }} />
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-0-5`}>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                style={{ verticalAlign: 'middle' }}
-                onClick={() => changeSelectorPanelYearSet(yearSelectorPanel - SELECTOR_YEAR_SET_NUMBER, PREV_TRANSITION)}
-              >
+    let selectorPanelYearHtml;
+    if (yearSelectorPanelList.length) {
+      selectorPanelYearHtml = yearSelectorPanelList.map((item, key) => {
+        let yearItemClass = cx('react-minimal-datetime-range-dropdown-calendar__year-item', item == pickedYearMonth.year && 'active');
+        let year = item - 1;
+        let direction = NEXT_TRANSITION;
+        if (item < pickedYearMonth.year) {
+          direction = PREV_TRANSITION;
+          year = item + 1;
+        }
+        return (
+          <div
+            className={yearItemClass}
+            onClick={
+              item !== pickedYearMonth.year
+                ? () => pickYear(year, direction)
+                : () => {
+                    return;
+                  }
+            }
+            key={key}
+          >
+            <span style={{ verticalAlign: 'middle' }}>{item}</span>
+          </div>
+        );
+      });
+    }
+    return (
+      <div className={`react-minimal-datetime-range-calendar`}>
+        <div className={`react-minimal-datetime-range-calendar__header`}>
+          <div className={selectorPanelClass} ref={$monthSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onTouchEnd={onMouseDown} onTouchCancel={onMouseUp}>
+            <div className={`react-minimal-datetime-range-dropdown-calendar__menu`}>
+              <div className={`react-minimal-datetime-range-dropdown-calendar__month`}>{selectorPanelMonthHtml}</div>
+              <div style={{ height: '10px' }} />
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-0-5`}>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  style={{ verticalAlign: 'middle' }}
+                  onClick={() => changeSelectorPanelYearSet(yearSelectorPanel - SELECTOR_YEAR_SET_NUMBER, PREV_TRANSITION)}
+                >
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+              </div>
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-9`}>
+                <ReactCSSTransitionGroup
+                  className="react-minimal-datetime-range-calendar__selector-panel-year-set-container"
+                  transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
+                  transitionAppearTimeout={500}
+                  transitionEnterTimeout={300}
+                  transitionLeaveTimeout={300}
+                >
+                  <div className={`react-minimal-datetime-range-dropdown-calendar__year`} key={yearSelectorPanelList}>
+                    {selectorPanelYearHtml}
+                  </div>
+                </ReactCSSTransitionGroup>
+              </div>
+              <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-0-5`}>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  style={{ verticalAlign: 'middle' }}
+                  onClick={() => changeSelectorPanelYearSet(yearSelectorPanel + SELECTOR_YEAR_SET_NUMBER, NEXT_TRANSITION)}
+                >
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                  <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
+            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__previous`} onClick={() => pickYear(pickedYearMonth.year, PREV_TRANSITION)}>
+              <svg width="15" height="15" viewBox="0 0 24 24">
+                <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z" />
+                <path fill="none" d="M24 24H0V0h24v24z" />
+              </svg>
+            </div>
+            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-previous`} onClick={() => pickMonth(pickedYearMonth.month, PREV_TRANSITION)}>
+              <svg width="15" height="15" viewBox="0 0 24 24">
                 <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                 <path d="M0 0h24v24H0z" fill="none" />
               </svg>
             </div>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-9`}>
-              <ReactCSSTransitionGroup
-                className="react-minimal-datetime-range-calendar__selector-panel-year-set-container"
-                transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={300}
-                transitionLeaveTimeout={300}
-              >
-                <div className={`react-minimal-datetime-range-dropdown-calendar__year`} key={yearSelectorPanelList}>
-                  {selectorPanelYearHtml}
-                </div>
-              </ReactCSSTransitionGroup>
-            </div>
-            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-0-5`}>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                style={{ verticalAlign: 'middle' }}
-                onClick={() => changeSelectorPanelYearSet(yearSelectorPanel + SELECTOR_YEAR_SET_NUMBER, NEXT_TRANSITION)}
-              >
+          </div>
+          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-6`}>
+            <ReactCSSTransitionGroup
+              className="react-minimal-datetime-range-calendar__title-container"
+              transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
+              transitionAppearTimeout={500}
+              transitionEnterTimeout={300}
+              transitionLeaveTimeout={300}
+            >
+              <div className={`react-minimal-datetime-range-calendar__title`} key={pickedYearMonth.string}>
+                <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+                  <span className={`react-minimal-datetime-range-calendar__clicker`}>
+                    <span>{`${LOCALE_DATA.months[pickedYearMonth.month - 1]}`}</span>
+                  </span>
+                  <span>&nbsp;</span>
+                  <span className={`react-minimal-datetime-range-calendar__clicker`}>
+                    <span>{`${pickedYearMonth.year}`}</span>
+                  </span>
+                </span>
+              </div>
+            </ReactCSSTransitionGroup>
+          </div>
+          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
+            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__next`} onClick={() => pickMonth(pickedYearMonth.month, NEXT_TRANSITION)}>
+              <svg width="15" height="15" viewBox="0 0 24 24">
                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                 <path d="M0 0h24v24H0z" fill="none" />
               </svg>
             </div>
+            <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-next`} onClick={() => pickYear(pickedYearMonth.year, NEXT_TRANSITION)}>
+              <svg width="15" height="15" viewBox="0 0 24 24">
+                <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z" />
+                <path fill="none" d="M0 0h24v24H0V0z" />
+              </svg>
+            </div>
           </div>
         </div>
-        <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
-          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__previous`} onClick={() => pickYear(pickedYearMonth.year, PREV_TRANSITION)}>
-            <svg width="15" height="15" viewBox="0 0 24 24">
-              <path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z" />
-              <path fill="none" d="M24 24H0V0h24v24z" />
-            </svg>
+        <div className={`react-minimal-datetime-range-calendar__content`}>
+          <div className={`react-minimal-datetime-range-calendar__table`}>
+            <div className={`react-minimal-datetime-range-calendar__table-row`}>{captionHtml}</div>
           </div>
-          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-previous`} onClick={() => pickMonth(pickedYearMonth.month, PREV_TRANSITION)}>
-            <svg width="15" height="15" viewBox="0 0 24 24">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-              <path d="M0 0h24v24H0z" fill="none" />
-            </svg>
-          </div>
-        </div>
-        <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-6`}>
           <ReactCSSTransitionGroup
-            className="react-minimal-datetime-range-calendar__title-container"
+            className={`react-minimal-datetime-range-calendar__body-container`}
             transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
             transitionAppearTimeout={500}
             transitionEnterTimeout={300}
             transitionLeaveTimeout={300}
+            style={transitionContainerStyle}
           >
-            <div className={`react-minimal-datetime-range-calendar__title`} key={pickedYearMonth.string}>
-              <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
-                <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                  <span>{`${LOCALE_DATA.months[pickedYearMonth.month - 1]}`}</span>
-                </span>
-                <span>&nbsp;</span>
-                <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                  <span>{`${pickedYearMonth.year}`}</span>
-                </span>
-              </span>
-            </div>
+            {content}
           </ReactCSSTransitionGroup>
         </div>
-        <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
-          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__next`} onClick={() => pickMonth(pickedYearMonth.month, NEXT_TRANSITION)}>
-            <svg width="15" height="15" viewBox="0 0 24 24">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-              <path d="M0 0h24v24H0z" fill="none" />
-            </svg>
-          </div>
-          <div className={`react-minimal-datetime-range__col react-minimal-datetime-range-calendar__sub-next`} onClick={() => pickYear(pickedYearMonth.year, NEXT_TRANSITION)}>
-            <svg width="15" height="15" viewBox="0 0 24 24">
-              <path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z" />
-              <path fill="none" d="M0 0h24v24H0V0z" />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div className={`react-minimal-datetime-range-calendar__content`}>
-        <div className={`react-minimal-datetime-range-calendar__table`}>
-          <div className={`react-minimal-datetime-range-calendar__table-row`}>{captionHtml}</div>
-        </div>
-        <ReactCSSTransitionGroup
-          className={`react-minimal-datetime-range-calendar__body-container`}
-          transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
-          style={transitionContainerStyle}
-        >
-          {content}
-        </ReactCSSTransitionGroup>
-      </div>
-      <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__today`} onClick={() => reset(true)}>
-        <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['today']}</span>
-        <span className={`react-minimal-datetime-range-calendar__inline-span react-minimal-datetime-range-calendar__icon react-minimal-datetime-range-refresh`} />
-      </div>
-      {isDefaultDateValid ? (
-        <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__default-day`} onClick={() => reset(false)}>
-          <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['reset-date']}</span>
+        <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__today`} onClick={() => reset(true)}>
+          <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['today']}</span>
           <span className={`react-minimal-datetime-range-calendar__inline-span react-minimal-datetime-range-calendar__icon react-minimal-datetime-range-refresh`} />
         </div>
-      ) : (
-        ``
-      )}
-    </div>
-  );
-});
+        {isDefaultDateValid ? (
+          <div className={`react-minimal-datetime-range-calendar__button react-minimal-datetime-range-calendar__default-day`} onClick={() => reset(false)}>
+            <span className={`react-minimal-datetime-range-calendar__inline-span`}>{LOCALE_DATA['reset-date']}</span>
+            <span className={`react-minimal-datetime-range-calendar__inline-span react-minimal-datetime-range-calendar__icon react-minimal-datetime-range-refresh`} />
+          </div>
+        ) : (
+          ``
+        )}
+      </div>
+    );
+  },
+);
 
-const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {} }) => {
+const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash }) => {
   const content = Object.keys(data).map(key => {
     let colHtml;
     if (data[key].length) {
@@ -385,6 +405,7 @@ const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {
           'react-minimal-datetime-range-calendar__date-item',
           isDisabled && 'disabled',
           DATE == item.name && MONTH == item.month && YEAR == item.year && 'today',
+          markedDatesHash[`${item.year}-${item.month}-${item.name}`] && 'marked',
           isPicked && 'active',
         );
         return <CalendarItem key={key} item={item} onClick={onClick} isPicked={isPicked} isDisabled={isDisabled} datePickerItemClass={datePickerItemClass} />;

@@ -25,6 +25,7 @@ export const CalendarPicker = memo(
     handleChooseHourPick = () => {},
     handleChooseMinutePick = () => {},
     enableTimeSelection = false,
+    markedDates = [],
   }) => {
     const [internalShow, setInternalShow] = useState(show);
     const handleOnClose = useCallback(() => {
@@ -89,6 +90,7 @@ export const CalendarPicker = memo(
             defaultTimes={defaultTimes}
             handleChooseHourPick={handleChooseHourPick}
             handleChooseMinutePick={handleChooseMinutePick}
+            markedDates={markedDates}
           />
         )}
       </div>
@@ -108,11 +110,11 @@ const CalendarPickerComponent = memo(
     handleOnResetDate,
     handleOnResetDefaultDate,
     defaultTimes,
+    markedDates,
     enableTimeSelection,
     handleChooseHourPick,
     handleChooseMinutePick,
   }) => {
-    console.log(defaultDate);
     const isDefaultDatesValid = isValidDate(defaultDate);
     const [internalShow, setInternalShow] = useState(false);
     const [times, setTimes] = useState(defaultTimes);
@@ -169,6 +171,7 @@ const CalendarPickerComponent = memo(
               onDatePicked={handleOnDatePicked}
               onResetDate={handleOnResetDate}
               onResetDefaultDate={handleOnResetDefaultDate}
+              markedDates={markedDates}
             />
           </div>
           {type === TYPES[1] && (
@@ -218,6 +221,7 @@ export const RangePicker = memo(
     onClose = () => {},
     style = {},
     showOnlyTime = false,
+    markedDates = [],
   }) => {
     // ['YYYY-MM-DD', 'YYYY-MM-DD'] // ['hh:mm', 'hh:mm']
     const isDefaultDatesValid = isValidDates(defaultDates);
@@ -426,6 +430,7 @@ export const RangePicker = memo(
               currentDateObjEnd={currentDateObjEnd}
               setCurrentDateObjEnd={setCurrentDateObjEnd}
               showOnlyTime={showOnlyTime}
+              markedDates={markedDates}
             />
           )}
         </div>
@@ -461,6 +466,7 @@ const RangePickerComponent = memo(
     currentDateObjEnd,
     setCurrentDateObjEnd,
     showOnlyTime,
+    markedDates,
   }) => {
     const [internalShow, setInternalShow] = useState(false);
     useEffect(() => {
@@ -490,6 +496,7 @@ const RangePickerComponent = memo(
             setCurrentDateObjStart={setCurrentDateObjStart}
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
+            markedDates={markedDates}
           />
           <div className="react-minimal-datetime-date-piker__divider" />
           <RangeDate
@@ -507,6 +514,7 @@ const RangePickerComponent = memo(
             setCurrentDateObjStart={setCurrentDateObjStart}
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
+            markedDates={markedDates}
           />
           {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">
