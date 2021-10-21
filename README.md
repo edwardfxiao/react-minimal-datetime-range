@@ -52,7 +52,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   onResetDate={res => console.log(res)}
   onResetDefaultDate={res => console.log(res)}
   style={{ width: '300px', margin: '10px auto 0' }}
-  // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`, `${todayY}-${todayM.padStart(2, '0')}-${todayD.padStart(2, '0') + 1}`]} // OPTIONAL. ['YYYY-MM-DD']
+  // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
   // defaultTimes={['10:12']} // OPTIONAL
   // enableTimeSelection={true} // OPTIONAL
   // handleChooseHourPick={res => console.log(res)} // OPTIONAL
@@ -69,7 +69,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   onClear={() => console.log('onClear')}
   style={{ width: '300px', margin: '0 auto' }}
   placeholder={['Start Time', 'End Time']}
-  // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`, `${todayY}-${todayM.padStart(2, '0')}-${todayD.padStart(2, '0') + 1}`]} // OPTIONAL. ['YYYY-MM-DD']
+  // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
   showOnlyTime={false} // default is false, only select time
   ////////////////////
   // IMPORTANT DESC //
