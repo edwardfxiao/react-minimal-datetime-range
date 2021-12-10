@@ -1,11 +1,11 @@
 {
   "name": "react-minimal-datetime-range",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A react component for date time range picker.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwardfhsiao/react-minimal-datetime-range.git"
+    "url": "git+https://github.com/edwardfxiao/react-minimal-datetime-range.git"
   },
   "keywords": [
     "react",
@@ -24,9 +24,9 @@
   "author": "Edward Xiao",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/edwardfhsiao/react-minimal-datetime-range/issues"
+    "url": "https://github.com/edwardfxiao/react-minimal-datetime-range/issues"
   },
-  "homepage": "https://edwardfhsiao.github.io/react-minimal-datetime-range",
+  "homepage": "https://edwardfxiao.github.io/react-minimal-datetime-range",
   "scripts": {
     "jslint": " ",
     "babel": "BABEL_ENV=lib babel ./src/js/component --out-dir ./lib/components",

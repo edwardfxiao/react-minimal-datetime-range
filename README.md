@@ -1,13 +1,13 @@
 # react-minimal-datetime-range
-[![npm version](https://badge.fury.io/js/react-minimal-datetime-range.svg)](https://badge.fury.io/js/react-minimal-datetime-range) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-minimal-datetime-range.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+[![npm version](https://badge.fury.io/js/react-minimal-datetime-range.svg)](https://badge.fury.io/js/react-minimal-datetime-range) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-minimal-datetime-range.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfxiao/react-minimal-datetime-range/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 A react component for date time range picker. Online demo examples.
-# <img src="https://raw.githubusercontent.com/edwardfhsiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
+# <img src="https://raw.githubusercontent.com/edwardfxiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
 
 # Online Demo
-<a href="https://edwardfhsiao.github.io/react-minimal-datetime-range/">Online demo example</a>
+<a href="https://edwardfxiao.github.io/react-minimal-datetime-range/">Online demo example</a>
 
-<a href="https://github.com/edwardfhsiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
+<a href="https://github.com/edwardfxiao/react-minimal-datetime-range/blob/gh-pages/example/index.js">Demo source code</a>
 
 # Codesandbox Examples
 * <a href="https://codesandbox.io/s/index-z90y9">Live playground</a> (Make sure window width is greater than 900 for better experience)
