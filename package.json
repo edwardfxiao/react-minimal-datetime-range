@@ -1,6 +1,6 @@
 {
   "name": "react-minimal-datetime-range",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "A react component for date time range picker.",
   "main": "index.js",
   "repository": {

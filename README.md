@@ -19,8 +19,8 @@ A react component for date time range picker. Online demo examples.
 ### Version of ```16.8.6``` or higher of react and react-dom is required.
 ```js
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">= 16.8.6",
+    "react-dom": ">= 16.8.6"
   }
 ```
 
