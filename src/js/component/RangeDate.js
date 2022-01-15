@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import LOCALE from './locale.js';
 import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString, isWith1Month } from './const';
 import { cx, isValidDate } from './utils.js';
@@ -330,6 +330,7 @@ const Index = memo(
         );
       });
     }
+    const classNames = direction == NEXT_TRANSITION ? 'forward' : 'backward';
     return (
       <div className={cx('react-minimal-datetime-range-calendar', 'react-minimal-datetime-range-calendar--range')}>
         <div className={`react-minimal-datetime-range-calendar__header`}>
@@ -350,17 +351,11 @@ const Index = memo(
                 </svg>
               </div>
               <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-9`}>
-                <ReactCSSTransitionGroup
-                  className="react-minimal-datetime-range-calendar__selector-panel-year-set-container"
-                  transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
-                  transitionAppearTimeout={500}
-                  transitionEnterTimeout={300}
-                  transitionLeaveTimeout={300}
-                >
-                  <div className={`react-minimal-datetime-range-dropdown-calendar__year`} key={yearSelectorPanelList}>
-                    {selectorPanelYearHtml}
-                  </div>
-                </ReactCSSTransitionGroup>
+                <TransitionGroup className="react-minimal-datetime-range-calendar__selector-panel-year-set-container" childFactory={child => React.cloneElement(child, { classNames })}>
+                  <CSSTransition key={yearSelectorPanelList} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-dropdown-calendar__year`} classNames={classNames}>
+                    <div>{selectorPanelYearHtml}</div>
+                  </CSSTransition>
+                </TransitionGroup>
               </div>
               <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-0-5`}>
                 <svg
@@ -395,14 +390,8 @@ const Index = memo(
             )}
           </div>
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-6`}>
-            <ReactCSSTransitionGroup
-              className="react-minimal-datetime-range-calendar__title-container"
-              transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={300}
-              transitionLeaveTimeout={300}
-            >
-              <div className={`react-minimal-datetime-range-calendar__title`} key={pickedYearMonth.string}>
+            <TransitionGroup className="react-minimal-datetime-range-calendar__title-container" childFactory={child => React.cloneElement(child, { classNames })}>
+              <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-calendar__title`} style={{ left: '0' }} classNames={classNames}>
                 <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
                   <span className={`react-minimal-datetime-range-calendar__clicker`}>
                     <span>{`${LOCALE_DATA.months[pickedYearMonth.month - 1]}`}</span>
@@ -412,8 +401,8 @@ const Index = memo(
                     <span>{`${pickedYearMonth.year}`}</span>
                   </span>
                 </span>
-              </div>
-            </ReactCSSTransitionGroup>
+              </CSSTransition>
+            </TransitionGroup>
           </div>
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-3`}>
             {showNextMonthArrow && (
@@ -438,16 +427,11 @@ const Index = memo(
           <div className={`react-minimal-datetime-range-calendar__table`}>
             <div className={`react-minimal-datetime-range-calendar__table-row`}>{captionHtml}</div>
           </div>
-          <ReactCSSTransitionGroup
-            className={`react-minimal-datetime-range-calendar__body-container`}
-            transitionName={direction === NEXT_TRANSITION ? 'forward' : 'backward'}
-            transitionAppearTimeout={500}
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={300}
-            style={transitionContainerStyle}
-          >
-            {content}
-          </ReactCSSTransitionGroup>
+          <TransitionGroup className={`react-minimal-datetime-range-calendar__body-container`} style={transitionContainerStyle} childFactory={child => React.cloneElement(child, { classNames })}>
+            <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} classNames={classNames}>
+              {content}
+            </CSSTransition>
+          </TransitionGroup>
         </div>
       </div>
     );
