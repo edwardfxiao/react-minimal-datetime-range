@@ -1,0 +1,37 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "edwardfxiao",
+      "name": "Edward Xiao",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11728228?v=4",
+      "profile": "https://github.com/edwardfxiao",
+      "contributions": [
+        "code",
+        "doc",
+        "infra",
+        "test",
+        "review"
+      ]
+    },
+    {
+      "login": "ryush00",
+      "name": "ryush00",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4997174?v=4",
+      "profile": "https://github.com/ryush00",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "react-minimal-datetime-range",
+  "projectOwner": "edwardfxiao",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
