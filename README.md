@@ -41,7 +41,7 @@ import { CalendarPicker, RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 
 <CalendarPicker
-  locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
+  locale={`en-us`} // ['en-us', 'zh-cn','ko-kr']; default is en-us
   show={showCalendarPicker} //default is false
   allowPageClickToClose={true} // default is true
   onClose={() => setShowCalendarPicker(false)}

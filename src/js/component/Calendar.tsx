@@ -347,9 +347,7 @@ const Index: React.FC<IndexProps> = memo(
             <TransitionGroup className="react-minimal-datetime-range-calendar__title-container" childFactory={child => React.cloneElement(child, { classNames })}>
               <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-calendar__title`} style={{ left: '0' }} classNames={classNames}>
                 <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
-                  <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                    { LOCALE_DATA.date_format(LOCALE_DATA.months[Number(pickedYearMonth.month) - 1], pickedYearMonth.year)}
-                  </span>
+                  <span className={`react-minimal-datetime-range-calendar__clicker`}>{LOCALE_DATA.date_format(LOCALE_DATA.months[Number(pickedYearMonth.month) - 1], pickedYearMonth.year)}</span>
                 </span>
               </CSSTransition>
             </TransitionGroup>
@@ -416,7 +414,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateI
   const content = Object.keys(data).map(key => {
     let colHtml;
     if (data[key].length) {
-      colHtml = data[key].map((item: {[k: string]: any}, key: any) => {
+      colHtml = data[key].map((item: { [k: string]: any }, key: any) => {
         const isPicked = pickedDateInfo.date === item.name && pickedDateInfo.month === item.month && pickedDateInfo.year === item.year;
         let isDisabled = pickedYearMonth.month !== item.month;
         const datePickerItemClass = cx(

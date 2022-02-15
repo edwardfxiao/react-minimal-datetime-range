@@ -74,7 +74,7 @@ const Component = () => {
               {!showCalendarPicker ? <span>Show CalendarPicker</span> : <span>Close CalendarPicker</span>}
             </div>
             <CalendarPicker
-              locale={`en-us`} // 'en-us' or 'zh-cn'; default is en-us
+              locale={`en-us`} // ['en-us', 'zh-cn','ko-kr']; default is en-us
               show={showCalendarPicker} //default is false
               onClose={() => setShowCalendarPicker(false)}
               allowPageClickToClose={true} // default is true
