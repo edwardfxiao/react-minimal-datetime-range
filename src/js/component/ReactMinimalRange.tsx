@@ -4,6 +4,7 @@ import LOCALE from './locale';
 import Calendar from './Calendar';
 import RangeDate from './RangeDate';
 import RangeTime from './RangeTime';
+import './react-minimal-datetime-range.css';
 const DEFAULT_LACALE = 'en-us';
 interface IObjectKeysAny {
   [key: string]: any;
