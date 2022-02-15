@@ -63,7 +63,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 />
 
 <RangePicker
-  locale="en-us" // default is en-us
+  locale="en-us"// ['en-us', 'zh-cn','ko-kr']; default is en-us
   show={false} // default is false
   disabled={false} // default is false
   allowPageClickToClose={true} // default is true
