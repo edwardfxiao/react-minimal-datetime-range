@@ -10,6 +10,9 @@ let locale: IObjectKeys = {
     now: 'Now',
     weeks: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    date_format: (month: Number, year: Number) => {
+      return `${month} ${year}`;
+    },
     date: 'Select date',
     time: 'Select time',
     confirm: 'Confirm',
@@ -24,11 +27,31 @@ let locale: IObjectKeys = {
     now: '现在',
     weeks: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
     months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    date_format: (month: Number, year: Number) => {
+      return `${year} ${month}`;
+    },
     date: '选择日期',
     time: '选择时间',
     confirm: '确定',
     start: '开始',
     end: '结束',
+  },
+  'ko-kr': {
+    today: '오늘',
+    reset: '초기화',
+    'reset-date': '날짜 초기화',
+    clear: '지우기',
+    now: '지금',
+    weeks: ['일', '월', '화', '수', '목', '금', '토'],
+    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    date_format: (month: Number, year: Number) => {
+      return `${year}년 ${month}`;
+    },
+    date: '날짜 선택',
+    time: '시간 선택',
+    confirm: '확인',
+    start: '시작',
+    end: '끝',
   },
 };
 
