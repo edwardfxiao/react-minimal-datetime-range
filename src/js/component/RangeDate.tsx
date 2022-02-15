@@ -425,11 +425,7 @@ const Index: React.FC<IndexProps> = memo(
               <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-calendar__title`} style={{ left: '0' }} classNames={classNames}>
                 <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
                   <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                    <span>{`${LOCALE_DATA.months[Number(pickedYearMonth.month) - 1]}`}</span>
-                  </span>
-                  <span>&nbsp;</span>
-                  <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                    <span>{`${pickedYearMonth.year}`}</span>
+                    { LOCALE_DATA.date_format(LOCALE_DATA.months[Number(pickedYearMonth.month) - 1], pickedYearMonth.year)}
                   </span>
                 </span>
               </CSSTransition>
