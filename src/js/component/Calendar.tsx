@@ -142,7 +142,7 @@ const Index: React.FC<IndexProps> = memo(
           ...pickedDateInfo,
           year: pickedYearMonth.year,
           month: pickedYearMonth.month,
-          date: formatDateString(pickedDate),
+          date: formatDateString(Number(pickedDate)),
         };
         setPickedDateInfo(newPickedDateInfo);
         onDatePicked(newPickedDateInfo);
