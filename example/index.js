@@ -1,7 +1,6 @@
-import 'core-js/es6/map';
-import 'core-js/es6/set';
 import 'raf/polyfill';
-import 'babel-polyfill';
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -10,7 +9,7 @@ import prefixAll from 'inline-style-prefix-all';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import '../src/css/example.css';
-import { CalendarPicker, RangePicker } from '../src/js/component/index.js';
+import { CalendarPicker, RangePicker } from '../src/js/component/index';
 // import { CalendarPicker, RangePicker } from '../lib/components/index.js';
 import '../src/js/component/react-minimal-datetime-range.css';
 // import '../lib/react-minimal-datetime-range.min.css';

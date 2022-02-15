@@ -7,7 +7,7 @@ export const POINTER_ROTATE = 0;
 
 export const WEEK_NUMBER = 7;
 
-export const getDaysArray = (year, month) => {
+export const getDaysArray = (year: number, month: number) => {
   let prevMonth;
   let nextMonth;
   let prevYear;
@@ -52,10 +52,10 @@ export const getDaysArray = (year, month) => {
   return res;
 };
 
-export const getDaysListByMonth = (year, month) => {
+export const getDaysListByMonth = (year: number, month: number) => {
   const date = new Date(year, month - 1, 1);
   let res = [];
-  year = String(year);
+  let stringYear = String(year);
   const monthName = formatDateString(month);
   while (date.getMonth() == month - 1) {
     const dayName = formatDateString(date.getDate());
@@ -63,8 +63,8 @@ export const getDaysListByMonth = (year, month) => {
       name: dayName,
       day: date.getDay(),
       month: monthName,
-      year: year,
-      value: `${year}-${monthName}-${dayName}`,
+      year: stringYear,
+      value: `${stringYear}-${monthName}-${dayName}`,
     };
     res.push(item);
     date.setDate(date.getDate() + 1);
@@ -72,14 +72,14 @@ export const getDaysListByMonth = (year, month) => {
   return res;
 };
 
-export const formatDateString = val => {
-  if (Number(val) < 10) {
-    return String('0' + Number(val));
+export const formatDateString = (val: number) => {
+  if (val < 10) {
+    return String('0' + val);
   }
   return String(val);
 };
 
-export const getYearSet = year => {
+export const getYearSet = (year: number) => {
   let res = [];
   let itemNumber;
   let startOffset;
@@ -156,11 +156,11 @@ export const KEY_CODE = {
 };
 // Number(currentDateObjStart.year) === Number(currentDateObjEnd.year) && Number(currentDateObjStart.month) + 1 === Number(currentDateObjEnd.month))
 // Number(currentDateObjEnd.year) === Number(currentDateObjStart.year) && Number(currentDateObjEnd.month) - 1 === Number(currentDateObjStart.month))
-export const isWith1Month = (year1, year2, month1, month2, type) => {
-  year1 = Number(year1);
-  month1 = Number(month1);
-  year2 = Number(year2);
-  month2 = Number(month2);
+export const isWith1Month = (year1: number, year2: number, month1: number, month2: number, type: string) => {
+  year1 = year1;
+  month1 = month1;
+  year2 = year2;
+  month2 = month2;
   if (type === 'add') {
     if (month1 === 12) {
       if (year1 + 1 === year2 && month2 === 1) {

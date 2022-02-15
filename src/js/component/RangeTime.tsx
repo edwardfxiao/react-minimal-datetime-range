@@ -1,11 +1,35 @@
 import React, { memo } from 'react';
 import { formatDateString } from './const';
-import { cx, isValidDate } from './utils.js';
+import { cx, isValidDate } from './utils';
 
 const HOURS = [...Array(24).keys()];
 const MINUTES = [...Array(60).keys()];
-
-const Index = memo(
+interface IObjectKeysAny {
+  [key: string]: any;
+}
+interface IObjectKeysObject {
+  [key: string]: object;
+}
+interface IObjectKeysBool {
+  [key: string]: boolean;
+}
+interface IObjectKeysArray {
+  [key: string]: Array<object>;
+}
+interface IndexProps {
+  showOnlyTime: boolean;
+  LOCALE_DATA: IObjectKeysAny;
+  singleMode?: boolean;
+  startDatePickedArray?: Array<string>;
+  endDatePickedArray?: Array<string>;
+  startTimePickedArray?: Array<string>;
+  endTimePickedArray?: Array<string>;
+  handleChooseStartTimeHour: (res: string) => void;
+  handleChooseStartTimeMinute: (res: string) => void;
+  handleChooseEndTimeHour?: (res: string) => void;
+  handleChooseEndTimeMinute?: (res: string) => void;
+}
+const Index: React.FC<IndexProps> = memo(
   ({
     startDatePickedArray,
     endDatePickedArray,

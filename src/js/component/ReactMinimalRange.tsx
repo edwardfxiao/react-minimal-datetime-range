@@ -1,31 +1,49 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
-import { cx, isValidDate, isValidDates } from './utils.js';
-import LOCALE from './locale.js';
-import Calendar from './Calendar.js';
-import RangeDate from './RangeDate.js';
-import RangeTime from './RangeTime.js';
+import { cx, isValidDate, isValidDates } from './utils';
+import LOCALE from './locale';
+import Calendar from './Calendar';
+import RangeDate from './RangeDate';
+import RangeTime from './RangeTime';
 const DEFAULT_LACALE = 'en-us';
-try {
-  STYLES = require('./react-minimal-datetime-range.css');
-} catch (ex) {}
-export const CalendarPicker = memo(
+interface IObjectKeysAny {
+  [key: string]: any;
+}
+interface CalendarPickerProps {
+  show?: boolean;
+  locale?: string;
+  allowPageClickToClose?: boolean;
+  defaultDate?: string;
+  style?: React.CSSProperties;
+  defaultTimes?: Array<string>;
+  enableTimeSelection?: boolean;
+  markedDates?: Array<string>;
+  onClose?: () => void;
+  onYearPicked?: (res: object) => void;
+  onMonthPicked?: (res: object) => void;
+  onDatePicked?: (res: object) => void;
+  onResetDate?: (res: object) => void;
+  onResetDefaultDate?: (res: object) => void;
+  handleChooseHourPick?: (res: Array<string>) => void;
+  handleChooseMinutePick?: (res: Array<string>) => void;
+}
+export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
   ({
     show = false,
     locale = DEFAULT_LACALE,
     allowPageClickToClose = true,
-    onClose = () => {},
     defaultDate = '',
+    style = {},
+    defaultTimes = ['', ''],
+    enableTimeSelection = false,
+    markedDates = [],
+    onClose = () => {},
     onYearPicked = () => {},
     onMonthPicked = () => {},
     onDatePicked = () => {},
     onResetDate = () => {},
     onResetDefaultDate = () => {},
-    style = {},
-    defaultTimes = ['', ''],
     handleChooseHourPick = () => {},
     handleChooseMinutePick = () => {},
-    enableTimeSelection = false,
-    markedDates = [],
   }) => {
     const [internalShow, setInternalShow] = useState(show);
     const handleOnClose = useCallback(() => {
@@ -97,27 +115,42 @@ export const CalendarPicker = memo(
     );
   },
 );
-
-const CalendarPickerComponent = memo(
+interface CalendarPickerComponentProps {
+  show?: boolean;
+  locale?: string;
+  allowPageClickToClose?: boolean;
+  defaultDate?: string;
+  defaultTimes?: Array<string>;
+  enableTimeSelection?: boolean;
+  markedDates?: Array<string>;
+  onClose?: () => void;
+  handleOnYearPicked?: (res: object) => void;
+  handleOnMonthPicked?: (res: object) => void;
+  handleOnDatePicked?: (res: object) => void;
+  handleOnResetDate?: (res: object) => void;
+  handleOnResetDefaultDate?: (res: object) => void;
+  handleChooseHourPick?: (res: Array<string>) => void;
+  handleChooseMinutePick?: (res: Array<string>) => void;
+}
+const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
   ({
     show,
     defaultDate,
     locale,
+    defaultTimes,
+    markedDates,
+    enableTimeSelection,
     onClose,
     handleOnYearPicked,
     handleOnMonthPicked,
     handleOnDatePicked,
     handleOnResetDate,
     handleOnResetDefaultDate,
-    defaultTimes,
-    markedDates,
-    enableTimeSelection,
     handleChooseHourPick,
     handleChooseMinutePick,
   }) => {
     const isDefaultDatesValid = isValidDate(defaultDate);
     const [internalShow, setInternalShow] = useState(false);
-    const [times, setTimes] = useState(defaultTimes);
     const [type, setType] = useState(TYPES[0]);
     const [startDatePickedArray, setStartDatePickedArray] = useState(defaultDate ? defaultDate.split('-') : []);
     const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1]]);
@@ -155,7 +188,7 @@ const CalendarPickerComponent = memo(
       }
     }, [type]);
     const componentClass = useMemo(() => cx('react-minimal-datetime-range', internalShow && 'visible'), [internalShow]);
-    const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
+    const LOCALE_DATA: IObjectKeysAny = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
     return (
       <div className={componentClass}>
         <svg className="react-minimal-datetime-range__close" viewBox="0 0 20 20" width="15" height="15" onClick={handleOnClose}>
@@ -177,7 +210,6 @@ const CalendarPickerComponent = memo(
           {type === TYPES[1] && (
             <div className="react-minimal-datetime-range__time-piker" style={{ marginTop: '10px' }}>
               <RangeTime
-                defaultTimeStart={times[0]}
                 startDatePickedArray={startDatePickedArray}
                 handleChooseStartTimeHour={handleChooseStartTimeHour}
                 handleChooseStartTimeMinute={handleChooseStartTimeMinute}
@@ -205,23 +237,42 @@ const CalendarPickerComponent = memo(
 
 const TYPES = ['date', 'time'];
 
-export const RangePicker = memo(
+interface RangePickerProps {
+  show?: boolean;
+  disabled?: boolean;
+  locale?: string;
+  allowPageClickToClose?: boolean;
+  showOnlyTime?: boolean;
+  defaultDate?: string;
+  placeholder?: Array<string>;
+  defaultDates?: Array<string>;
+  defaultTimes?: Array<string>;
+  initialDates?: Array<string>;
+  initialTimes?: Array<string>;
+  enableTimeSelection?: boolean;
+  markedDates?: Array<string>;
+  style?: React.CSSProperties;
+  onConfirm?: (res: Array<string>) => void;
+  onClear?: () => void;
+  onClose?: () => void;
+}
+export const RangePicker: React.FC<RangePickerProps> = memo(
   ({
     show = false,
     disabled = false,
-    allowPageClickToClose = true,
     locale = DEFAULT_LACALE,
+    allowPageClickToClose = true,
+    showOnlyTime = false,
     placeholder = ['', ''],
     defaultDates = ['', ''],
     defaultTimes = ['', ''],
     initialDates = ['', ''],
     initialTimes = ['', ''],
+    markedDates = [],
+    style = {},
     onConfirm = () => {},
     onClear = () => {},
     onClose = () => {},
-    style = {},
-    showOnlyTime = false,
-    markedDates = [],
   }) => {
     // ['YYYY-MM-DD', 'YYYY-MM-DD'] // ['hh:mm', 'hh:mm']
     const isDefaultDatesValid = isValidDates(defaultDates);
@@ -285,7 +336,7 @@ export const RangePicker = memo(
       }
     }, [type]);
     const handleOnConfirm = useCallback(
-      (e, sd, ed, st, et) => {
+      (sd = null, ed = null, st = null, et = null) => {
         if (!sd) {
           sd = startDatePickedArray;
         }
@@ -323,7 +374,7 @@ export const RangePicker = memo(
         }
         e.stopPropagation();
         if (isInitialDatesValid) {
-          handleOnConfirm({}, initialDates[0].split('-'), initialDates[1].split('-'), initialTimes[0].split(':'), initialTimes[1].split(':'));
+          handleOnConfirm(initialDates[0].split('-'), initialDates[1].split('-'), initialTimes[0].split(':'), initialTimes[1].split(':'));
           return;
         }
         setSelected(false);
@@ -379,6 +430,9 @@ export const RangePicker = memo(
     const isEmpty = useMemo(() => !start && !end, [start, end]);
     const valueStart = useMemo(() => (showOnlyTime ? start.split(' ')[1] : start), [showOnlyTime, start]);
     const valueEnd = useMemo(() => (showOnlyTime ? end.split(' ')[1] : end), [showOnlyTime, end]);
+    const handleOnConfirmClick = useCallback(() => {
+      handleOnConfirm();
+    }, [startDatePickedArray, endDatePickedArray, startTimePickedArray, endTimePickedArray]);
     return (
       <div className="react-minimal-datetime-range__range" style={style}>
         <span className={`react-minimal-datetime-range__range-input-wrapper ${disabled && 'disabled'}`} onClick={() => !disabled && setInternalShow(!internalShow)}>
@@ -418,7 +472,7 @@ export const RangePicker = memo(
               endDatePickedArray={endDatePickedArray}
               type={type}
               handleOnChangeType={handleOnChangeType}
-              handleOnConfirm={handleOnConfirm}
+              handleOnConfirmClick={handleOnConfirmClick}
               startTimePickedArray={startTimePickedArray}
               endTimePickedArray={endTimePickedArray}
               handleChooseStartTimeHour={handleChooseStartTimeHour}
@@ -439,34 +493,59 @@ export const RangePicker = memo(
   },
 );
 
-const RangePickerComponent = memo(
+interface RangePickerComponentProps {
+  show: boolean;
+  locale: string;
+  selected: boolean;
+  setSelected: (res: boolean) => void;
+  dates: Array<string>;
+  times: Array<string>;
+  type: string;
+  startDatePickedArray: Array<string>;
+  endDatePickedArray: Array<string>;
+  startTimePickedArray: Array<string>;
+  endTimePickedArray: Array<string>;
+  currentDateObjStart: object;
+  setCurrentDateObjStart: (res: object) => void;
+  currentDateObjEnd: object;
+  setCurrentDateObjEnd: (res: object) => void;
+  showOnlyTime: boolean;
+  markedDates: Array<string>;
+  handleOnChangeType: () => void;
+  handleOnConfirmClick: () => void;
+  handleChooseStartTimeHour: (res: string) => void;
+  handleChooseStartTimeMinute: (res: string) => void;
+  handleChooseEndTimeHour: (res: string) => void;
+  handleChooseEndTimeMinute: (res: string) => void;
+  handleChooseStartDate: (res: object) => void;
+  handleChooseEndDate: (res: object) => void;
+}
+const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
   ({
     show,
+    locale,
     selected,
     setSelected,
-    handleChooseStartDate,
-    handleChooseEndDate,
     dates,
-    times,
-    locale,
+    type,
     startDatePickedArray,
     endDatePickedArray,
-    type,
-    handleOnChangeType,
-    handleOnConfirm,
-    handleChooseStartTimeHour,
-    handleChooseStartTimeMinute,
-    handleChooseEndTimeHour,
-    handleChooseEndTimeMinute,
     startTimePickedArray,
     endTimePickedArray,
-    currentDateObjList,
+    handleChooseStartDate,
+    handleChooseEndDate,
     currentDateObjStart,
     setCurrentDateObjStart,
     currentDateObjEnd,
     setCurrentDateObjEnd,
     showOnlyTime,
     markedDates,
+    handleOnChangeType,
+    handleOnConfirmClick,
+    handleChooseStartTimeHour,
+    handleChooseStartTimeMinute,
+    handleChooseEndTimeHour,
+    handleChooseEndTimeMinute,
   }) => {
     const [internalShow, setInternalShow] = useState(false);
     useEffect(() => {
@@ -477,7 +556,7 @@ const RangePickerComponent = memo(
       }
     }, [show]);
     const componentClass = useMemo(() => cx('react-minimal-datetime-range', internalShow && 'visible'), [internalShow]);
-    const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
+    const LOCALE_DATA: IObjectKeysAny = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
     return (
       <div className={componentClass}>
         <div className="react-minimal-datetime-date-piker">
@@ -519,8 +598,6 @@ const RangePickerComponent = memo(
           {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">
               <RangeTime
-                defaultTimeStart={times[0]}
-                defaultTimeEnd={times[1]}
                 startDatePickedArray={startDatePickedArray}
                 endDatePickedArray={endDatePickedArray}
                 handleChooseStartTimeHour={handleChooseStartTimeHour}
@@ -541,7 +618,7 @@ const RangePickerComponent = memo(
               {type === TYPES[0] ? LOCALE_DATA[TYPES[1]] : LOCALE_DATA[TYPES[0]]}
             </div>
           )}
-          <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--confirm', !selected && 'disabled')} onClick={selected ? handleOnConfirm : () => {}}>
+          <div className={cx('react-minimal-datetime-range__button', 'react-minimal-datetime-range__button--confirm', !selected && 'disabled')} onClick={selected ? handleOnConfirmClick : () => {}}>
             {LOCALE_DATA['confirm']}
           </div>
         </div>

@@ -1,9 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import LOCALE from './locale.js';
+import LOCALE from './locale';
 import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
-import { cx, isValidDate, isValidDates } from './utils.js';
-
+import { cx, isValidDate, isValidDates } from './utils';
+interface IObjectKeysAny {
+  [key: string]: any;
+}
+interface IObjectKeysObject {
+  [key: string]: object;
+}
+interface IObjectKeysBool {
+  [key: string]: boolean;
+}
+interface IObjectKeysArray {
+  [key: string]: Array<object>;
+}
 const TODAY = new Date();
 const YEAR = TODAY.getFullYear();
 const MONTH = TODAY.getMonth() + 1;
@@ -11,10 +22,20 @@ const DATE = TODAY.getDate();
 
 const ITEM_HEIGHT = 40;
 
-const Index = memo(
-  ({ locale = 'en-us', defaultDate = '', onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {}, markedDates = {} }) => {
-    const markedDatesHash = useMemo(() => {
-      const res = {};
+interface IndexProps {
+  locale?: string;
+  defaultDate?: string;
+  markedDates?: Array<string>;
+  onYearPicked?: (res: object) => void;
+  onMonthPicked?: (res: object) => void;
+  onDatePicked?: (res: object) => void;
+  onResetDate?: (res: object) => void;
+  onResetDefaultDate?: (res: object) => void;
+}
+const Index: React.FC<IndexProps> = memo(
+  ({ locale = 'en-us', defaultDate = '', markedDates = [], onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {} }) => {
+    const markedDatesHash: IObjectKeysBool = useMemo(() => {
+      const res: IObjectKeysBool = {};
       if (markedDates && markedDates.length) {
         let isValid = true;
         for (let i = 0; i < markedDates.length; i += 1) {
@@ -31,7 +52,7 @@ const Index = memo(
       }
       return res;
     }, [markedDates]);
-    const LOCALE_DATA = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
+    const LOCALE_DATA: IObjectKeysAny = useMemo(() => (LOCALE[locale] ? LOCALE[locale] : LOCALE['en-us']), [locale]);
     let defaultDateDate = DATE;
     let defaultDateMonth = MONTH;
     let defaultDateYear = YEAR;
@@ -185,7 +206,7 @@ const Index = memo(
     if (dates.length) {
       let row = dates.length / WEEK_NUMBER;
       let rowIndex = 1;
-      let rowObj = {};
+      let rowObj: IObjectKeysArray = {};
       dates.map((item, key) => {
         if (key < rowIndex * WEEK_NUMBER) {
           if (!rowObj[rowIndex]) {
@@ -205,7 +226,7 @@ const Index = memo(
         height: `${row * ITEM_HEIGHT}px`,
       };
     }
-    const captionHtml = LOCALE_DATA.weeks.map((item, key) => {
+    const captionHtml = LOCALE_DATA.weeks.map((item: string, key: string) => {
       return (
         <div className={`react-minimal-datetime-range-calendar__table-caption react-minimal-datetime-range-calendar__table-cel no-border`} key={key}>
           {item}
@@ -213,12 +234,13 @@ const Index = memo(
       );
     });
     let selectorPanelClass = cx('react-minimal-datetime-range-dropdown', 'react-minimal-datetime-range-calendar__selector-panel', showSelectorPanel && 'visible');
-    let selectorPanelMonthHtml = LOCALE_DATA.months.map((item, key) => {
-      let itemMonth = key + 1;
-      let monthItemClass = cx('react-minimal-datetime-range-dropdown-calendar__month-item', itemMonth == pickedYearMonth.month && 'active');
+    let selectorPanelMonthHtml = LOCALE_DATA.months.map((item: string, key: string) => {
+      let itemMonth: number = Number(key) + 1;
+      const numberMonth = Number(pickedYearMonth.month);
+      let monthItemClass = cx('react-minimal-datetime-range-dropdown-calendar__month-item', itemMonth === numberMonth && 'active');
       let month = itemMonth - 1;
       let direction = NEXT_TRANSITION;
-      if (itemMonth < pickedYearMonth.month) {
+      if (itemMonth < numberMonth) {
         direction = PREV_TRANSITION;
         month = itemMonth + 1;
       }
@@ -226,7 +248,7 @@ const Index = memo(
         <div
           className={monthItemClass}
           onClick={
-            itemMonth !== pickedYearMonth.month
+            itemMonth !== numberMonth
               ? () => pickMonth(month, direction)
               : () => {
                   return;
@@ -241,10 +263,11 @@ const Index = memo(
     let selectorPanelYearHtml;
     if (yearSelectorPanelList.length) {
       selectorPanelYearHtml = yearSelectorPanelList.map((item, key) => {
-        let yearItemClass = cx('react-minimal-datetime-range-dropdown-calendar__year-item', item == pickedYearMonth.year && 'active');
+        const numberYearMonth = Number(pickedYearMonth.year);
+        let yearItemClass = cx('react-minimal-datetime-range-dropdown-calendar__year-item', item === numberYearMonth && 'active');
         let year = item - 1;
         let direction = NEXT_TRANSITION;
-        if (item < pickedYearMonth.year) {
+        if (item < numberYearMonth) {
           direction = PREV_TRANSITION;
           year = item + 1;
         }
@@ -252,7 +275,7 @@ const Index = memo(
           <div
             className={yearItemClass}
             onClick={
-              item !== pickedYearMonth.year
+              item !== numberYearMonth
                 ? () => pickYear(year, direction)
                 : () => {
                     return;
@@ -287,7 +310,7 @@ const Index = memo(
               </div>
               <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-9`}>
                 <TransitionGroup className="react-minimal-datetime-range-calendar__selector-panel-year-set-container" childFactory={child => React.cloneElement(child, { classNames })}>
-                  <CSSTransition key={yearSelectorPanelList} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-dropdown-calendar__year`} classNames={classNames}>
+                  <CSSTransition key={yearSelectorPanelList.join('-')} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-dropdown-calendar__year`} classNames={classNames}>
                     <div>{selectorPanelYearHtml}</div>
                   </CSSTransition>
                 </TransitionGroup>
@@ -323,9 +346,9 @@ const Index = memo(
           <div className={`react-minimal-datetime-range__col react-minimal-datetime-range__col-6`}>
             <TransitionGroup className="react-minimal-datetime-range-calendar__title-container" childFactory={child => React.cloneElement(child, { classNames })}>
               <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-calendar__title`} style={{ left: '0' }} classNames={classNames}>
-              <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+                <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
                   <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                    <span>{`${LOCALE_DATA.months[pickedYearMonth.month - 1]}`}</span>
+                    <span>{`${LOCALE_DATA.months[Number(pickedYearMonth.month) - 1]}`}</span>
                   </span>
                   <span>&nbsp;</span>
                   <span className={`react-minimal-datetime-range-calendar__clicker`}>
@@ -376,12 +399,28 @@ const Index = memo(
     );
   },
 );
-
-const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash }) => {
+interface pickedDateInfo {
+  date: string;
+  month: string;
+  year: string;
+}
+interface pickedYearMonth {
+  month: string;
+  year: string;
+}
+interface CalendarBodyProps {
+  data?: IObjectKeysArray;
+  pickedDateInfo?: pickedDateInfo;
+  pickedYearMonth?: pickedYearMonth;
+  markedDates?: Array<string>;
+  markedDatesHash: IObjectKeysBool;
+  onClick?: (res: string) => void;
+}
+const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash }) => {
   const content = Object.keys(data).map(key => {
     let colHtml;
     if (data[key].length) {
-      colHtml = data[key].map((item, key) => {
+      colHtml = data[key].map((item: {[k: string]: any}, key: any) => {
         const isPicked = pickedDateInfo.date === item.name && pickedDateInfo.month === item.month && pickedDateInfo.year === item.year;
         let isDisabled = pickedYearMonth.month !== item.month;
         const datePickerItemClass = cx(
@@ -403,8 +442,14 @@ const CalendarBody = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {
   });
   return <div className={`react-minimal-datetime-range-calendar__table slide`}>{content}</div>;
 });
-
-const CalendarItem = memo(({ item = {}, isPicked = false, isDisabled = false, datePickerItemClass = '', onClick = () => {} }) => {
+interface CalendarItemProps {
+  item?: IObjectKeysAny;
+  isPicked?: boolean;
+  isDisabled?: boolean;
+  datePickerItemClass?: string;
+  onClick?: (res: string) => void;
+}
+const CalendarItem: React.FC<CalendarItemProps> = memo(({ item = {}, isPicked = false, isDisabled = false, datePickerItemClass = '', onClick = () => {} }) => {
   const handleOnClick = useCallback(() => {
     onClick(item.name);
   }, [item.name]);

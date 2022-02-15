@@ -1,13 +1,7 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-var locale = {
+interface IObjectKeys {
+  [key: string]: object;
+}
+let locale: IObjectKeys = {
   'en-us': {
     today: 'Today',
     reset: 'Reset',
@@ -20,7 +14,7 @@ var locale = {
     time: 'Select time',
     confirm: 'Confirm',
     start: 'Start',
-    end: 'End'
+    end: 'End',
   },
   'zh-cn': {
     today: '今天',
@@ -34,22 +28,21 @@ var locale = {
     time: '选择时间',
     confirm: '确定',
     start: '开始',
-    end: '结束'
-  }
+    end: '结束',
+  },
 };
 
-var getCustomLocale = function getCustomLocale(o, m) {
-  if (!o || _typeof(o) !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
+const getCustomLocale = (o: any, m: any) => {
+  if (!o || typeof o !== 'object' || o.constructor !== Object || !Object.keys(o).length) {
     console.error('wrong structure');
     return false;
   }
-
-  Object.keys(o).map(function (i) {
+  Object.keys(o).map(i => {
     if (!m[i]) {
       m[i] = o[i];
     } else {
       if (Object.keys(o[i]).length) {
-        Object.keys(o[i]).map(function (j) {
+        Object.keys(o[i]).map(j => {
           m[i][j] = o[i][j];
         });
       }
@@ -58,19 +51,22 @@ var getCustomLocale = function getCustomLocale(o, m) {
   return m;
 };
 
-var handleCustomLocale = function handleCustomLocale(locale, w) {
-  var res;
+declare global {
+  interface Window {
+    REACT_MINIMAL_DATETIME_RANGE: any;
+  }
+}
 
+const handleCustomLocale = (locale: any, w: Window) => {
+  let res;
   if (typeof w !== 'undefined') {
     if (w.REACT_MINIMAL_DATETIME_RANGE && w.REACT_MINIMAL_DATETIME_RANGE['customLocale']) {
       res = getCustomLocale(w.REACT_MINIMAL_DATETIME_RANGE['customLocale'], locale);
     }
   }
-
   if (typeof res === 'undefined' || res === false) {
     return locale;
   }
-
   return res;
 };
 
@@ -79,5 +75,4 @@ if (typeof window !== 'undefined') {
   locale = handleCustomLocale(locale, window);
 }
 
-var _default = locale;
-exports["default"] = _default;
+export default locale;
