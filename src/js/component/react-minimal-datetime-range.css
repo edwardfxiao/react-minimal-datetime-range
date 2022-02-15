@@ -529,12 +529,12 @@
   transform: translateX(0);
 }
 
-.slide-leave {
+.slide-exit {
   transform: translateX(0);
   transition: 0.3s transform ease-in-out;
 }
 
-.slide-leave-active {
+.slide-exit-active {
   transform: translateX(-100%);
 }
 
@@ -547,12 +547,12 @@
   transform: translateX(0);
 }
 
-.forward-leave {
+.forward-exit {
   transform: translateX(0);
   transition: 0.3s transform ease-in-out;
 }
 
-.forward-leave-active {
+.forward-exit-active {
   transform: translateX(-100%);
 }
 
@@ -565,12 +565,12 @@
   transform: translateX(0);
 }
 
-.backward-leave {
+.backward-exit {
   transform: translateX(0);
   transition: 0.3s transform ease-in-out;
 }
 
-.backward-leave-active {
+.backward-exit-active {
   transform: translateX(100%);
 }
 
