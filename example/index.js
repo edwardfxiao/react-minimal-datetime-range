@@ -56,7 +56,7 @@ const Component = () => {
               show={showCalendarPicker} //default is false
               onClose={() => setShowCalendarPicker(false)}
               allowPageClickToClose={true} // default is true
-              defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "MM/DD/YYYY"
+              defaultDate={year + '-' + month + '-' + date} // OPTIONAL. format: "YYYY-MM-DD"
               onYearPicked={res => console.log(res)}
               onMonthPicked={res => console.log(res)}
               onDatePicked={res => console.log(res)}
@@ -64,6 +64,7 @@ const Component = () => {
               onResetDefaultDate={res => console.log(res)}
               style={{ width: '300px', margin: '10px auto 0' }}
               markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
+              // supportDateRange={[`2022-02-16`, `2022-12-10`]} // "YYYY-MM-DD"
               // defaultTimes={['10:12']} // OPTIONAL
               // enableTimeSelection={true} // OPTIONAL
               // handleChooseHourPick={res => console.log(res)} // OPTIONAL

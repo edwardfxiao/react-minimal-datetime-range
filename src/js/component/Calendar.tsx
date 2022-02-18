@@ -6,9 +6,6 @@ import { cx, isValidDate, isValidDates } from './utils';
 interface IObjectKeysAny {
   [key: string]: any;
 }
-interface IObjectKeysObject {
-  [key: string]: object;
-}
 interface IObjectKeysBool {
   [key: string]: boolean;
 }
@@ -26,6 +23,7 @@ interface IndexProps {
   locale?: string;
   defaultDate?: string;
   markedDates?: Array<string>;
+  supportDateRange?: Array<string>;
   onYearPicked?: (res: object) => void;
   onMonthPicked?: (res: object) => void;
   onDatePicked?: (res: object) => void;
@@ -33,7 +31,17 @@ interface IndexProps {
   onResetDefaultDate?: (res: object) => void;
 }
 const Index: React.FC<IndexProps> = memo(
-  ({ locale = 'en-us', defaultDate = '', markedDates = [], onYearPicked = () => {}, onMonthPicked = () => {}, onDatePicked = () => {}, onResetDate = () => {}, onResetDefaultDate = () => {} }) => {
+  ({
+    locale = 'en-us',
+    defaultDate = '',
+    markedDates = [],
+    supportDateRange = [],
+    onYearPicked = () => {},
+    onMonthPicked = () => {},
+    onDatePicked = () => {},
+    onResetDate = () => {},
+    onResetDefaultDate = () => {},
+  }) => {
     const markedDatesHash: IObjectKeysBool = useMemo(() => {
       const res: IObjectKeysBool = {};
       if (markedDates && markedDates.length) {
@@ -95,6 +103,8 @@ const Index: React.FC<IndexProps> = memo(
     useEffect(() => {
       setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
     }, [pickedYearMonth]);
+    const minSupportDate = supportDateRange.length > 0 && isValidDate(supportDateRange[0]) ? supportDateRange[0] : '';
+    const maxSupportDate = supportDateRange.length > 1 && isValidDate(supportDateRange[1]) ? supportDateRange[1] : '';
     const pickYear = useCallback(
       (year, direction) => {
         year = Number(year);
@@ -221,7 +231,18 @@ const Index: React.FC<IndexProps> = memo(
           rowObj[rowIndex].push(item);
         }
       });
-      content = <CalendarBody data={rowObj} pickedYearMonth={pickedYearMonth} pickedDateInfo={pickedDateInfo} onClick={pickDate} key={pickedYearMonth.string} markedDatesHash={markedDatesHash} />;
+      content = (
+        <CalendarBody
+          data={rowObj}
+          pickedYearMonth={pickedYearMonth}
+          pickedDateInfo={pickedDateInfo}
+          onClick={pickDate}
+          key={pickedYearMonth.string}
+          markedDatesHash={markedDatesHash}
+          minSupportDate={minSupportDate}
+          maxSupportDate={maxSupportDate}
+        />
+      );
       transitionContainerStyle = {
         height: `${row * ITEM_HEIGHT}px`,
       };
@@ -408,15 +429,28 @@ interface CalendarBodyProps {
   pickedYearMonth?: pickedYearMonth;
   markedDates?: Array<string>;
   markedDatesHash: IObjectKeysBool;
+  minSupportDate: string;
+  maxSupportDate: string;
   onClick?: (res: string) => void;
 }
-const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash }) => {
+const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash, minSupportDate, maxSupportDate }) => {
   const content = Object.keys(data).map(key => {
     let colHtml;
     if (data[key].length) {
       colHtml = data[key].map((item: { [k: string]: any }, key: any) => {
+        const itemDate = `${item.year}-${Number(item.month)}-${Number(item.name)}`;
         const isPicked = pickedDateInfo.date === item.name && pickedDateInfo.month === item.month && pickedDateInfo.year === item.year;
         let isDisabled = pickedYearMonth.month !== item.month;
+        if (minSupportDate) {
+          if (new Date(itemDate) < new Date(minSupportDate)) {
+            isDisabled = true;
+          }
+        }
+        if (maxSupportDate) {
+          if (new Date(itemDate) > new Date(maxSupportDate)) {
+            isDisabled = true;
+          }
+        }
         const datePickerItemClass = cx(
           'react-minimal-datetime-range-calendar__table-cel',
           'react-minimal-datetime-range-calendar__date-item',

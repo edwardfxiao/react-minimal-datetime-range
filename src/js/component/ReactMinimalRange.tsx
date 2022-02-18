@@ -18,6 +18,7 @@ interface CalendarPickerProps {
   defaultTimes?: Array<string>;
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
+  supportDateRange?: Array<string>;
   onClose?: () => void;
   onYearPicked?: (res: object) => void;
   onMonthPicked?: (res: object) => void;
@@ -37,6 +38,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
     defaultTimes = ['', ''],
     enableTimeSelection = false,
     markedDates = [],
+    supportDateRange = [],
     onClose = () => {},
     onYearPicked = () => {},
     onMonthPicked = () => {},
@@ -110,6 +112,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
             handleChooseHourPick={handleChooseHourPick}
             handleChooseMinutePick={handleChooseMinutePick}
             markedDates={markedDates}
+            supportDateRange={supportDateRange}
           />
         )}
       </div>
@@ -124,6 +127,7 @@ interface CalendarPickerComponentProps {
   defaultTimes?: Array<string>;
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
+  supportDateRange?: Array<string>;
   onClose?: () => void;
   handleOnYearPicked?: (res: object) => void;
   handleOnMonthPicked?: (res: object) => void;
@@ -140,6 +144,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
     locale,
     defaultTimes,
     markedDates,
+    supportDateRange,
     enableTimeSelection,
     onClose,
     handleOnYearPicked,
@@ -206,6 +211,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
               onResetDate={handleOnResetDate}
               onResetDefaultDate={handleOnResetDefaultDate}
               markedDates={markedDates}
+              supportDateRange={supportDateRange}
             />
           </div>
           {type === TYPES[1] && (
