@@ -1,3 +1,7 @@
+# 2.0.4
+
+- Update README about date_format in ```customLocale```
+
 # 2.0.3
 
 - Add ```supportDateRange``` to Calendar component
