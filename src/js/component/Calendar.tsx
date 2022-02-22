@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from '
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import LOCALE from './locale';
 import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString } from './const';
-import { cx, isValidDate, isValidDates } from './utils';
+import { cx, isValidDate } from './utils';
 interface IObjectKeysAny {
   [key: string]: any;
 }

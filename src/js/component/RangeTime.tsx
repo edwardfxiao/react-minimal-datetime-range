@@ -1,20 +1,11 @@
 import React, { memo } from 'react';
 import { formatDateString } from './const';
-import { cx, isValidDate } from './utils';
+import { cx } from './utils';
 
 const HOURS = [...Array(24).keys()];
 const MINUTES = [...Array(60).keys()];
 interface IObjectKeysAny {
   [key: string]: any;
-}
-interface IObjectKeysObject {
-  [key: string]: object;
-}
-interface IObjectKeysBool {
-  [key: string]: boolean;
-}
-interface IObjectKeysArray {
-  [key: string]: Array<object>;
 }
 interface IndexProps {
   showOnlyTime: boolean;

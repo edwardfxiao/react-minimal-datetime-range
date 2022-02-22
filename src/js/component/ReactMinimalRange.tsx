@@ -216,7 +216,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
           </div>
           {type === TYPES[1] && (
             <div className="react-minimal-datetime-range__time-piker" style={{ marginTop: '10px' }}>
-              <RangeTime
+              {/* <RangeTime
                 startDatePickedArray={startDatePickedArray}
                 handleChooseStartTimeHour={handleChooseStartTimeHour}
                 handleChooseStartTimeMinute={handleChooseStartTimeMinute}
@@ -224,7 +224,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
                 showOnlyTime={true}
                 LOCALE_DATA={LOCALE_DATA}
                 singleMode={true}
-              />
+              /> */}
             </div>
           )}
         </div>
