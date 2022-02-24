@@ -1,3 +1,7 @@
+# 2.0.6
+
+- CalendarPicker bugfix
+
 # 2.0.5
 
 - Better TypeScript support (export interface CalendarPickerProps and RangePickerProps)
