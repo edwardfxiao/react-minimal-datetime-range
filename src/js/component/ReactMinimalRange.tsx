@@ -9,7 +9,7 @@ const DEFAULT_LACALE = 'en-us';
 interface IObjectKeysAny {
   [key: string]: any;
 }
-interface CalendarPickerProps {
+export interface CalendarPickerProps {
   show?: boolean;
   locale?: string;
   allowPageClickToClose?: boolean;
@@ -244,7 +244,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
 
 const TYPES = ['date', 'time'];
 
-interface RangePickerProps {
+export interface RangePickerProps {
   show?: boolean;
   disabled?: boolean;
   locale?: string;

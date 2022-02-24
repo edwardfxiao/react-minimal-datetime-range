@@ -1,3 +1,7 @@
+# 2.0.5
+
+- Better TypeScript support (export interface CalendarPickerProps and RangePickerProps)
+
 # 2.0.4
 
 - Update README about date_format in ```customLocale```
