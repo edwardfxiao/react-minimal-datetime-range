@@ -116,6 +116,9 @@ By providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```, you can 
                     confirm: 'Confirm',
                     start: 'Start',
                     end: 'End',
+                    date_format: (month, year) => {
+                      return `${month} ${year}`;
+                    },
                 }
             }
         }

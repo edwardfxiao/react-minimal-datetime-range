@@ -14,9 +14,6 @@ const ITEM_HEIGHT = 40;
 interface IObjectKeysAny {
   [key: string]: any;
 }
-interface IObjectKeysObject {
-  [key: string]: object;
-}
 interface IObjectKeysBool {
   [key: string]: boolean;
 }

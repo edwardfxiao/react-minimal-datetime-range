@@ -9,7 +9,7 @@ const DEFAULT_LACALE = 'en-us';
 interface IObjectKeysAny {
   [key: string]: any;
 }
-interface CalendarPickerProps {
+export interface CalendarPickerProps {
   show?: boolean;
   locale?: string;
   allowPageClickToClose?: boolean;
@@ -216,7 +216,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
           </div>
           {type === TYPES[1] && (
             <div className="react-minimal-datetime-range__time-piker" style={{ marginTop: '10px' }}>
-              <RangeTime
+              {/* <RangeTime
                 startDatePickedArray={startDatePickedArray}
                 handleChooseStartTimeHour={handleChooseStartTimeHour}
                 handleChooseStartTimeMinute={handleChooseStartTimeMinute}
@@ -224,7 +224,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
                 showOnlyTime={true}
                 LOCALE_DATA={LOCALE_DATA}
                 singleMode={true}
-              />
+              /> */}
             </div>
           )}
         </div>
@@ -244,7 +244,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
 
 const TYPES = ['date', 'time'];
 
-interface RangePickerProps {
+export interface RangePickerProps {
   show?: boolean;
   disabled?: boolean;
   locale?: string;
