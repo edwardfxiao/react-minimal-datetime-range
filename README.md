@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![npm version](https://badge.fury.io/js/react-minimal-datetime-range.svg)](https://badge.fury.io/js/react-minimal-datetime-range) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-minimal-datetime-range.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfxiao/react-minimal-datetime-range/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+[![npm version](https://badge.fury.io/js/react-minimal-datetime-range.svg)](https://badge.fury.io/js/react-minimal-datetime-range) ![Cdnjs](https://img.shields.io/cdnjs/v/react-minimal-datetime-range) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react-minimal-datetime-range.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/edwardfxiao/react-minimal-datetime-range/master/LICENSE)[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 A react component for date time range picker. Online demo examples.
 # <img src="https://raw.githubusercontent.com/edwardfxiao/react-minimal-datetime-range/master/react-minimal-datetime-range.gif" />
@@ -31,6 +31,29 @@ A react component for date time range picker. Online demo examples.
 ```sh
 npm install react-minimal-datetime-range --save
 ```
+#### By CDN (starting from v2.0.0)
+```html
+<head>
+ ...
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.0/react-minimal-datetime-range.min.css" />
+</head>
+<body>
+ <div id="root"></div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.0/react-minimal-datetime-range.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+ <script type="text/babel">
+    const App = React.memo(() => {
+      return (<RangePicker .../>)
+    });
+    ReactDOM.render(<App />, document.getElementById('root'));
+ </script>
+</body>
+
+
+```
+
 # Donation
 <a href="https://www.paypal.me/XIAOMENGXIAO/0.99" target="_blank" alt="PayPal Donate">Thanks for donating me a donut!&nbsp;&nbsp;⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄</a>
 
