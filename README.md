@@ -35,13 +35,13 @@ npm install react-minimal-datetime-range --save
 ```html
 <head>
  ...
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.0/react-minimal-datetime-range.min.css" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.6/react-minimal-datetime-range.min.css" />
 </head>
 <body>
  <div id="root"></div>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.0/react-minimal-datetime-range.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-minimal-datetime-range/2.0.6/react-minimal-datetime-range.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
  <script type="text/babel">
     const App = React.memo(() => {
