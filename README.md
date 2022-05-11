@@ -17,7 +17,7 @@ A react component for date time range picker. Online demo examples.
 * <a href="https://codesandbox.io/s/custom-locale-ylvtr">Example of custom locales</a> (when providing ```window.REACT_MINIMAL_DATETIME_RANGE['customLocale']```)
 
 # Docs Link
-[Custom Locale Guid(can be multiple locales)](#custom-locale)
+[Custom Locale Guide(can be multiple locales)](#custom-locale)
 
 ### Version of ```16.8.6``` or higher of react and react-dom is required.
 ```js
