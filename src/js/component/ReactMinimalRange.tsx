@@ -258,6 +258,7 @@ export interface RangePickerProps {
   initialTimes?: Array<string>;
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
+  supportDateRange?: Array<string>;
   style?: React.CSSProperties;
   onConfirm?: (res: Array<string>) => void;
   onClear?: () => void;
@@ -276,6 +277,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
     initialDates = ['', ''],
     initialTimes = ['', ''],
     markedDates = [],
+    supportDateRange = [],
     style = {},
     onConfirm = () => {},
     onClear = () => {},
@@ -492,6 +494,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
               setCurrentDateObjEnd={setCurrentDateObjEnd}
               showOnlyTime={showOnlyTime}
               markedDates={markedDates}
+              supportDateRange={supportDateRange}
             />
           )}
         </div>
@@ -518,6 +521,7 @@ interface RangePickerComponentProps {
   setCurrentDateObjEnd: (res: object) => void;
   showOnlyTime: boolean;
   markedDates: Array<string>;
+  supportDateRange?: Array<string>;
   handleOnChangeType: () => void;
   handleOnConfirmClick: () => void;
   handleChooseStartTimeHour: (res: string) => void;
@@ -547,6 +551,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
     setCurrentDateObjEnd,
     showOnlyTime,
     markedDates,
+    supportDateRange,
     handleOnChangeType,
     handleOnConfirmClick,
     handleChooseStartTimeHour,
@@ -583,6 +588,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
             markedDates={markedDates}
+            supportDateRange={supportDateRange}
           />
           <div className="react-minimal-datetime-date-piker__divider" />
           <RangeDate
@@ -601,6 +607,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             currentDateObjEnd={currentDateObjEnd}
             setCurrentDateObjEnd={setCurrentDateObjEnd}
             markedDates={markedDates}
+            supportDateRange={supportDateRange}
           />
           {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">

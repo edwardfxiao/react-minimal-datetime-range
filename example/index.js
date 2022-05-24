@@ -96,6 +96,7 @@ const Component = () => {
               onClose={() => console.log('closed')}
               style={{ width: '300px', margin: '0 auto' }}
               // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
+              // supportDateRange={[`2022-02-16`, `2022-12-10`]} // "YYYY-MM-DD"
               // showOnlyTime={true} // default is false
             />
           </div>

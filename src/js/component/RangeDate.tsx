@@ -30,6 +30,7 @@ interface IndexProps {
   startDatePickedArray?: Array<string>;
   endDatePickedArray?: Array<string>;
   markedDates?: Array<string>;
+  supportDateRange?: Array<string>;
   handleChooseStartDate?: (res: object) => void;
   handleChooseEndDate?: (res: object) => void;
   currentDateObjStart?: IObjectKeysAny;
@@ -54,6 +55,7 @@ const Index: React.FC<IndexProps> = memo(
     setCurrentDateObjStart = () => {},
     setCurrentDateObjEnd = () => {},
     markedDates = [],
+    supportDateRange = [],
   }) => {
     const markedDatesHash: IObjectKeysBool = useMemo(() => {
       const res: IObjectKeysBool = {};
@@ -194,6 +196,8 @@ const Index: React.FC<IndexProps> = memo(
     useEffect(() => {
       setDates(getDaysArray(Number(pickedYearMonth.year), Number(pickedYearMonth.month)));
     }, [pickedYearMonth]);
+    const minSupportDate = supportDateRange.length > 0 && isValidDate(supportDateRange[0]) ? supportDateRange[0] : '';
+    const maxSupportDate = supportDateRange.length > 1 && isValidDate(supportDateRange[1]) ? supportDateRange[1] : '';
     const pickYear = useCallback(
       (year, direction) => {
         year = Number(year);
@@ -290,6 +294,8 @@ const Index: React.FC<IndexProps> = memo(
           onClick={pickDate}
           key={pickedYearMonth.string}
           markedDatesHash={markedDatesHash}
+          minSupportDate={minSupportDate}
+          maxSupportDate={maxSupportDate}
         />
       );
       transitionContainerStyle = {
@@ -421,9 +427,7 @@ const Index: React.FC<IndexProps> = memo(
             <TransitionGroup className="react-minimal-datetime-range-calendar__title-container" childFactory={child => React.cloneElement(child, { classNames })}>
               <CSSTransition key={pickedYearMonth.string} timeout={{ enter: 300, exit: 300 }} className={`react-minimal-datetime-range-calendar__title`} style={{ left: '0' }} classNames={classNames}>
                 <span className={`react-minimal-datetime-range-calendar__clicker`} onClick={handleShowSelectorPanel} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
-                  <span className={`react-minimal-datetime-range-calendar__clicker`}>
-                    { LOCALE_DATA.date_format(LOCALE_DATA.months[Number(pickedYearMonth.month) - 1], pickedYearMonth.year)}
-                  </span>
+                  <span className={`react-minimal-datetime-range-calendar__clicker`}>{LOCALE_DATA.date_format(LOCALE_DATA.months[Number(pickedYearMonth.month) - 1], pickedYearMonth.year)}</span>
                 </span>
               </CSSTransition>
             </TransitionGroup>
@@ -483,6 +487,8 @@ interface CalendarBodyProps {
   pickedYearMonth?: pickedYearMonth;
   markedDates?: Array<string>;
   markedDatesHash: IObjectKeysBool;
+  minSupportDate: string;
+  maxSupportDate: string;
   onClick?: (res: string) => void;
 }
 const CalendarBody: React.FC<CalendarBodyProps> = memo(
@@ -498,6 +504,8 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
     pickedDateInfo = {},
     pickedYearMonth = {},
     markedDatesHash = {},
+    minSupportDate,
+    maxSupportDate,
   }) => {
     const content = Object.keys(data).map(key => {
       let colHtml;
@@ -505,6 +513,16 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
         colHtml = data[key].map((item: { [k: string]: any }, key: any) => {
           const itemDate = new Date(`${item.year}-${item.month}-${item.name}`);
           let isDisabled = pickedYearMonth.month !== item.month;
+          if (minSupportDate) {
+            if (new Date(itemDate) < new Date(minSupportDate)) {
+              isDisabled = true;
+            }
+          }
+          if (maxSupportDate) {
+            if (new Date(itemDate) > new Date(maxSupportDate)) {
+              isDisabled = true;
+            }
+          }
           let isPickedStart = false;
           let isPickedEnd = false;
           let isHighlight = false;
@@ -555,6 +573,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
               handleChooseStartDate={handleChooseStartDate}
               handleChooseEndDate={handleChooseEndDate}
               item={item}
+              isDisabled={isDisabled}
               datePickerItemClass={datePickerItemClass}
             />
           );
@@ -582,8 +601,9 @@ interface CalendarItemProps {
   datePickerItemClass?: string;
 }
 const CalendarItem: React.FC<CalendarItemProps> = memo(
-  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, datePickerItemClass = '' }) => {
+  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, isDisabled = false, datePickerItemClass = '' }) => {
     const handleOnClick = useCallback(() => {
+      if (isDisabled) return;
       if (startDatePickedArray.length) {
         setSelected(true);
         handleChooseEndDate(item);
@@ -597,6 +617,7 @@ const CalendarItem: React.FC<CalendarItemProps> = memo(
       }
     }, [item, selected, startDatePickedArray, endDatePickedArray]);
     const handleOnMouseOver = useCallback(() => {
+      if (isDisabled) return;
       if (!selected) {
         if (startDatePickedArray.length) {
           handleChooseEndDate(item);

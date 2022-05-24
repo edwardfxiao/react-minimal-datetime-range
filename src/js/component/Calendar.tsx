@@ -433,7 +433,7 @@ interface CalendarBodyProps {
   maxSupportDate: string;
   onClick?: (res: string) => void;
 }
-const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash, minSupportDate, maxSupportDate }) => {
+const CalendarBody: React.FC<CalendarBodyProps> = memo(({ data = {}, pickedDateInfo = {}, pickedYearMonth = {}, onClick = () => {}, markedDatesHash = {}, minSupportDate, maxSupportDate }) => {
   const pickedDate = `${Number(pickedDateInfo.year)}-${Number(pickedDateInfo.month)}-${Number(pickedDateInfo.date)}`;
   const content = Object.keys(data).map(key => {
     let colHtml;

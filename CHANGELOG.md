@@ -1,3 +1,7 @@
+# 2.0.7
+
+- Add ```supportDateRange``` to RangePicker component as #7 states
+
 # 2.0.6
 
 - CalendarPicker bugfix
