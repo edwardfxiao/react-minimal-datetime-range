@@ -19,6 +19,7 @@ export interface CalendarPickerProps {
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
   supportDateRange?: Array<string>;
+  duration?: number;
   onClose?: () => void;
   onYearPicked?: (res: object) => void;
   onMonthPicked?: (res: object) => void;
@@ -39,6 +40,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
     enableTimeSelection = false,
     markedDates = [],
     supportDateRange = [],
+    duration = 0,
     onClose = () => {},
     onYearPicked = () => {},
     onMonthPicked = () => {},
@@ -113,6 +115,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
             handleChooseMinutePick={handleChooseMinutePick}
             markedDates={markedDates}
             supportDateRange={supportDateRange}
+            duration={duration}
           />
         )}
       </div>
@@ -128,6 +131,7 @@ interface CalendarPickerComponentProps {
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
   supportDateRange?: Array<string>;
+  duration?: number;
   onClose?: () => void;
   handleOnYearPicked?: (res: object) => void;
   handleOnMonthPicked?: (res: object) => void;
@@ -259,6 +263,7 @@ export interface RangePickerProps {
   enableTimeSelection?: boolean;
   markedDates?: Array<string>;
   supportDateRange?: Array<string>;
+  duration?: number;
   style?: React.CSSProperties;
   onConfirm?: (res: Array<string>) => void;
   onClear?: () => void;
@@ -278,6 +283,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
     initialTimes = ['', ''],
     markedDates = [],
     supportDateRange = [],
+    duration = 0,
     style = {},
     onConfirm = () => {},
     onClear = () => {},
@@ -495,6 +501,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
               showOnlyTime={showOnlyTime}
               markedDates={markedDates}
               supportDateRange={supportDateRange}
+              duration={duration}
             />
           )}
         </div>
@@ -522,6 +529,7 @@ interface RangePickerComponentProps {
   showOnlyTime: boolean;
   markedDates: Array<string>;
   supportDateRange?: Array<string>;
+  duration?: number;
   handleOnChangeType: () => void;
   handleOnConfirmClick: () => void;
   handleChooseStartTimeHour: (res: string) => void;
@@ -552,6 +560,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
     showOnlyTime,
     markedDates,
     supportDateRange,
+    duration,
     handleOnChangeType,
     handleOnConfirmClick,
     handleChooseStartTimeHour,
@@ -589,6 +598,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             setCurrentDateObjEnd={setCurrentDateObjEnd}
             markedDates={markedDates}
             supportDateRange={supportDateRange}
+            duration={duration}
           />
           <div className="react-minimal-datetime-date-piker__divider" />
           <RangeDate
@@ -608,6 +618,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             setCurrentDateObjEnd={setCurrentDateObjEnd}
             markedDates={markedDates}
             supportDateRange={supportDateRange}
+            duration={duration}
           />
           {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">

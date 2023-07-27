@@ -98,6 +98,7 @@ const Component = () => {
               // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
               // supportDateRange={[`2022-02-16`, `2022-12-10`]} // "YYYY-MM-DD"
               // showOnlyTime={true} // default is false
+              // duration={2} // day count default is 0. set end date automatically when start date is picked
             />
           </div>
         </div>

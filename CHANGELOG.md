@@ -1,3 +1,7 @@
+# 2.0.8
+
+- Add ```duration``` to RangePicker component as #8 states
+
 # 2.0.7
 
 - Add ```supportDateRange``` to RangePicker component as #7 states

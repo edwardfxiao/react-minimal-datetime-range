@@ -196,3 +196,24 @@ export const isWith1Month = (year1: number, year2: number, month1: number, month
   //   }
   // }
 };
+
+interface IObjectKeysAny {
+  [key: string]: any;
+}
+
+export const getEndDateItemByDuration = (item: IObjectKeysAny, duration: number) => {
+  const { year, month, name } = item;
+  const date = new Date(`${year}-${month}-${name}`);
+  const endDate = new Date(date.getTime() + duration * 24 * 60 * 60 * 1000);
+  const yearString = String(endDate.getFullYear());
+  const monthString = formatDateString(endDate.getMonth() + 1);
+  const dateString = formatDateString(endDate.getDate());
+  const endDateItem = {
+    year: yearString,
+    month: monthString,
+    name: dateString,
+    day: endDate.getDay(),
+    value: `${yearString}-${monthString}-${dateString}`,
+  };
+  return endDateItem;
+};

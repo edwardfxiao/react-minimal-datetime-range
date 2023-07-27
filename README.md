@@ -98,6 +98,7 @@ import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
   placeholder={['Start Time', 'End Time']}
   // markedDates={[`${todayY}-${todayM}-${todayD - 1}`, `${todayY}-${todayM}-${todayD}`]} // OPTIONAL. ['YYYY-MM-DD']
   showOnlyTime={false} // default is false, only select time
+  // duration={2} // day count. default is 0. set end date will be add 2 days automatically when start date is picked
   ////////////////////
   // IMPORTANT DESC //
   ////////////////////

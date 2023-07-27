@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import LOCALE from './locale';
-import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString, isWith1Month } from './const';
+import { WEEK_NUMBER, PREV_TRANSITION, NEXT_TRANSITION, SELECTOR_YEAR_SET_NUMBER, getDaysArray, getYearSet, formatDateString, isWith1Month, getEndDateItemByDuration } from './const';
 import { cx, isValidDate } from './utils';
 
 const TODAY = new Date();
@@ -31,6 +31,7 @@ interface IndexProps {
   endDatePickedArray?: Array<string>;
   markedDates?: Array<string>;
   supportDateRange?: Array<string>;
+  duration?: number;
   handleChooseStartDate?: (res: object) => void;
   handleChooseEndDate?: (res: object) => void;
   currentDateObjStart?: IObjectKeysAny;
@@ -56,6 +57,7 @@ const Index: React.FC<IndexProps> = memo(
     setCurrentDateObjEnd = () => {},
     markedDates = [],
     supportDateRange = [],
+    duration = 0,
   }) => {
     const markedDatesHash: IObjectKeysBool = useMemo(() => {
       const res: IObjectKeysBool = {};
@@ -296,6 +298,7 @@ const Index: React.FC<IndexProps> = memo(
           markedDatesHash={markedDatesHash}
           minSupportDate={minSupportDate}
           maxSupportDate={maxSupportDate}
+          duration={duration}
         />
       );
       transitionContainerStyle = {
@@ -486,6 +489,7 @@ interface CalendarBodyProps {
   pickedDateInfo?: pickedDateInfo;
   pickedYearMonth?: pickedYearMonth;
   markedDates?: Array<string>;
+  duration?: number;
   markedDatesHash: IObjectKeysBool;
   minSupportDate: string;
   maxSupportDate: string;
@@ -506,6 +510,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
     markedDatesHash = {},
     minSupportDate,
     maxSupportDate,
+    duration,
   }) => {
     const content = Object.keys(data).map(key => {
       let colHtml;
@@ -575,6 +580,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
               item={item}
               isDisabled={isDisabled}
               datePickerItemClass={datePickerItemClass}
+              duration={duration}
             />
           );
         });
@@ -599,9 +605,10 @@ interface CalendarItemProps {
   isPicked?: boolean;
   isDisabled?: boolean;
   datePickerItemClass?: string;
+  duration?: number;
 }
 const CalendarItem: React.FC<CalendarItemProps> = memo(
-  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, isDisabled = false, datePickerItemClass = '' }) => {
+  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, isDisabled = false, datePickerItemClass = '', duration = 0 }) => {
     const handleOnClick = useCallback(() => {
       if (isDisabled) return;
       if (startDatePickedArray.length) {
@@ -611,19 +618,28 @@ const CalendarItem: React.FC<CalendarItemProps> = memo(
         handleChooseStartDate(item);
       }
       if (selected) {
-        handleChooseEndDate({ year: '', month: '', name: '', value: '' });
-        handleChooseStartDate(item);
-        setSelected(false);
+        if (duration > 0) {
+          const endDateItem = getEndDateItemByDuration(item, duration);
+          console.log(endDateItem);
+          handleChooseEndDate(endDateItem);
+          handleChooseStartDate(item);
+          setSelected(true);
+        } else {
+          handleChooseEndDate({ year: '', month: '', name: '', value: '' });
+          handleChooseStartDate(item);
+          setSelected(false);
+        }
       }
-    }, [item, selected, startDatePickedArray, endDatePickedArray]);
+    }, [item, selected, startDatePickedArray, endDatePickedArray, duration]);
     const handleOnMouseOver = useCallback(() => {
+      if (duration > 0) return;
       if (isDisabled) return;
       if (!selected) {
         if (startDatePickedArray.length) {
           handleChooseEndDate(item);
         }
       }
-    }, [item, selected, startDatePickedArray, endDatePickedArray]);
+    }, [item, selected, startDatePickedArray, endDatePickedArray, duration]);
     return (
       <div className={`${datePickerItemClass}`} onMouseOver={handleOnMouseOver} onClick={handleOnClick}>
         {item.name}
@@ -631,5 +647,4 @@ const CalendarItem: React.FC<CalendarItemProps> = memo(
     );
   },
 );
-
 export default Index;
