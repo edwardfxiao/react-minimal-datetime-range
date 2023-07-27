@@ -609,21 +609,28 @@ interface CalendarItemProps {
 }
 const CalendarItem: React.FC<CalendarItemProps> = memo(
   ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, isDisabled = false, datePickerItemClass = '', duration = 0 }) => {
+    const handleDuration = useCallback(() => {
+      const endDateItem = getEndDateItemByDuration(item, duration);
+      handleChooseEndDate(endDateItem);
+      handleChooseStartDate(item);
+      setSelected(true);
+    }, [item, duration]);
     const handleOnClick = useCallback(() => {
       if (isDisabled) return;
       if (startDatePickedArray.length) {
         setSelected(true);
         handleChooseEndDate(item);
       } else {
-        handleChooseStartDate(item);
+        if (duration > 0) {
+          handleDuration();
+        } else {
+          handleChooseStartDate(item);
+          return;
+        }
       }
       if (selected) {
         if (duration > 0) {
-          const endDateItem = getEndDateItemByDuration(item, duration);
-          console.log(endDateItem);
-          handleChooseEndDate(endDateItem);
-          handleChooseStartDate(item);
-          setSelected(true);
+          handleDuration();
         } else {
           handleChooseEndDate({ year: '', month: '', name: '', value: '' });
           handleChooseStartDate(item);

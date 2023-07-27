@@ -163,7 +163,7 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
     const [internalShow, setInternalShow] = useState(false);
     const [type, setType] = useState(TYPES[0]);
     const [startDatePickedArray, setStartDatePickedArray] = useState(defaultDate ? defaultDate.split('-') : []);
-    const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1]]);
+    const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1] || '']);
     const [selected, setSelected] = useState(isDefaultDatesValid ? true : false);
     const handleChooseStartTimeHour = useCallback(
       res => {
@@ -301,8 +301,8 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
     const [endDatePickedArray, setEndDatePickedArray] = useState(defaultDates[1] ? defaultDates[1].split('-') : []);
     const [currentDateObjStart, setCurrentDateObjStart] = useState({});
     const [currentDateObjEnd, setCurrentDateObjEnd] = useState({});
-    const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1]]);
-    const [endTimePickedArray, setEndTimePickedArray] = useState([defaultTimes[1].split(':')[0], defaultTimes[1].split(':')[1]]);
+    const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1] || '']);
+    const [endTimePickedArray, setEndTimePickedArray] = useState([defaultTimes[1].split(':')[0], defaultTimes[1].split(':')[1] || '']);
     const [dates, setDates] = useState(defaultDates);
     const [times, setTimes] = useState(defaultTimes);
     const handleChooseStartDate = useCallback(
@@ -368,8 +368,8 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
         const b = new Date(ed.join('-'));
         const starts = a < b ? sd : ed;
         const ends = a > b ? sd : ed;
-        const startStr = `${starts.join('-')} ${st.join(':')}`;
-        const endStr = `${ends.join('-')} ${et.join(':')}`;
+        const startStr = `${starts.join('-')} ${st[0] && st[1] ? st.join(':') : ''}`;
+        const endStr = `${ends.join('-')} ${et[0] && et[1] ? et.join(':') : ''}`;
         setStart(startStr);
         setEnd(endStr);
         setStartDatePickedArray(starts);

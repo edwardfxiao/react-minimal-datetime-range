@@ -1,3 +1,7 @@
+# 2.0.9
+
+- Bugfix as #8 states
+
 # 2.0.8
 
 - Add ```duration``` to RangePicker component as #8 states
