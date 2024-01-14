@@ -1,4 +1,4 @@
-# 2.0.9
+# 2.1.0
 
 - Add ```onChooseDate``` to RangePicker component as #9 states
 
