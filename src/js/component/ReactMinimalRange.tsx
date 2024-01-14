@@ -268,6 +268,7 @@ export interface RangePickerProps {
   onConfirm?: (res: Array<string>) => void;
   onClear?: () => void;
   onClose?: () => void;
+  onChooseDate?: (res: object) => void;
 }
 export const RangePicker: React.FC<RangePickerProps> = memo(
   ({
@@ -285,6 +286,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
     supportDateRange = [],
     duration = 0,
     style = {},
+    onChooseDate = () => {},
     onConfirm = () => {},
     onClear = () => {},
     onClose = () => {},
@@ -502,6 +504,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
               markedDates={markedDates}
               supportDateRange={supportDateRange}
               duration={duration}
+              onChooseDate={onChooseDate}
             />
           )}
         </div>
@@ -531,6 +534,7 @@ interface RangePickerComponentProps {
   supportDateRange?: Array<string>;
   duration?: number;
   handleOnChangeType: () => void;
+  onChooseDate: (res: object) => void;
   handleOnConfirmClick: () => void;
   handleChooseStartTimeHour: (res: string) => void;
   handleChooseStartTimeMinute: (res: string) => void;
@@ -561,6 +565,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
     markedDates,
     supportDateRange,
     duration,
+    onChooseDate,
     handleOnChangeType,
     handleOnConfirmClick,
     handleChooseStartTimeHour,
@@ -599,6 +604,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             markedDates={markedDates}
             supportDateRange={supportDateRange}
             duration={duration}
+            onChooseDate={onChooseDate}
           />
           <div className="react-minimal-datetime-date-piker__divider" />
           <RangeDate
@@ -619,6 +625,7 @@ const RangePickerComponent: React.FC<RangePickerComponentProps> = memo(
             markedDates={markedDates}
             supportDateRange={supportDateRange}
             duration={duration}
+            onChooseDate={onChooseDate}
           />
           {(showOnlyTime || type === TYPES[1]) && (
             <div className="react-minimal-datetime-range__time-piker">

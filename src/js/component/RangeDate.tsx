@@ -38,6 +38,7 @@ interface IndexProps {
   setCurrentDateObjStart?: (res: object) => void;
   currentDateObjEnd?: IObjectKeysAny;
   setCurrentDateObjEnd?: (res: object) => void;
+  onChooseDate?: (res: object) => void;
 }
 const Index: React.FC<IndexProps> = memo(
   ({
@@ -58,6 +59,7 @@ const Index: React.FC<IndexProps> = memo(
     markedDates = [],
     supportDateRange = [],
     duration = 0,
+    onChooseDate = () => {},
   }) => {
     const markedDatesHash: IObjectKeysBool = useMemo(() => {
       const res: IObjectKeysBool = {};
@@ -299,6 +301,7 @@ const Index: React.FC<IndexProps> = memo(
           minSupportDate={minSupportDate}
           maxSupportDate={maxSupportDate}
           duration={duration}
+          onChooseDate={onChooseDate}
         />
       );
       transitionContainerStyle = {
@@ -494,6 +497,7 @@ interface CalendarBodyProps {
   minSupportDate: string;
   maxSupportDate: string;
   onClick?: (res: string) => void;
+  onChooseDate?: (res: object) => void;
 }
 const CalendarBody: React.FC<CalendarBodyProps> = memo(
   ({
@@ -511,6 +515,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
     minSupportDate,
     maxSupportDate,
     duration,
+    onChooseDate,
   }) => {
     const content = Object.keys(data).map(key => {
       let colHtml;
@@ -581,6 +586,7 @@ const CalendarBody: React.FC<CalendarBodyProps> = memo(
               isDisabled={isDisabled}
               datePickerItemClass={datePickerItemClass}
               duration={duration}
+              onChooseDate={onChooseDate}
             />
           );
         });
@@ -606,9 +612,22 @@ interface CalendarItemProps {
   isDisabled?: boolean;
   datePickerItemClass?: string;
   duration?: number;
+  onChooseDate?: (res: object) => void;
 }
 const CalendarItem: React.FC<CalendarItemProps> = memo(
-  ({ selected, setSelected, startDatePickedArray, endDatePickedArray, handleChooseStartDate, handleChooseEndDate, item = {}, isDisabled = false, datePickerItemClass = '', duration = 0 }) => {
+  ({
+    selected,
+    setSelected,
+    startDatePickedArray,
+    endDatePickedArray,
+    handleChooseStartDate,
+    handleChooseEndDate,
+    item = {},
+    isDisabled = false,
+    datePickerItemClass = '',
+    duration = 0,
+    onChooseDate,
+  }) => {
     const handleDuration = useCallback(() => {
       const endDateItem = getEndDateItemByDuration(item, duration);
       handleChooseEndDate(endDateItem);
@@ -617,6 +636,7 @@ const CalendarItem: React.FC<CalendarItemProps> = memo(
     }, [item, duration]);
     const handleOnClick = useCallback(() => {
       if (isDisabled) return;
+      onChooseDate && onChooseDate(item);
       if (startDatePickedArray.length) {
         setSelected(true);
         handleChooseEndDate(item);
