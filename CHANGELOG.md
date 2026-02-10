@@ -1,3 +1,6 @@
+# 3.0.1
+- Rm enzyme-adapter-react-16 and enzyme
+
 # 3.0.0
 - Update React to v19.2.4 as #11 states
 
