@@ -1,3 +1,6 @@
+# 3.0.0
+- Update React to v19.2.4 as #11 states
+
 # 2.1.0
 
 - Add ```onChooseDate``` to RangePicker component as #9 states

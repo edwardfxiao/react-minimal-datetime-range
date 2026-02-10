@@ -55,19 +55,19 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
       setInternalShow(false);
       onClose && onClose();
     }, []);
-    const handleOnYearPicked = useCallback(yearObj => {
+    const handleOnYearPicked = useCallback((yearObj: any) => {
       onYearPicked && onYearPicked(yearObj);
     }, []);
-    const handleOnMonthPicked = useCallback(monthObj => {
+    const handleOnMonthPicked = useCallback((monthObj: any) => {
       onMonthPicked && onMonthPicked(monthObj);
     }, []);
-    const handleOnDatePicked = useCallback(dateObj => {
+    const handleOnDatePicked = useCallback((dateObj: any) => {
       onDatePicked && onDatePicked(dateObj);
     }, []);
-    const handleOnResetDate = useCallback(dateObj => {
+    const handleOnResetDate = useCallback((dateObj: any) => {
       onResetDate && onResetDate(dateObj);
     }, []);
-    const handleOnResetDefaultDate = useCallback(dateObj => {
+    const handleOnResetDefaultDate = useCallback((dateObj: any) => {
       onResetDefaultDate && onResetDefaultDate(dateObj);
     }, []);
     useEffect(() => {
@@ -85,7 +85,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = memo(
       }
     }, []);
     const pageClick = useCallback(
-      e => {
+      (e: any) => {
         if (!allowPageClickToClose) {
           return;
         }
@@ -166,14 +166,14 @@ const CalendarPickerComponent: React.FC<CalendarPickerComponentProps> = memo(
     const [startTimePickedArray, setStartTimePickedArray] = useState([defaultTimes[0].split(':')[0], defaultTimes[0].split(':')[1] || '']);
     const [selected, setSelected] = useState(isDefaultDatesValid ? true : false);
     const handleChooseStartTimeHour = useCallback(
-      res => {
+      (res: any) => {
         setStartTimePickedArray([res, startTimePickedArray[1]]);
         handleChooseHourPick(res);
       },
       [startTimePickedArray],
     );
     const handleChooseStartTimeMinute = useCallback(
-      res => {
+      (res: any) => {
         setStartTimePickedArray([startTimePickedArray[0], res]);
         handleChooseMinutePick(res);
       },
@@ -308,39 +308,39 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
     const [dates, setDates] = useState(defaultDates);
     const [times, setTimes] = useState(defaultTimes);
     const handleChooseStartDate = useCallback(
-      ({ name, month, year, value }) => {
+      ({ name, month, year, value }: { name: string; month: string; year: string; value: string }) => {
         setDates([value, dates[1]]);
         setStartDatePickedArray(value === '' ? [] : [year, month, name]);
       },
       [dates],
     );
     const handleChooseEndDate = useCallback(
-      ({ name, month, year, value }) => {
+      ({ name, month, year, value }: { name: string; month: string; year: string; value: string }) => {
         setDates([dates[0], value]);
         setEndDatePickedArray(value === '' ? [] : [year, month, name]);
       },
       [dates],
     );
     const handleChooseStartTimeHour = useCallback(
-      res => {
+      (res: any) => {
         setStartTimePickedArray([res, startTimePickedArray[1]]);
       },
       [startTimePickedArray],
     );
     const handleChooseStartTimeMinute = useCallback(
-      res => {
+      (res: any) => {
         setStartTimePickedArray([startTimePickedArray[0], res]);
       },
       [startTimePickedArray],
     );
     const handleChooseEndTimeHour = useCallback(
-      res => {
+      (res: any) => {
         setEndTimePickedArray([res, endTimePickedArray[1]]);
       },
       [endTimePickedArray],
     );
     const handleChooseEndTimeMinute = useCallback(
-      res => {
+      (res: any) => {
         setEndTimePickedArray([endTimePickedArray[0], res]);
       },
       [endTimePickedArray],
@@ -353,7 +353,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
       }
     }, [type]);
     const handleOnConfirm = useCallback(
-      (sd = null, ed = null, st = null, et = null) => {
+      (sd: any = null, ed: any = null, st: any = null, et: any = null) => {
         if (!sd) {
           sd = startDatePickedArray;
         }
@@ -385,7 +385,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
       [startDatePickedArray, endDatePickedArray, startTimePickedArray, endTimePickedArray],
     );
     const handleOnClear = useCallback(
-      e => {
+      (e: any) => {
         if (disabled) {
           return;
         }
@@ -432,7 +432,7 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
       }
     }, []);
     const pageClick = useCallback(
-      e => {
+      (e: any) => {
         if (!allowPageClickToClose) {
           return;
         }
@@ -480,8 +480,8 @@ export const RangePicker: React.FC<RangePickerProps> = memo(
               show={internalShow}
               selected={selected}
               setSelected={setSelected}
-              handleChooseStartDate={handleChooseStartDate}
-              handleChooseEndDate={handleChooseEndDate}
+              handleChooseStartDate={(res: any) => handleChooseStartDate(res)}
+              handleChooseEndDate={(res: any) => handleChooseEndDate(res)}
               dates={dates}
               times={times}
               locale={locale}

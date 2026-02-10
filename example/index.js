@@ -1,7 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import React, { useState, useRef, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import prefixAll from 'inline-style-prefix-all';
 import '../src/css/example.css';
 import { CalendarPicker, RangePicker } from '../src/js/component/index';
@@ -112,4 +112,4 @@ const Component = () => {
 
 // <Markdown source={markdownTextboxEmptyExample} renderers={{ CodeBlock }} />
 
-ReactDOM.render(<Component />, document.getElementById('root'));
+createRoot(document.getElementById('root')).render(<Component />);
