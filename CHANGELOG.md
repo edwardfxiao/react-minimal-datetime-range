@@ -1,3 +1,6 @@
+# 3.0.2
+- Rm jest
+
 # 3.0.1
 - Rm enzyme-adapter-react-16 and enzyme
 
